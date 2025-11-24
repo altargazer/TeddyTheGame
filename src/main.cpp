@@ -30,7 +30,7 @@ int main() {
     camera.target = (Vector2) {player.pos.x + player.width / 2.0f, player.pos.y + player.height / 2.0f};
     camera.offset = (Vector2) {screenWidth/2.0f, screenHeight/2.0f};
     camera.rotation = 0.0f;
-    camera.zoom = 3.0f;
+    camera.zoom = 2.0f;
 
     SetTargetFPS(60);
 
@@ -62,6 +62,8 @@ int main() {
         camera.target.x += (target.x - camera.target.x) * 0.5f;
         camera.target.y += (target.y - camera.target.y) * 0.5f;
 
+        float deltaTime = GetFrameTime();
+        player.HandleAnimation(deltaTime);
         player.Draw();
 
         EndMode2D();

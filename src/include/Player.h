@@ -24,6 +24,21 @@ public:
     //objects
     Rectangle HitBox;
 
+    //animation
+    struct Animation{
+        Texture2D sheet; //sprite sheet for this animation
+        int frames; //total number of frames
+        float frameDuration; //duration of each frame
+        int frameW; //frame width
+        int frameH; //frame height
+    };
+    Animation walkingAnim;
+    Animation idleAnim;
+    Animation* currentAnimation;
+
+    int currentFrame;
+    float animationTimer;
+
     //sprites
     Texture2D idleSheet;
     Texture2D walkingSheet;
@@ -38,6 +53,8 @@ public:
     void JumpAndGravity();
     void HandleCollisions(Rectangle coll);
     void UpdatePositions();
+    void ChangeAnim(Animation* anim);
+    void HandleAnimation(float deltaTime);
 
 };
 

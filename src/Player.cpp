@@ -2,12 +2,17 @@
 #include <raylib.h>
 #include <algorithm>
 #include <iostream>
+#include <cmath>
+
+//Comments about sprite size:
+    //Idle: 29 x 37
+    //Walking: 
 
 Player::Player(float startX, float startY, int dir){
     pos = {startX, startY};
     height = 37;
-    width = 30;
-    speed.x = 5;
+    width = 29;
+    speed.x = 6;
     gravity = 0.6f;
     speed.y = gravity;
     direction = dir;
@@ -19,14 +24,34 @@ Player::Player(float startX, float startY, int dir){
     idle = true;
     wallSliding = false;
 
-    HitBox = {pos.x + 5, pos.y + 3, width - 5, height - 10};
+    currentAnimation = nullptr;
+    currentFrame = 0;
+    animationTimer = 0.0f;
+
+    HitBox = {pos.x + 5, pos.y + 3, width - 4, height - 10};
 
     idleSheet = LoadTexture("sprites/player/PlayerIdle.png");
+    SetTextureFilter(idleSheet, TEXTURE_FILTER_POINT);
+
+    idleAnim.sheet = idleSheet;
+    idleAnim.frames = 4;
+    idleAnim.frameDuration = 0.15f;
+    idleAnim.frameH = 37;
+    idleAnim.frameW = 29;
+
+    walkingAnim.sheet = idleSheet;
+    walkingAnim.frames = 4;
+    walkingAnim.frameDuration = 0.15f;
+    walkingAnim.frameH = 37;
+    walkingAnim.frameW = 29;
 }
 
 void Player::Update() {
+
     walking = false;
     isGrounded = false;
+    wallSliding = false;
+
     if (IsKeyDown(KEY_D)) {
         pos.x += speed.x;
         direction = 1;
@@ -44,12 +69,46 @@ void Player::Update() {
 
     if(walking || jumping || wallSliding) idle = false;
     else idle = true;
+
+    if(walking) ChangeAnim(&walkingAnim);
+    if(idle) ChangeAnim(&idleAnim);
 }
 
 void Player::Draw() {
-    Rectangle sourceRec = { 0, 0, 31, 37 }; // the one I want
-    DrawTextureRec(idleSheet, sourceRec, pos, WHITE);
+
+    //source rectangle is the one we want form the sheet
+    //I add 1 becuase I put padding of 1 px to avoid problems
+    Rectangle sourceRec = 
+        {(float)currentFrame*(currentAnimation->frameW + 1), 0, (float)direction*currentAnimation->frameW, (float)currentAnimation->frameH};
+
+    //Rectangle sourceRec = { 0, 0, (float)direction*29, 37 }; // the one I want
+    
+    DrawTextureRec(currentAnimation->sheet, sourceRec, pos, WHITE);
+
     DrawRectangleRec(HitBox, {200, 0, 0, 100});
+}
+
+void Player::HandleAnimation(float deltaTime){
+    animationTimer += deltaTime;
+
+    //if we have finihed time of frame
+    if(animationTimer >= currentAnimation->frameDuration){
+        animationTimer = 0.0f;
+        currentFrame++;
+
+        //if we have reached the last frame
+        if(currentFrame >= currentAnimation->frames){
+            currentFrame = 0;
+        }
+    }   
+}
+
+void Player::ChangeAnim(Animation* anim){
+    if(currentAnimation == anim) return;
+
+    currentAnimation = anim;
+    currentFrame = 0;
+    animationTimer = 0;
 }
 
 void Player::JumpAndGravity() {
@@ -63,7 +122,10 @@ void Player::JumpAndGravity() {
 }
 
 void Player::UpdatePositions(){
-    HitBox = {pos.x + 5, pos.y + 3, width - 5, height - 10};
+    if(direction == 1){
+        HitBox = {pos.x + 5, pos.y + 3, width - 5, height - 10};
+    } else HitBox = {pos.x, pos.y + 3, width - 5, height - 10};
+    
 }
 
 void Player::HandleCollisions(Rectangle tile){
