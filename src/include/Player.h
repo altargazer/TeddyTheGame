@@ -31,6 +31,7 @@ public:
         float frameDuration; //duration of each frame
         int frameW; //frame width
         int frameH; //frame height
+        int padding; //blanck pixels in between the frames
     };
     Animation walkingAnim;
     Animation idleAnim;

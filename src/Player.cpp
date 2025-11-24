@@ -6,7 +6,7 @@
 
 //Comments about sprite size:
     //Idle: 29 x 37
-    //Walking: 
+    //Walking: 31 x 39
 
 Player::Player(float startX, float startY, int dir){
     pos = {startX, startY};
@@ -31,19 +31,21 @@ Player::Player(float startX, float startY, int dir){
     HitBox = {pos.x + 5, pos.y + 3, width - 4, height - 10};
 
     idleSheet = LoadTexture("sprites/player/PlayerIdle.png");
-    SetTextureFilter(idleSheet, TEXTURE_FILTER_POINT);
+    walkingSheet = LoadTexture("sprites/player/PlayerWalk.png");
 
     idleAnim.sheet = idleSheet;
     idleAnim.frames = 4;
-    idleAnim.frameDuration = 0.15f;
+    idleAnim.frameDuration = 0.3f;
     idleAnim.frameH = 37;
     idleAnim.frameW = 29;
+    idleAnim.padding = 1;
 
-    walkingAnim.sheet = idleSheet;
-    walkingAnim.frames = 4;
-    walkingAnim.frameDuration = 0.15f;
-    walkingAnim.frameH = 37;
-    walkingAnim.frameW = 29;
+    walkingAnim.sheet = walkingSheet;
+    walkingAnim.frames = 8;
+    walkingAnim.frameDuration = 0.2f;
+    walkingAnim.frameH = 39;
+    walkingAnim.frameW = 31;
+    walkingAnim.padding = 1;
 }
 
 void Player::Update() {
@@ -77,15 +79,18 @@ void Player::Update() {
 void Player::Draw() {
 
     //source rectangle is the one we want form the sheet
-    //I add 1 becuase I put padding of 1 px to avoid problems
+    //To calculate the x of the frame: current * (frameWidth + padding)
     Rectangle sourceRec = 
-        {(float)currentFrame*(currentAnimation->frameW + 1), 0, (float)direction*currentAnimation->frameW, (float)currentAnimation->frameH};
-
-    //Rectangle sourceRec = { 0, 0, (float)direction*29, 37 }; // the one I want
+        {
+            (float)currentFrame*(currentAnimation->frameW + currentAnimation->padding), 
+            0, 
+            (float)direction*currentAnimation->frameW, 
+            (float)currentAnimation->frameH
+        };
     
     DrawTextureRec(currentAnimation->sheet, sourceRec, pos, WHITE);
 
-    DrawRectangleRec(HitBox, {200, 0, 0, 100});
+    //DrawRectangleRec(HitBox, {200, 0, 0, 100});
 }
 
 void Player::HandleAnimation(float deltaTime){
