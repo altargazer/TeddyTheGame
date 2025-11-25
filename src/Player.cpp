@@ -2,7 +2,6 @@
 #include <raylib.h>
 #include <algorithm>
 #include <iostream>
-#include <cmath>
 
 //Comments about sprite size:
     //Idle: 29 x 37
@@ -17,6 +16,10 @@ Player::Player(float startX, float startY, int dir){
     speed.y = gravity;
     direction = dir;
     jumpPower = 12;
+
+    lives = 6;
+    money = 0;
+    cocos = 0;
 
     isGrounded = false;
     jumping = false;
@@ -33,12 +36,14 @@ Player::Player(float startX, float startY, int dir){
     idleSheet = LoadTexture("sprites/player/PlayerIdle.png");
     walkingSheet = LoadTexture("sprites/player/PlayerWalk.png");
 
+
     idleAnim.sheet = idleSheet;
     idleAnim.frames = 4;
     idleAnim.frameDuration = 0.3f;
     idleAnim.frameH = 37;
     idleAnim.frameW = 29;
     idleAnim.padding = 1;
+    idleAnim.paddingLeft = 0;
 
     walkingAnim.sheet = walkingSheet;
     walkingAnim.frames = 8;
@@ -46,6 +51,7 @@ Player::Player(float startX, float startY, int dir){
     walkingAnim.frameH = 39;
     walkingAnim.frameW = 31;
     walkingAnim.padding = 1;
+    walkingAnim.paddingLeft = 2;
 }
 
 void Player::Update() {
@@ -88,7 +94,7 @@ void Player::Draw() {
             (float)currentAnimation->frameH
         };
     
-    DrawTextureRec(currentAnimation->sheet, sourceRec, pos, WHITE);
+    DrawTextureRec(currentAnimation->sheet, sourceRec, {pos.x - currentAnimation->paddingLeft, pos.y}, WHITE);
 
     //DrawRectangleRec(HitBox, {200, 0, 0, 100});
 }
@@ -179,4 +185,17 @@ void Player::HandleCollisions(Rectangle tile){
         }
         UpdatePositions();
     }
+}
+
+bool Player::HandlePickingUp(Rectangle coll, bool pressing){
+    if(!pressing){
+        if(CheckCollisionRecs(HitBox, coll)) return true;
+    }
+    if (CheckCollisionRecs(HitBox, coll)){
+        DrawText("Press S To Pick Up", pos.x + 35, pos.y - 10, 10, BLACK);
+        if(IsKeyPressed(KEY_S)){
+            return true;
+        }
+    }
+    return false;
 }

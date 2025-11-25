@@ -1,16 +1,41 @@
 #include "include/Levels.h"
 #include "include/Player.h"
+#include "include/TextBox.h"
 #include <raylib.h>
 #include <iostream>
 
-Levels::Levels(int id, Player* player, float exitX, float exitY){
+/*
+OBJECTS:
+0: nothing
+1: tile/collider
+2: 
+    In level 1:
+3: Cocoa
+4: Coco
+5: Money
+6: 
+    In level 1:
+7: 
+    In level 1:
+8: 
+    In level 1:
+9: 
+    In level 1:
+10: 
+    In level 1:
+*/
+
+Levels::Levels(int id, Player* player, TextBox* textBox, float exitX, float exitY){
+
     this->id = id;
     this->player = player;
+    this->textBox = textBox;
 
     exitRec = {exitX, exitY, 32, 32};
 
     //Level 1
     if(id == 1){
+        weapon = LoadTexture("sprites/objects/weapon2.png");
         background = LoadTexture("sprites/maps/prueba.png");
         colliders = 
         {
@@ -33,7 +58,7 @@ Levels::Levels(int id, Player* player, float exitX, float exitY){
             {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
             {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
             {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,0,0,0},
-            {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+            {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
             {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
             {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
             {0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
@@ -55,16 +80,16 @@ Levels::Levels(int id, Player* player, float exitX, float exitY){
 }
 
 void Levels::Draw(){
-    DrawTexture(background, 0, 0, WHITE);;
+    DrawTexture(background, 0, 0, WHITE);
 }
 
 void Levels::ManageCollisions(){
     for(int i = 0; i < (int)colliders.size(); i++){
-            for(int j = 0; j < (int)colliders[i].size(); j++){
-                if(colliders[i][j] == 1){
-                float posx = i*32;
-                float posy = j*32;
-                Rectangle plat = {posy, posx, 32, 32};
+        for(int j = 0; j < (int)colliders[i].size(); j++){
+            if(colliders[i][j] == 1){
+                float posy = i*32;
+                float posx = j*32;
+                Rectangle plat = {posx, posy, 32, 32};
                 //DrawRectangleRec(plat, semi_transparent);
                 player->HandleCollisions(plat);
             }
@@ -72,6 +97,41 @@ void Levels::ManageCollisions(){
     }
 }
 
+void Levels::ManageObjects(){
+    for(int i = 0; i < (int)colliders.size(); i++){
+        for(int j = 0; j < (int)colliders[i].size(); j++){
+            if(colliders[i][j] != 1 && colliders[i][j] != 0){
+                float posy = i*32;
+                float posx = j*32;
+                DrawObject(colliders[i][j], posx, posy);
+                //Food items and weapon are only on Level 1
+                if(id == 1){
+                    //Weapon
+                    if(colliders[i][j] == 2){
+                        Rectangle weaponColl = {posx+4, posy+4, 24, 28};
+                        if(player->HandlePickingUp(weaponColl, true)){
+                            player->hasWeapon = true;
+                            colliders[i][j] = 0;
+                            textBox->Write("Has conseguido un arma!", 20);
+                        }
+                    }
+
+                    //Food Items TO-DO
+                }
+            }
+        }
+    }
+}
+
 bool Levels::ReachedExit(Player* player){
     return CheckCollisionRecs(exitRec, player->HitBox);
+}
+
+void Levels::DrawObject(int id,float posX,float posY){
+    //Level 1 since it has a lot of sprites
+    if(this->id == 1){
+        if(id == 2){
+            DrawTexture(weapon, posX, posY+5, WHITE);
+        }
+    }
 }

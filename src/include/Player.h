@@ -13,6 +13,9 @@ public:
     float height, width;
     float gravity;
     int direction;
+    int lives;
+    int money;
+    int cocos;
 
     //states
     bool isGrounded;
@@ -20,6 +23,7 @@ public:
     bool walking;
     bool idle;
     bool wallSliding;
+    bool hasWeapon;
 
     //objects
     Rectangle HitBox;
@@ -32,6 +36,7 @@ public:
         int frameW; //frame width
         int frameH; //frame height
         int padding; //blanck pixels in between the frames
+        int paddingLeft; //number of padding on the right for some sprites so that the position is correct
     };
     Animation walkingAnim;
     Animation idleAnim;
@@ -56,6 +61,7 @@ public:
     void UpdatePositions();
     void ChangeAnim(Animation* anim);
     void HandleAnimation(float deltaTime);
+    bool HandlePickingUp(Rectangle coll, bool pressing);
 
 };
 
