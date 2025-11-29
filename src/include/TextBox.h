@@ -14,11 +14,13 @@ public:
     float timer;
     float duration; //time that it lasts if not clicked
     int index; //index for multiple messages
+    int size;
+
+    Texture2D arrow;
 
     TextBox();
 
-    void Write(std::string text, float duration);
-    void WriteMultiple(std::vector<std::string> texts);
+    void SetText(std::vector<std::string> message, float duration);
     void Update(float deltatime);
     void Draw();
 

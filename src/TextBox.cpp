@@ -7,48 +7,25 @@ TextBox::TextBox(){
     timer = 0;
     duration = 0;
     index = -1;
+
+    arrow = LoadTexture("sprites/objects/arrow.png");
 }
 
-void TextBox::Write(std::string text, float duration){
-    multiple.clear();
-    index = -1;
-
-    this->text = text;
-    this->duration = duration;
-    timer = 0;
-    active = true;
-}
-
-void TextBox::WriteMultiple(std::vector<std::string> texts){
-    multiple = texts;
+void TextBox::SetText(std::vector<std::string> message, float duration){
+    multiple = message;
     index = 0;
 
     this->text = multiple[index];
-    this->duration = 0;
+    this->duration = duration;
     timer = 0;
     active = true;
-}
-
-void TextBox::Draw(){
-    if(!active) return;
-
-    // int width = GetScreenWidth() - 10;
-    // int heigth = 100;
-
-    DrawText(text.c_str(), 800, 550, 20, BLACK);
-
-    //dibujar fondo caja color Fade
-    //dibujar lineas caja
-    //dibujar texto
-
-    //TO-Do opción para retrato con booleano en el constructor
+    size = (int) multiple.size();
 }
 
 void TextBox::Update(float deltatime){
     if(!active) return;
-    
-    //duration = 0 for multiple, so will ignore this
-    if (duration > 0) {
+
+    if(size == 1 || index == size - 1){
         timer += deltatime;
         if (timer >= duration) {
             active = false;
@@ -57,11 +34,11 @@ void TextBox::Update(float deltatime){
     }
 
     if(IsMouseButtonPressed(MOUSE_LEFT_BUTTON)){
-        //for multiple
-        if(index != -1){
+        //for multiple words
+        if(size > 1){
             index++;
             
-            if(index >= (int)multiple.size()){
+            if(index >= size){
                 active = false;
                 return;
             }
@@ -70,8 +47,25 @@ void TextBox::Update(float deltatime){
             return;
         }
 
-        //for single
         active = false;
     }
     
+}
+
+void TextBox::Draw(){
+    if(!active) return;
+
+    float width = GetScreenWidth() - 20;
+    float heigth = 200;
+
+    DrawRectangle(15, 100, width, heigth, BLACK);
+    DrawRectangle(10, 95, width, heigth, WHITE);
+    DrawRectangleLinesEx({10, 95, width, heigth}, 2.0f, BLACK);
+    
+    DrawTexture(arrow, 1420, 230, WHITE);
+
+    DrawText(text.c_str(), 30, 115, 30, BLACK);
+
+    //TO-Do opción para retrato con booleano en el constructor
+    //TO-Do flecha para avanzar
 }

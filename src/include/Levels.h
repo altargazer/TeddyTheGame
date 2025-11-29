@@ -21,6 +21,7 @@ public:
 
     //objects
     Texture2D weapon;
+    Texture2D cocoa;
 
     //methods
     Levels(int id, Player* player, TextBox* textBox, float exitX, float exitY);

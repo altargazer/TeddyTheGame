@@ -2,6 +2,7 @@
 #define PLAYER_H
 
 #include <raylib.h>
+#include "TextBox.h"
 
 class Player {
 public:
@@ -17,16 +18,27 @@ public:
     int money;
     int cocos;
 
+    //attack
+    float attTimer;
+    float attMaxTimer;
+
     //states
     bool isGrounded;
     bool jumping;
     bool walking;
     bool idle;
+    bool attacking;
     bool wallSliding;
     bool hasWeapon;
 
     //objects
     Rectangle HitBox;
+    Rectangle attackHitBox;
+    TextBox* textBox;
+    Texture2D lifeFull;
+    Texture2D lifeEmpty;
+    Texture2D monedita;
+    Texture2D coquito;
 
     //animation
     struct Animation{
@@ -35,11 +47,14 @@ public:
         float frameDuration; //duration of each frame
         int frameW; //frame width
         int frameH; //frame height
-        int padding; //blanck pixels in between the frames
+        int paddingRight; //blanck pixels in between the frames
         int paddingLeft; //number of padding on the right for some sprites so that the position is correct
+        int paddingTop; //same for the top
+        
     };
     Animation walkingAnim;
     Animation idleAnim;
+    Animation attackAnim;
     Animation* currentAnimation;
 
     int currentFrame;
@@ -49,19 +64,23 @@ public:
     Texture2D idleSheet;
     Texture2D walkingSheet;
     Texture2D wallSlidingText;
+    Texture2D attackSheet;
+    Texture2D keyInteract;
 
     //constructors
-    Player(float startX = 0, float startY = 0, int direction = 1);
+    Player(TextBox* textBox, float startX = 0, float startY = 0, int direction = 1);
 
     //methods
-    void Update();
+    void Update(float deltaTime);
     void Draw();
     void JumpAndGravity();
     void HandleCollisions(Rectangle coll);
     void UpdatePositions();
     void ChangeAnim(Animation* anim);
     void HandleAnimation(float deltaTime);
+    void Attack(float deltaTime);
     bool HandlePickingUp(Rectangle coll, bool pressing);
+    void DrawTop();
 
 };
 

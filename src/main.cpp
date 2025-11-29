@@ -8,7 +8,6 @@
 
 Levels* currentLevel;
 int level;
-TextBox textBox;
 
 void ChangeLevel(int next, Levels* nextLevel, Player& player, int x, int y){
     level = next;
@@ -22,7 +21,8 @@ int main() {
 
     InitWindow(screenWidth, screenHeight, "Teddy: The Game");
 
-    Player player(screenWidth / 2+50, screenHeight / 2 + 100, 1);
+    TextBox textBox;
+    Player player(&textBox, screenWidth / 2+50, screenHeight / 2 + 100, 1);
     player.hasWeapon = false; //at the beggining he doesn't have the weapon
     Levels level1(1, &player, &textBox, 96, 864);
     Levels level2(2, &player, &textBox, 96, 864);
@@ -31,10 +31,12 @@ int main() {
     level = 1;
 
     Camera2D camera = { 0 };
-    camera.target = (Vector2) {player.pos.x + player.width / 2.0f, player.pos.y + player.height / 2.0f};
+    camera.target = (Vector2) {player.pos.x + player.width / 2.0f, player.pos.y + player.height / 2.0f - 20};
     camera.offset = (Vector2) {screenWidth/2.0f, screenHeight/2.0f};
     camera.rotation = 0.0f;
     camera.zoom = 3.0f;
+
+    Texture2D fondo = LoadTexture("sprites/maps/fondoCocina.png");
 
     SetTargetFPS(60);
 
@@ -42,7 +44,7 @@ int main() {
         
         float deltaTime = GetFrameTime();
 
-        player.Update();
+        player.Update(deltaTime);
         player.JumpAndGravity();
         player.UpdatePositions();
 
@@ -50,12 +52,16 @@ int main() {
 
         if(level == 1 && currentLevel->ReachedExit(&player)){
             //ChangeLevel(2, &level2, player, 0, 0);
-            std::cout << "Cambio de Nivel" << std::endl;
         }
 
         //Drawing Starts Here
         BeginDrawing();
         ClearBackground(WHITE);
+        
+        DrawTexture(fondo, 0,0, WHITE);
+        DrawTexture(fondo, fondo.width, 0, WHITE);
+        //DrawRectangle(0, 0, 1500, 900, Fade({245, 232, 210, 200}, 0.8f));
+        DrawRectangle(0, 0, 1500, 900, Fade(WHITE, 0.8f));
         
         
         BeginMode2D(camera);
@@ -65,7 +71,7 @@ int main() {
 
         Vector2 target = {
             player.pos.x + player.width / 2.0f,
-            player.pos.y + player.height / 2.0f
+            player.pos.y + player.height / 2.0f - 20
         };
 
         camera.target.x += (target.x - camera.target.x) * 0.5f;
@@ -79,9 +85,10 @@ int main() {
 
         currentLevel->ManageObjects();
 
-        textBox.Draw();
-
         EndMode2D();
+
+        textBox.Draw();
+        player.DrawTop();
         EndDrawing();
     }
     
