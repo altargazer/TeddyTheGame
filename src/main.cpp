@@ -1,10 +1,11 @@
 #include <iostream>
 #include <raylib.h>
 #include <vector>
+#include <cmath>
 #include "include/Player.h"
 #include "include/Levels.h"
 #include "include/TextBox.h"
-#include <cmath>
+#include "include/Enemies.h"
 
 Levels* currentLevel;
 int level;
@@ -84,6 +85,7 @@ int main() {
         player.Draw();
 
         currentLevel->ManageObjects();
+        currentLevel->ManageEnemies(deltaTime);
 
         EndMode2D();
 

@@ -5,6 +5,7 @@
 #include <vector>
 #include "Player.h"
 #include "TextBox.h"
+#include "Enemies.h"
 
 class Levels{
 public:
@@ -23,6 +24,9 @@ public:
     Texture2D weapon;
     Texture2D cocoa;
 
+    //enemies
+    std::vector<Enemies*> enemies;
+
     //methods
     Levels(int id, Player* player, TextBox* textBox, float exitX, float exitY);
     void Draw();
@@ -30,6 +34,7 @@ public:
     void ManageObjects();
     bool ReachedExit(Player* p);
     void DrawObject(int id,float posX,float posY);
+    void ManageEnemies(float deltatime);
 
 };
 

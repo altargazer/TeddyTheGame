@@ -137,6 +137,9 @@ void Player::UpdatePositions(){
     } else{
         HitBox = {pos.x, pos.y + 3, width - 5, height - 10};
         attackHitBox = {pos.x - 30, pos.y, 31, height};
+        if(walking){
+            HitBox.x -= 1;
+        }
     }
 }
 
