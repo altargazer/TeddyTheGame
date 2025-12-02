@@ -41,7 +41,7 @@ int main() {
 
     SetTargetFPS(60);
 
-    while (!WindowShouldClose()) {
+    while (!WindowShouldClose()){
         
         float deltaTime = GetFrameTime();
 

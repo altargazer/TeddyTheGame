@@ -18,6 +18,7 @@ Player::Player(TextBox* textBox, float startX, float startY, int dir){
     speed.y = gravity;
     direction = dir;
     jumpPower = 12;
+    coolDown = 0;
 
     lives = 4;
     money = 15;
@@ -31,8 +32,9 @@ Player::Player(TextBox* textBox, float startX, float startY, int dir){
     attacking = false;
     idle = true;
     wallSliding = false;
+    damaged = false;
 
-    attMaxTimer = 0.8f;
+    attMaxTimer = 0.4f;
 
     currentAnimation = nullptr;
     currentFrame = 0;
@@ -71,7 +73,7 @@ Player::Player(TextBox* textBox, float startX, float startY, int dir){
 
     attackAnim.sheet = attackSheet;
     attackAnim.frames = 4;
-    attackAnim.frameDuration = 0.2f;
+    attackAnim.frameDuration = attMaxTimer/attackAnim.frames;
     attackAnim.frameH = 43;
     attackAnim.frameW = 54;
     attackAnim.paddingRight = 1;
@@ -111,6 +113,14 @@ void Player::Update(float deltaTime) {
 
     if(hasWeapon) Attack(deltaTime);
     if(attacking) ChangeAnim(&attackAnim);
+
+    if(damaged){
+        coolDown += deltaTime;
+        if(coolDown >= 2.0f){
+            coolDown = 0;
+            damaged = false;
+        }
+    }
 }
 
 void Player::Attack(float deltaTime){
@@ -278,4 +288,17 @@ bool Player::HandlePickingUp(Rectangle coll, bool pressing){
         }
     }
     return false;
+}
+
+void Player::TakeDamage(int damage){
+    if(!damaged){
+        if(lives > 1){
+            damaged = true;
+            lives--;
+            pos.x -= 25*direction;
+            pos.y -= 7;
+        }
+
+        //TODO else: dead
+    }
 }

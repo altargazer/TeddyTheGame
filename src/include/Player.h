@@ -17,6 +17,7 @@ public:
     int lives;
     int money;
     int cocos;
+    float coolDown;
 
     //attack
     float attTimer;
@@ -30,6 +31,7 @@ public:
     bool attacking;
     bool wallSliding;
     bool hasWeapon;
+    bool damaged;
 
     //objects
     Rectangle HitBox;
@@ -81,6 +83,7 @@ public:
     void Attack(float deltaTime);
     bool HandlePickingUp(Rectangle coll, bool pressing);
     void DrawTop();
+    void TakeDamage(int damage);
 
 };
 

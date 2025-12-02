@@ -3,9 +3,29 @@
 #include <cmath>
 #include "include/Enemies.h"
 
-void Enemies::Update(){
+void Enemies::Update(float deltatime){
     if(!alive) return;
     isAttacking = false;
+
+    if(damaged){
+        cooldown += deltatime;
+        if(cooldown >= player->attMaxTimer){
+            cooldown = 0;
+            damaged = false;
+        }
+    }
+
+    if(player->attacking && !damaged){
+        if(CheckCollisionRecs(HitBox, player->attackHitBox)){
+            damaged = true;
+            lives--;
+            position.x += 30*player->direction;
+            if(lives <= 0){
+                alive = false;
+                return;
+            } 
+        }
+    }
 
     int distanceX = player->pos.x - position.x;
     int distanceY = player->pos.y - position.y;
@@ -16,43 +36,75 @@ void Enemies::Update(){
     }
     if(position.x > maxRight) position.x = maxRight;
     if(position.x < maxLeft) position.x = maxLeft;
+
+    if(CheckCollision()){
+        player->TakeDamage(damage);
+        position.x -= 10*direction;
+    }
+
+    HitBox = {position.x, position.y, HitBox.width, HitBox.height};
 }
 
 void Enemies::Draw(float deltatime){
-    if(isAttacking){
-        DrawTexture(attackingSprite, position.x, position.y, WHITE);
+    //DrawRectangleRec(HitBox, Fade(RED, 0.5));
+    if(!alive){
+        deadTimer += deltatime;
+        if(deadTimer <= 5){
+            DrawTexture(deadSprite, position.x, position.y + HitBox.height - deadSprite.height, WHITE);
+        } else{
+            remove = true;
+        }
         return;
     }
-    if(alive){
-        DrawTexture(idleSprite, position.x, position.y, WHITE);
+
+    if(isAttacking){
+        Rectangle source = {(float)currentFrame*(frameW + padding), 0, (float)frameW*direction, (float)frameH};
+        DrawTextureRec(attackingSprite, source, position, WHITE);
+        frameTimer += deltatime;
+        if(frameTimer >= frameDuration){
+            frameTimer = 0;
+            currentFrame++;
+            if(currentFrame >= frames) currentFrame = 0;
+        }
+        return;
     }
     else{
-        if(deadTimer <= 5){
-            deadTimer += deltatime;
-            DrawTexture(deadSprite, position.x, position.y, WHITE);
-        } else remove = true;
+        DrawTexture(idleSprite, position.x, position.y, WHITE);
     }
+}
+
+bool Enemies::CheckCollision(){
+    return (CheckCollisionRecs(HitBox, player->HitBox));
 }
 
 MicroCalvi::MicroCalvi(Vector2 pos, Player* player, int maxR, int maxL){
     //standing: 13 x 23
+    //walking: 13 + 1 padding x 24
     //dead: 23 x 8
 
     this->player = player;
 
     lives = 2;
     damage = 1;
-    velocity = 3;
+    velocity = 2;
     position = pos;
     direction = 1;
     maxRight = maxR;
     maxLeft = maxL;
 
+    frameTimer = 0;
+    frameDuration = 0.3f;
     deadTimer = 0;
+    padding = 1;
+    frames = 4;
+    frameH = 24;
+    frameW = 13;
+    currentFrame = 0;
 
     alive = true;
     isAttacking = false;
     remove = false;
+    damaged = false;
 
     HitBox = {position.x, position.y, 13, 23};
     idleSprite = LoadTexture("sprites/characters/microCalviAlive.png");

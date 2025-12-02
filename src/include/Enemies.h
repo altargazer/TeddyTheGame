@@ -15,11 +15,13 @@ public:
     int maxLeft;
     float deadTimer;
     Vector2 position;
+    float cooldown;
 
     //states
     bool isAttacking;
     bool alive;
     bool remove;
+    bool damaged;
  
     //objects
     Rectangle HitBox;
@@ -31,8 +33,18 @@ public:
     Texture2D attackingSprite;
     Texture2D deadSprite;
 
-    void Update();
+    //animation (only for attacking)
+    float frameTimer;
+    float frameDuration;
+    int frames;
+    int padding;
+    int frameW;
+    int frameH;
+    int currentFrame;
+
+    void Update(float deltatime);
     void Draw(float deltatime);
+    bool CheckCollision();
 };
 
 class MicroCalvi : public Enemies{

@@ -165,7 +165,7 @@ void Levels::ManageEnemies(float deltatime){
             enemies.erase(enemies.begin() + i);
         } 
         else{
-            enemies[i]->Update();
+            enemies[i]->Update(deltatime);
             enemies[i]->Draw(deltatime);
             i++;
         }
