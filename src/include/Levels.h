@@ -15,6 +15,7 @@ public:
     Player* player;
     TextBox* textBox;
     Rectangle exitRec;
+    int maxDown; //limit for each limit to fall and die
 
     //map
     Texture2D background;
@@ -23,6 +24,7 @@ public:
     //objects
     Texture2D weapon;
     Texture2D cocoa;
+    Texture2D bed;
 
     //enemies
     std::vector<Enemies*> enemies;
@@ -35,6 +37,7 @@ public:
     bool ReachedExit(Player* p);
     void DrawObject(int id,float posX,float posY);
     void ManageEnemies(float deltatime);
+    void ControlFalling();
 
 };
 

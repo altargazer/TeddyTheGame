@@ -9,20 +9,14 @@ OBJECTS:
 0: nothing
 1: tile/collider
 2: 
-    In level 1:
 3: Cocoa
 4: Coco
 5: Money
 6: 
-    In level 1:
 7: 
-    In level 1:
-8: 
-    In level 1:
+8:
 9: 
-    In level 1:
-10: 
-    In level 1:
+10-19: reserved for beds (checkpoints)
 */
 
 Levels::Levels(int id, Player* player, TextBox* textBox, float exitX, float exitY){
@@ -34,11 +28,18 @@ Levels::Levels(int id, Player* player, TextBox* textBox, float exitX, float exit
     exitRec = {exitX, exitY, 32, 32};
 
     cocoa = LoadTexture("sprites/objects/cocoa.png");
+    bed = LoadTexture("sprites/objects/bed.png");
 
     //Level 1
     if(id == 1){
+        //sprites specific to this level
         weapon = LoadTexture("sprites/objects/weapon2.png");
         background = LoadTexture("sprites/maps/Level1.png");
+
+        //max to fall
+        maxDown = 1216;
+
+        //colliders
         colliders = 
         {
             {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
@@ -70,14 +71,14 @@ Levels::Levels(int id, Player* player, TextBox* textBox, float exitX, float exit
             {0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
             {0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1},
             {0,0,1,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0},
-            {0,0,1,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,1,1,1,1,1,0,0,1,0,0,0,0,0,0,0},
-            {0,0,1,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,3,0,0,0,0,0,0,0,0,0,0,5,0,0,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,0},
+            {0,0,1,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,0,0,10,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,1,1,1,1,1,0,0,1,0,0,0,0,0,0,0},
+            {0,0,1,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5,0,0,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,0},
             {0,0,0,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,0},
             {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4,0,1,0,0,1,0,0,0,0,0,0,0},
             {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,0,0,1,0,0,0,0,0,0,0},
             {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1,0,0,1,0,0,0,0,0,0,0}
-        };
-        
+        };;
+
         //add enemies here
         MicroCalvi* calvi1 = new MicroCalvi({544, 910}, player, 694, 416);
         enemies.push_back(calvi1);
@@ -129,6 +130,7 @@ void Levels::ManageObjects(){
 
                     //Food Items TO-DO
                 }
+                //cocoa: increase 1 life
                 if(colliders[i][j] == 3){
                     Rectangle cocoaColl = {posx+7, posy+14, 18, 21};
                     if(player->HandlePickingUp(cocoaColl, true)){
@@ -136,6 +138,15 @@ void Levels::ManageObjects(){
                             player->lives++;
                             colliders[i][j] = 0;
                         }
+                    }
+                }
+
+                //bed: update last chekpoint
+                if(colliders[i][j] >= 10 && colliders[i][j] <=19){
+                    Rectangle bedColl = {posx, posy, 80, 64};
+                    if(player->HandlePickingUp(bedColl, true)){
+                        player->lastCheckPoint = {posx+10, posy + 32};
+                        std::cout << "Nuevo check point: " << player->lastCheckPoint.x << ", " << player->lastCheckPoint.y << std::endl;
                     }
                 }
             }
@@ -149,9 +160,12 @@ void Levels::DrawObject(int id,float posX,float posY){
         if(id == 2){
             DrawTexture(weapon, posX, posY+5, WHITE);
         }
-        else if(id == 3){
-            DrawTexture(cocoa, posX, posY + 5, WHITE);
-        }
+    }
+    if(id == 3){
+        DrawTexture(cocoa, posX, posY + 5, WHITE);
+    }
+    else if(id >= 10 && id <= 19){
+        DrawTexture(bed, posX, posY, WHITE);
     }
 }
 
@@ -170,6 +184,18 @@ void Levels::ManageEnemies(float deltatime){
             i++;
         }
     }
+}
+
+void Levels::ControlFalling(){
+    if(player->pos.y >= maxDown){
+        player->lives--;
+        if(player->lives <= 0){
+            player->HandleDead();
+            return;
+        }
+        player->pos = player->lastCheckPoint;
+        textBox->SetText({"Upsi, me he tropezado"}, 5);
+    }    
 }
 
 bool Levels::ReachedExit(Player* player){

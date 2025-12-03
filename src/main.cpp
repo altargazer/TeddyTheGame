@@ -23,7 +23,7 @@ int main() {
     InitWindow(screenWidth, screenHeight, "Teddy: The Game");
 
     TextBox textBox;
-    Player player(&textBox, screenWidth / 2+50, screenHeight / 2 + 100, 1);
+    Player player(&textBox, screenWidth / 2-640, screenHeight / 2 + 100, 1);
     player.hasWeapon = false; //at the beggining he doesn't have the weapon
     Levels level1(1, &player, &textBox, 96, 864);
     Levels level2(2, &player, &textBox, 96, 864);
@@ -69,6 +69,7 @@ int main() {
         
         currentLevel->Draw();
         currentLevel->ManageCollisions();
+        currentLevel->ControlFalling();
 
         Vector2 target = {
             player.pos.x + player.width / 2.0f,
@@ -82,9 +83,10 @@ int main() {
         camera.target.y = floorf(camera.target.y);
 
         player.HandleAnimation(deltaTime);
+        currentLevel->ManageObjects();
         player.Draw();
 
-        currentLevel->ManageObjects();
+        
         currentLevel->ManageEnemies(deltaTime);
 
         EndMode2D();

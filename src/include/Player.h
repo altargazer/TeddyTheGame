@@ -18,6 +18,7 @@ public:
     int money;
     int cocos;
     float coolDown;
+    Vector2 lastCheckPoint;
 
     //attack
     float attTimer;
@@ -32,6 +33,7 @@ public:
     bool wallSliding;
     bool hasWeapon;
     bool damaged;
+    bool dead; //to do: for timer if needed
 
     //objects
     Rectangle HitBox;
@@ -84,6 +86,7 @@ public:
     bool HandlePickingUp(Rectangle coll, bool pressing);
     void DrawTop();
     void TakeDamage(int damage);
+    void HandleDead();
 
 };
 

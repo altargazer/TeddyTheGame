@@ -19,6 +19,7 @@ Player::Player(TextBox* textBox, float startX, float startY, int dir){
     direction = dir;
     jumpPower = 12;
     coolDown = 0;
+    lastCheckPoint = {128, 896};
 
     lives = 4;
     money = 15;
@@ -292,13 +293,20 @@ bool Player::HandlePickingUp(Rectangle coll, bool pressing){
 
 void Player::TakeDamage(int damage){
     if(!damaged){
-        if(lives > 1){
-            damaged = true;
-            lives--;
-            pos.x -= 25*direction;
-            pos.y -= 7;
+        lives--;
+        if(lives <= 0){
+            HandleDead();
+            return;
         }
-
-        //TODO else: dead
+        damaged = true;
+        pos.x -= 25*direction;
+        pos.y -= 7;
     }
+}
+
+void Player::HandleDead(){
+    //set dying state and change animation to sleeping, wait some seconds, then die
+    lives = 6;
+    pos = lastCheckPoint;
+    textBox->SetText({"¡Que bien he dormido!"}, 5);
 }
