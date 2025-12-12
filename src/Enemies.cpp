@@ -5,7 +5,10 @@
 
 void Enemies::Update(float deltatime){
     if(!alive) return;
+    
     isAttacking = false;
+
+    if(player->dead) return;
 
     if(damaged){
         cooldown += deltatime;

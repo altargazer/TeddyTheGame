@@ -9,11 +9,17 @@ TextBox::TextBox(){
     index = -1;
 
     arrow = LoadTexture("sprites/objects/arrow.png");
+    pigeon = LoadTexture("sprites/characters/retratoPigeon.png");
 }
 
-void TextBox::SetText(std::vector<std::string> message, float duration){
+void TextBox::SetText(std::vector<std::string> message, float duration, std::string character){
     multiple = message;
     index = 0;
+
+    if(character == "pigeon") retrato = pigeon;
+    if(character == "teddy") retrato = pigeon; //Todo
+    if(character == "calvo") retrato = pigeon; //Todo
+    if(character == "paddy") retrato = pigeon;
 
     this->text = multiple[index];
     this->duration = duration;
@@ -60,11 +66,12 @@ void TextBox::Draw(){
 
     DrawRectangle(15, 100, width, heigth, BLACK);
     DrawRectangle(10, 95, width, heigth, WHITE);
+    DrawTexture(retrato, 15, 100, WHITE);
     DrawRectangleLinesEx({10, 95, width, heigth}, 2.0f, BLACK);
     
     DrawTexture(arrow, 1420, 230, WHITE);
 
-    DrawText(text.c_str(), 30, 115, 30, BLACK);
+    DrawText(text.c_str(), 25 + 200, 115, 35, BLACK);
 
     //TO-Do opción para retrato con booleano en el constructor
     //TO-Do flecha para avanzar

@@ -24,6 +24,8 @@ public:
     float attTimer;
     float attMaxTimer;
 
+    float deadTimer;
+
     //states
     bool isGrounded;
     bool jumping;
@@ -34,6 +36,7 @@ public:
     bool hasWeapon;
     bool damaged;
     bool dead; //to do: for timer if needed
+    bool sleeping;
 
     //objects
     Rectangle HitBox;
@@ -59,6 +62,8 @@ public:
     Animation walkingAnim;
     Animation idleAnim;
     Animation attackAnim;
+    Animation deadAnim;
+    Animation wallAnim;
     Animation* currentAnimation;
 
     int currentFrame;
@@ -70,6 +75,8 @@ public:
     Texture2D wallSlidingText;
     Texture2D attackSheet;
     Texture2D keyInteract;
+    Texture2D deadSheet;
+    Texture2D wallSlide;
 
     //constructors
     Player(TextBox* textBox, float startX = 0, float startY = 0, int direction = 1);

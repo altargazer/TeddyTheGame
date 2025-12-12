@@ -17,10 +17,12 @@ public:
     int size;
 
     Texture2D arrow;
+    Texture2D retrato;
+    Texture2D pigeon;
 
     TextBox();
 
-    void SetText(std::vector<std::string> message, float duration);
+    void SetText(std::vector<std::string> message, float duration, std::string character);
     void Update(float deltatime);
     void Draw();
 

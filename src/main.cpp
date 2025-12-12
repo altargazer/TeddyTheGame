@@ -9,6 +9,8 @@
 
 Levels* currentLevel;
 int level;
+int fadeTimer;
+float alpha;
 
 void ChangeLevel(int next, Levels* nextLevel, Player& player, int x, int y){
     level = next;
@@ -43,13 +45,13 @@ int main() {
 
     while (!WindowShouldClose()){
         
-        float deltaTime = GetFrameTime();
+        float deltatime = GetFrameTime();
 
-        player.Update(deltaTime);
+        player.Update(deltatime);
         player.JumpAndGravity();
         player.UpdatePositions();
 
-        textBox.Update(deltaTime);
+        textBox.Update(deltatime);
 
         if(level == 1 && currentLevel->ReachedExit(&player)){
             //ChangeLevel(2, &level2, player, 0, 0);
@@ -82,15 +84,15 @@ int main() {
         camera.target.x = floorf(camera.target.x);
         camera.target.y = floorf(camera.target.y);
 
-        player.HandleAnimation(deltaTime);
+        player.HandleAnimation(deltatime);
         currentLevel->ManageObjects();
         player.Draw();
 
         
-        currentLevel->ManageEnemies(deltaTime);
+        currentLevel->ManageEnemies(deltatime);
 
         EndMode2D();
-
+        
         textBox.Draw();
         player.DrawTop();
         EndDrawing();

@@ -8,15 +8,16 @@
 OBJECTS:
 0: nothing
 1: tile/collider
-2: 
+2: Weapon
 3: Cocoa
 4: Coco
 5: Money
-6: 
+6:
 7: 
 8:
 9: 
 10-19: reserved for beds (checkpoints)
+20-29: pigeon
 */
 
 Levels::Levels(int id, Player* player, TextBox* textBox, float exitX, float exitY){
@@ -29,6 +30,8 @@ Levels::Levels(int id, Player* player, TextBox* textBox, float exitX, float exit
 
     cocoa = LoadTexture("sprites/objects/cocoa.png");
     bed = LoadTexture("sprites/objects/bed.png");
+    coin = LoadTexture("sprites/objects/coinSmall.png");
+    pigeon = LoadTexture("sprites/objects/pigeon.png");
 
     //Level 1
     if(id == 1){
@@ -70,9 +73,9 @@ Levels::Levels(int id, Player* player, TextBox* textBox, float exitX, float exit
             {0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
             {0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
             {0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1},
-            {0,0,1,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0},
+            {0,0,1,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5,0,0,0,0,0,0,0,0,0,0,0,3,0,0,0,0,1,0,0,0,0,0,0,0},
             {0,0,1,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,0,0,10,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,1,1,1,1,1,0,0,1,0,0,0,0,0,0,0},
-            {0,0,1,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5,0,0,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,0},
+            {0,0,1,0,0,0,0,20,0,0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5,0,0,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,0},
             {0,0,0,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,0},
             {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4,0,1,0,0,1,0,0,0,0,0,0,0},
             {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,0,0,1,0,0,0,0,0,0,0},
@@ -124,7 +127,7 @@ void Levels::ManageObjects(){
                         if(player->HandlePickingUp(weaponColl, true)){
                             player->hasWeapon = true;
                             colliders[i][j] = 0;
-                            textBox->SetText({"Has conseguido un arma!", "Haz click izquierdo para atacar"}, 5);
+                            textBox->SetText({"Has conseguido un arma!", "Haz click izquierdo para atacar"}, 5, "calvo");
                         }
                     }
 
@@ -146,7 +149,25 @@ void Levels::ManageObjects(){
                     Rectangle bedColl = {posx, posy, 80, 64};
                     if(player->HandlePickingUp(bedColl, true)){
                         player->lastCheckPoint = {posx+10, posy + 32};
-                        std::cout << "Nuevo check point: " << player->lastCheckPoint.x << ", " << player->lastCheckPoint.y << std::endl;
+                        player->sleeping = true;
+                    }
+                }
+
+                //coin: increase player.coins
+                if(colliders[i][j] == 5){
+                    Rectangle coinColl = {posx, posy, 17, 16};
+                    if(player->HandlePickingUp(coinColl, false)){
+                        player->money++;
+                        colliders[i][j] = 0;
+                    }
+                }
+
+                //pigeon: say something
+                if(colliders[i][j] >= 20 && colliders[i][j] <=29){
+                    Rectangle pigeonColl = {posx, posy, 31, 28};
+                    //TODO: system for different pigeons
+                    if(player->HandlePickingUp(pigeonColl, true)){
+                        PigeonSytem(colliders[i][j]-20);
                     }
                 }
             }
@@ -167,6 +188,12 @@ void Levels::DrawObject(int id,float posX,float posY){
     else if(id >= 10 && id <= 19){
         DrawTexture(bed, posX, posY, WHITE);
     }
+    else if(id == 5){
+        DrawTexture(coin, posX, posY+5, WHITE);
+    }
+    else if(id >= 20 && id <= 29){
+        DrawTexture(pigeon, posX, posY + 5, WHITE);
+    }
 }
 
 void Levels::ManageEnemies(float deltatime){
@@ -186,15 +213,26 @@ void Levels::ManageEnemies(float deltatime){
     }
 }
 
+void Levels::PigeonSytem(int id){
+    switch (id){
+        //initial
+        case 0:
+            textBox->SetText({"Las reglas del club de la lucha son:", "Nadie habla del club de la lucha", "NADIE habla del club de la lucha", "Y no me acuerdo"}, 5, "pigeon");
+            break;
+
+    }
+}
+
 void Levels::ControlFalling(){
     if(player->pos.y >= maxDown){
         player->lives--;
         if(player->lives <= 0){
             player->HandleDead();
+            player->dead = true;
             return;
         }
         player->pos = player->lastCheckPoint;
-        textBox->SetText({"Upsi, me he tropezado"}, 5);
+        textBox->SetText({"Upsi, me he tropezado"}, 5, "teddy");
     }    
 }
 

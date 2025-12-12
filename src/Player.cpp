@@ -13,7 +13,7 @@ Player::Player(TextBox* textBox, float startX, float startY, int dir){
     pos = {startX, startY};
     height = 37;
     width = 29;
-    speed.x = 6;
+    speed.x = 5;
     gravity = 0.6f;
     speed.y = gravity;
     direction = dir;
@@ -34,8 +34,11 @@ Player::Player(TextBox* textBox, float startX, float startY, int dir){
     idle = true;
     wallSliding = false;
     damaged = false;
+    dead = false;
+    sleeping = false;
 
     attMaxTimer = 0.4f;
+    deadTimer = 0;
 
     currentAnimation = nullptr;
     currentFrame = 0;
@@ -47,6 +50,8 @@ Player::Player(TextBox* textBox, float startX, float startY, int dir){
     idleSheet = LoadTexture("sprites/player/PlayerIdle.png");
     walkingSheet = LoadTexture("sprites/player/PlayerWalk.png");
     attackSheet = LoadTexture("sprites/player/PlayerAttack.png");
+    wallSlide = LoadTexture("sprites/player/PlayerWallSlide.png");
+    deadSheet = LoadTexture("sprites/player/PlayerSleeping.png");
     keyInteract = LoadTexture("sprites/objects/keyE.png");
     lifeFull = LoadTexture("sprites/objects/lifeFull.png");
     lifeEmpty = LoadTexture("sprites/objects/lifeEmpty.png");
@@ -80,13 +85,58 @@ Player::Player(TextBox* textBox, float startX, float startY, int dir){
     attackAnim.paddingRight = 1;
     attackAnim.paddingLeft = 0;
     attackAnim.paddingTop = 6;
+
+    deadAnim.sheet = deadSheet;
+    deadAnim.frames = 14;
+    deadAnim.frameDuration = 0.1f;
+    deadAnim.frameH = 37;
+    deadAnim.frameW = 33;
+    deadAnim.paddingRight = 1;
+    deadAnim.paddingLeft = 0;
+    deadAnim.paddingTop = 0;
+
+    wallAnim.sheet = wallSlide;
+    wallAnim.frames = 0;
+    wallAnim.frameDuration = 1;
+    wallAnim.frameH = 40;
+    wallAnim.frameW = 32;
+    wallAnim.paddingRight = 0;
+    wallAnim.paddingLeft = 0;
+    wallAnim.paddingTop = 0;
 }
 
 void Player::Update(float deltaTime) {
 
+    if(dead){
+        deadTimer += deltaTime;
+        if(deadTimer >= deadAnim.frameDuration * deadAnim.frames){
+            deadTimer = 0;
+            dead = false;
+            HandleDead();
+            return;
+        }
+        ChangeAnim(&deadAnim);
+        return;
+    } 
+
+    if(sleeping){
+        deadTimer += deltaTime;
+        if(deadTimer >= deadAnim.frameDuration * deadAnim.frames){
+            deadTimer = 0;
+            sleeping = false;
+            return;
+        }
+        ChangeAnim(&deadAnim);
+        return;
+    }
+
+    if(textBox->active){
+        ChangeAnim(&idleAnim);
+        return;
+    }
+
     walking = false;
     isGrounded = false;
-    wallSliding = false;
 
     if (IsKeyDown(KEY_D)) {
         pos.x += speed.x;
@@ -100,16 +150,18 @@ void Player::Update(float deltaTime) {
     }
     if (IsKeyPressed(KEY_SPACE) && !jumping) {
         speed.y = -jumpPower;
+        isGrounded = false;
         jumping = true;
     }
 
     //I only need padding when direction = -1
     attackAnim.paddingLeft = direction == 1 ? 0 : 25;
+    wallAnim.paddingLeft = direction == 1 ? -2 : 6;
 
-    if(walking || jumping || wallSliding || attacking) idle = false;
+    if(walking || jumping || wallSliding || attacking || wallSliding) idle = false;
     else idle = true;
 
-    if(walking && !attacking) ChangeAnim(&walkingAnim);
+    if(walking && !attacking && !wallSliding) ChangeAnim(&walkingAnim);
     if(idle) ChangeAnim(&idleAnim);
 
     if(hasWeapon) Attack(deltaTime);
@@ -117,7 +169,7 @@ void Player::Update(float deltaTime) {
 
     if(damaged){
         coolDown += deltaTime;
-        if(coolDown >= 2.0f){
+        if(coolDown >= 1.0f){
             coolDown = 0;
             damaged = false;
         }
@@ -207,7 +259,7 @@ void Player::HandleAnimation(float deltaTime){
         if(currentFrame >= currentAnimation->frames){
             currentFrame = 0;
         }
-    }   
+    }
 }
 
 void Player::ChangeAnim(Animation* anim){
@@ -229,6 +281,7 @@ void Player::JumpAndGravity() {
 }
 
 void Player::HandleCollisions(Rectangle tile){
+    wallSliding = false;
     //Not colliding
     if (!CheckCollisionRecs(HitBox, tile)) return;
 
@@ -246,6 +299,8 @@ void Player::HandleCollisions(Rectangle tile){
     //Is it horizontal or vertical?
     if (minOverlapX < minOverlapY){
         //HORIZONTAL COLLISION
+        wallSliding = true;
+        walking = false;
 
         //colliding from the left
         if (overlapLeft < overlapRight){
@@ -256,7 +311,10 @@ void Player::HandleCollisions(Rectangle tile){
             pos.x += minOverlapX;
         }
         UpdatePositions();
+
+        if(wallSliding) ChangeAnim(&wallAnim);
     }
+    
     else{
         //VERTICAL COLLISION
 
@@ -277,6 +335,7 @@ void Player::HandleCollisions(Rectangle tile){
 }
 
 bool Player::HandlePickingUp(Rectangle coll, bool pressing){
+    if(sleeping || dead) return false;
     if(!pressing){
         if(CheckCollisionRecs(HitBox, coll)) return true;
     }
@@ -295,7 +354,7 @@ void Player::TakeDamage(int damage){
     if(!damaged){
         lives--;
         if(lives <= 0){
-            HandleDead();
+            dead = true;
             return;
         }
         damaged = true;
@@ -308,5 +367,6 @@ void Player::HandleDead(){
     //set dying state and change animation to sleeping, wait some seconds, then die
     lives = 6;
     pos = lastCheckPoint;
-    textBox->SetText({"¡Que bien he dormido!"}, 5);
+    direction = 1;
+    textBox->SetText({"¡Que bien he dormido!"}, 5, "teddy");
 }

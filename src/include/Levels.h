@@ -25,6 +25,8 @@ public:
     Texture2D weapon;
     Texture2D cocoa;
     Texture2D bed;
+    Texture2D coin;
+    Texture2D pigeon;
 
     //enemies
     std::vector<Enemies*> enemies;
@@ -38,6 +40,7 @@ public:
     void DrawObject(int id,float posX,float posY);
     void ManageEnemies(float deltatime);
     void ControlFalling();
+    void PigeonSytem(int id);
 
 };
 
