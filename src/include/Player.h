@@ -32,7 +32,6 @@ public:
     bool walking;
     bool idle;
     bool attacking;
-    bool wallSliding;
     bool hasWeapon;
     bool damaged;
     bool dead; //to do: for timer if needed
@@ -63,7 +62,6 @@ public:
     Animation idleAnim;
     Animation attackAnim;
     Animation deadAnim;
-    Animation wallAnim;
     Animation* currentAnimation;
 
     int currentFrame;
@@ -72,11 +70,9 @@ public:
     //sprites
     Texture2D idleSheet;
     Texture2D walkingSheet;
-    Texture2D wallSlidingText;
     Texture2D attackSheet;
     Texture2D keyInteract;
     Texture2D deadSheet;
-    Texture2D wallSlide;
 
     //constructors
     Player(TextBox* textBox, float startX = 0, float startY = 0, int direction = 1);

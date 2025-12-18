@@ -20,7 +20,7 @@ void ChangeLevel(int next, Levels* nextLevel, Player& player, int x, int y){
 
 int main() {
     const int screenWidth = 1500;
-    const int screenHeight = 900;
+    const int screenHeight = 870;
 
     InitWindow(screenWidth, screenHeight, "Teddy: The Game");
 

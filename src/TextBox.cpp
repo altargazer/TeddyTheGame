@@ -10,6 +10,7 @@ TextBox::TextBox(){
 
     arrow = LoadTexture("sprites/objects/arrow.png");
     pigeon = LoadTexture("sprites/characters/retratoPigeon.png");
+    calvo = LoadTexture("sprites/characters/retratoCalvo.png");
 }
 
 void TextBox::SetText(std::vector<std::string> message, float duration, std::string character){
@@ -18,7 +19,7 @@ void TextBox::SetText(std::vector<std::string> message, float duration, std::str
 
     if(character == "pigeon") retrato = pigeon;
     if(character == "teddy") retrato = pigeon; //Todo
-    if(character == "calvo") retrato = pigeon; //Todo
+    if(character == "calvo") retrato = calvo; //Todo
     if(character == "paddy") retrato = pigeon;
 
     this->text = multiple[index];

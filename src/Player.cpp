@@ -32,7 +32,6 @@ Player::Player(TextBox* textBox, float startX, float startY, int dir){
     walking = false;
     attacking = false;
     idle = true;
-    wallSliding = false;
     damaged = false;
     dead = false;
     sleeping = false;
@@ -50,7 +49,6 @@ Player::Player(TextBox* textBox, float startX, float startY, int dir){
     idleSheet = LoadTexture("sprites/player/PlayerIdle.png");
     walkingSheet = LoadTexture("sprites/player/PlayerWalk.png");
     attackSheet = LoadTexture("sprites/player/PlayerAttack.png");
-    wallSlide = LoadTexture("sprites/player/PlayerWallSlide.png");
     deadSheet = LoadTexture("sprites/player/PlayerSleeping.png");
     keyInteract = LoadTexture("sprites/objects/keyE.png");
     lifeFull = LoadTexture("sprites/objects/lifeFull.png");
@@ -94,15 +92,6 @@ Player::Player(TextBox* textBox, float startX, float startY, int dir){
     deadAnim.paddingRight = 1;
     deadAnim.paddingLeft = 0;
     deadAnim.paddingTop = 0;
-
-    wallAnim.sheet = wallSlide;
-    wallAnim.frames = 0;
-    wallAnim.frameDuration = 1;
-    wallAnim.frameH = 40;
-    wallAnim.frameW = 32;
-    wallAnim.paddingRight = 0;
-    wallAnim.paddingLeft = 0;
-    wallAnim.paddingTop = 0;
 }
 
 void Player::Update(float deltaTime) {
@@ -156,12 +145,11 @@ void Player::Update(float deltaTime) {
 
     //I only need padding when direction = -1
     attackAnim.paddingLeft = direction == 1 ? 0 : 25;
-    wallAnim.paddingLeft = direction == 1 ? -2 : 6;
 
-    if(walking || jumping || wallSliding || attacking || wallSliding) idle = false;
+    if(walking || jumping || attacking) idle = false;
     else idle = true;
 
-    if(walking && !attacking && !wallSliding) ChangeAnim(&walkingAnim);
+    if(walking && !attacking) ChangeAnim(&walkingAnim);
     if(idle) ChangeAnim(&idleAnim);
 
     if(hasWeapon) Attack(deltaTime);
@@ -177,7 +165,7 @@ void Player::Update(float deltaTime) {
 }
 
 void Player::Attack(float deltaTime){
-    if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && !attacking && !textBox->active) {
+    if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && !attacking) {
         attacking = true;
         attTimer = 0;
     }
@@ -281,7 +269,6 @@ void Player::JumpAndGravity() {
 }
 
 void Player::HandleCollisions(Rectangle tile){
-    wallSliding = false;
     //Not colliding
     if (!CheckCollisionRecs(HitBox, tile)) return;
 
@@ -299,7 +286,6 @@ void Player::HandleCollisions(Rectangle tile){
     //Is it horizontal or vertical?
     if (minOverlapX < minOverlapY){
         //HORIZONTAL COLLISION
-        wallSliding = true;
         walking = false;
 
         //colliding from the left
@@ -311,8 +297,6 @@ void Player::HandleCollisions(Rectangle tile){
             pos.x += minOverlapX;
         }
         UpdatePositions();
-
-        if(wallSliding) ChangeAnim(&wallAnim);
     }
     
     else{

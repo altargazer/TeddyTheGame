@@ -17,7 +17,7 @@ OBJECTS:
 8:
 9: 
 10-19: reserved for beds (checkpoints)
-20-29: pigeon
+20-29: reserved for pigeons
 */
 
 Levels::Levels(int id, Player* player, TextBox* textBox, float exitX, float exitY){
@@ -32,6 +32,7 @@ Levels::Levels(int id, Player* player, TextBox* textBox, float exitX, float exit
     bed = LoadTexture("sprites/objects/bed.png");
     coin = LoadTexture("sprites/objects/coinSmall.png");
     pigeon = LoadTexture("sprites/objects/pigeon.png");
+    coco = LoadTexture("sprites/objects/cocoSmall.png");
 
     //Level 1
     if(id == 1){
@@ -162,6 +163,15 @@ void Levels::ManageObjects(){
                     }
                 }
 
+                //coco: inscrease player.cocos
+                if(colliders[i][j] == 4){
+                    Rectangle cocoColl = {posx, posy, 16, 15};
+                    if(player->HandlePickingUp(cocoColl, false)){
+                        player->cocos++;
+                        colliders[i][j] = 0;
+                    }
+                }
+
                 //pigeon: say something
                 if(colliders[i][j] >= 20 && colliders[i][j] <=29){
                     Rectangle pigeonColl = {posx, posy, 31, 28};
@@ -184,6 +194,9 @@ void Levels::DrawObject(int id,float posX,float posY){
     }
     if(id == 3){
         DrawTexture(cocoa, posX, posY + 5, WHITE);
+    }
+    else if(id == 4){
+        DrawTexture(coco, posX, posY+17, WHITE);
     }
     else if(id >= 10 && id <= 19){
         DrawTexture(bed, posX, posY, WHITE);

@@ -24,6 +24,7 @@ public:
     //objects
     Texture2D weapon;
     Texture2D cocoa;
+    Texture2D coco;
     Texture2D bed;
     Texture2D coin;
     Texture2D pigeon;

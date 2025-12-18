@@ -19,6 +19,9 @@ public:
     Texture2D arrow;
     Texture2D retrato;
     Texture2D pigeon;
+    Texture2D calvo;
+    Texture2D paddy;
+    Texture2D teddy;
 
     TextBox();
 
