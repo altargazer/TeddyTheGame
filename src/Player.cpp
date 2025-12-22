@@ -284,22 +284,7 @@ void Player::HandleCollisions(Rectangle tile){
     float minOverlapY = (overlapTop < overlapBottom) ? overlapTop : overlapBottom;
 
     //Is it horizontal or vertical?
-    if (minOverlapX < minOverlapY){
-        //HORIZONTAL COLLISION
-        walking = false;
-
-        //colliding from the left
-        if (overlapLeft < overlapRight){
-            pos.x -= minOverlapX;
-        }
-        //colliding from the right
-        else{ 
-            pos.x += minOverlapX;
-        }
-        UpdatePositions();
-    }
-    
-    else{
+    if (minOverlapX > minOverlapY){
         //VERTICAL COLLISION
 
         //Collision from the top (ground)
@@ -313,6 +298,21 @@ void Player::HandleCollisions(Rectangle tile){
         else{
             pos.y += minOverlapY;
             speed.y = 0;
+        }
+        UpdatePositions();
+    }
+    
+    else{
+        //HORIZONTAL COLLISION
+        walking = false;
+
+        //colliding from the left
+        if (overlapLeft < overlapRight){
+            pos.x -= minOverlapX;
+        }
+        //colliding from the right
+        else{ 
+            pos.x += minOverlapX;
         }
         UpdatePositions();
     }

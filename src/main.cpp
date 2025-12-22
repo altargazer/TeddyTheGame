@@ -66,7 +66,6 @@ int main() {
         //DrawRectangle(0, 0, 1500, 900, Fade({245, 232, 210, 200}, 0.8f));
         DrawRectangle(0, 0, 1500, 900, Fade(WHITE, 0.8f));
         
-        
         BeginMode2D(camera);
         
         currentLevel->Draw();
@@ -95,6 +94,11 @@ int main() {
         
         textBox.Draw();
         player.DrawTop();
+
+        //Position of player for development
+        std::string position = "X: " + std::to_string((int)player.pos.x) + ", Y:" + std::to_string((int)(player.pos.y+player.height));
+        DrawText(position.c_str(), screenWidth-200, screenHeight-40, 30, BLACK);
+        
         EndDrawing();
     }
     

@@ -80,14 +80,14 @@ bool Enemies::CheckCollision(){
     return (CheckCollisionRecs(HitBox, player->HitBox));
 }
 
-MicroCalvi::MicroCalvi(Vector2 pos, Player* player, int maxR, int maxL){
+MicroCalvi::MicroCalvi(Vector2 pos, Player* player, int maxL, int maxR){
     //standing: 13 x 23
     //walking: 13 + 1 padding x 24
     //dead: 23 x 8
 
     this->player = player;
 
-    lives = 2;
+    lives = 3;
     damage = 1;
     velocity = 2;
     position = pos;
@@ -117,4 +117,37 @@ MicroCalvi::MicroCalvi(Vector2 pos, Player* player, int maxR, int maxL){
 
 //MicroCalvi::Draw is the same as parent
 
+Rata::Rata(Vector2 pos, Player* player, int maxL, int maxR){
+    //standing: 26 x 22
+    //walking: 26 + 1 padding x 22
+    //dead: 
 
+    this->player = player;
+
+    lives = 2;
+    damage = 1;
+    velocity = 1;
+    position = pos;
+    direction = 1;
+    maxRight = maxR;
+    maxLeft = maxL;
+
+    frameTimer = 0;
+    frameDuration = 0.3f;
+    deadTimer = 0;
+    padding = 1;
+    frames = 4;
+    frameH = 22;
+    frameW = 26;
+    currentFrame = 0;
+
+    alive = true;
+    isAttacking = false;
+    remove = false;
+    damaged = false;
+
+    HitBox = {position.x, position.y, 26, 22};
+    idleSprite = LoadTexture("sprites/characters/ratAlive.png");
+    attackingSprite = LoadTexture("sprites/characters/ratAttack.png");
+    deadSprite = LoadTexture("sprites/characters/ratDead.png");
+}

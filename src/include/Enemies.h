@@ -54,7 +54,7 @@ public:
 
 class Rata : public Enemies{
 public:
-    Rata(Vector2 pos);
+    Rata(Vector2 pos, Player* player, int maxR, int maxL);
 };
 
 #endif 

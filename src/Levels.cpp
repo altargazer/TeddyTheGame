@@ -84,8 +84,10 @@ Levels::Levels(int id, Player* player, TextBox* textBox, float exitX, float exit
         };;
 
         //add enemies here
-        MicroCalvi* calvi1 = new MicroCalvi({544, 910}, player, 694, 416);
+        MicroCalvi* calvi1 = new MicroCalvi({544, 910}, player, 416, 694);
         enemies.push_back(calvi1);
+        Rata* rat1 = new Rata({1650, 845}, player, 1536, 1792);
+        enemies.push_back(rat1);
     }
 
     //Level 2
