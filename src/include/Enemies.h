@@ -2,7 +2,7 @@
 #define ENEMIES_H
 
 #include <raylib.h>
-#include "PLayer.h"
+#include "Player.h"
 
 class Enemies{
 public:
