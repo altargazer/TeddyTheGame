@@ -126,7 +126,7 @@ Rata::Rata(Vector2 pos, Player* player, int maxL, int maxR){
 
     lives = 2;
     damage = 1;
-    velocity = 1;
+    velocity = 1.5;
     position = pos;
     direction = 1;
     maxRight = maxR;
@@ -150,4 +150,33 @@ Rata::Rata(Vector2 pos, Player* player, int maxL, int maxR){
     idleSprite = LoadTexture("sprites/characters/ratAlive.png");
     attackingSprite = LoadTexture("sprites/characters/ratAttack.png");
     deadSprite = LoadTexture("sprites/characters/ratDead.png");
+}
+
+Paddy::Paddy(Vector2 pos, Player* player, int direction){
+
+    this->player = player;
+
+    lives = 999;
+    damage = 0;
+    velocity = 0;
+    position = pos;
+    this->direction = direction;
+
+    frameTimer = 0;
+    frameDuration = 0.3f;
+    deadTimer = 0;
+    padding = 1;
+    frames = 2;
+    frameH = 33;
+    frameW = 31;
+    currentFrame = 0;
+
+    alive = true;
+    isAttacking = true;
+    remove = false;
+    damaged = false;
+
+    HitBox = {position.x, position.y, 31, 33};
+    attackingSprite = LoadTexture("sprites/characters/PaddySheet.png");
+
 }

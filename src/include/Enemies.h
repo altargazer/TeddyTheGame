@@ -57,4 +57,8 @@ public:
     Rata(Vector2 pos, Player* player, int maxR, int maxL);
 };
 
+class Paddy : public Enemies{
+    Paddy(Vector2 pos, Player* player, int direction);
+};
+
 #endif 

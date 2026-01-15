@@ -17,6 +17,9 @@ public:
     Rectangle exitRec;
     int maxDown; //limit for each limit to fall and die
 
+    //from 1st level
+    bool talkedToPaddy;
+
     //map
     Texture2D background;
     std::vector<std::vector<int>> colliders;
@@ -42,7 +45,7 @@ public:
     void ManageEnemies(float deltatime);
     void ControlFalling();
     void PigeonSytem(int id);
-
+    void DrawFoods();
 };
 
 

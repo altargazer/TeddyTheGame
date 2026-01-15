@@ -40,6 +40,8 @@ Levels::Levels(int id, Player* player, TextBox* textBox, float exitX, float exit
         weapon = LoadTexture("sprites/objects/weapon2.png");
         background = LoadTexture("sprites/maps/Level1.png");
 
+        talkedToPaddy = true;
+
         //max to fall
         maxDown = 1216;
 
@@ -236,6 +238,13 @@ void Levels::PigeonSytem(int id){
             break;
 
     }
+}
+
+void Levels::DrawFoods(){
+    float width = GetScreenWidth() - 500;
+    float heigth = 100;
+
+    DrawRectangle(250, GetScreenHeight() - 120, width, heigth, Fade(BLACK, 0.5f));
 }
 
 void Levels::ControlFalling(){

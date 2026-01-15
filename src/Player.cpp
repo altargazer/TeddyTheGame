@@ -270,6 +270,7 @@ void Player::JumpAndGravity() {
 
 void Player::HandleCollisions(Rectangle tile){
     //Not colliding
+    
     if (!CheckCollisionRecs(HitBox, tile)) return;
 
     //Calculate the overlap from every possible side

@@ -94,6 +94,9 @@ int main() {
         
         textBox.Draw();
         player.DrawTop();
+        if(level == 1 && currentLevel->talkedToPaddy){
+            currentLevel->DrawFoods();
+        }
 
         //Position of player for development
         std::string position = "X: " + std::to_string((int)player.pos.x) + ", Y:" + std::to_string((int)(player.pos.y+player.height));
