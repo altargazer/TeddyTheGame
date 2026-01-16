@@ -19,6 +19,8 @@ public:
 
     //from 1st level
     bool talkedToPaddy;
+    int countFoods;
+    Texture2D egg;
 
     //map
     Texture2D background;

@@ -41,6 +41,8 @@ Levels::Levels(int id, Player* player, TextBox* textBox, float exitX, float exit
         background = LoadTexture("sprites/maps/Level1.png");
 
         talkedToPaddy = true;
+        countFoods = 0;
+        egg = LoadTexture("sprites/objects/egg.png");
 
         //max to fall
         maxDown = 1216;
@@ -241,10 +243,20 @@ void Levels::PigeonSytem(int id){
 }
 
 void Levels::DrawFoods(){
-    float width = GetScreenWidth() - 500;
-    float heigth = 100;
+    float width = GetScreenWidth() - 950;
+    float height = 100;
 
-    DrawRectangle(250, GetScreenHeight() - 120, width, heigth, Fade(BLACK, 0.5f));
+    DrawRectangle(450, GetScreenHeight() - 120, width, height, Fade(BLACK, 0.5f));
+
+    float xpos = 460;
+    float ypos = GetScreenHeight() - 110;
+    for(int i = 0; i<6; i++){
+        DrawRectangleLinesEx({xpos, ypos, height-20, height-20}, 1.0f, WHITE);
+        if(i == 0){
+            DrawTexture(egg, xpos, ypos, WHITE);
+        }
+        xpos += (10 + height-20);
+    }
 }
 
 void Levels::ControlFalling(){
