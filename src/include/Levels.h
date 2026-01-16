@@ -21,6 +21,11 @@ public:
     bool talkedToPaddy;
     int countFoods;
     Texture2D egg;
+    Texture2D nata;
+    Texture2D flour;
+    Texture2D cheese;
+    Texture2D sugar;
+    Texture2D gas;
 
     //map
     Texture2D background;

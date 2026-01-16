@@ -6,6 +6,9 @@
 
 class Enemies{
 public:
+
+    virtual ~Enemies() {}
+
     //stats
     int lives;
     int damage;
@@ -42,8 +45,8 @@ public:
     int frameH;
     int currentFrame;
 
-    void Update(float deltatime);
-    void Draw(float deltatime);
+    virtual void Update(float deltatime);
+    virtual void Draw(float deltatime);
     bool CheckCollision();
 };
 
@@ -58,7 +61,12 @@ public:
 };
 
 class Paddy : public Enemies{
-    Paddy(Vector2 pos, Player* player, int direction);
+public:
+    TextBox* textBox;
+    Paddy(Vector2 pos, Player* player, int direction, TextBox* textBox);
+
+    void Update(float deltatime) override;
+    void Draw(float deltatime) override;
 };
 
 #endif 

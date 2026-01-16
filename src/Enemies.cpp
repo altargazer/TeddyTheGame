@@ -152,9 +152,10 @@ Rata::Rata(Vector2 pos, Player* player, int maxL, int maxR){
     deadSprite = LoadTexture("sprites/characters/ratDead.png");
 }
 
-Paddy::Paddy(Vector2 pos, Player* player, int direction){
+Paddy::Paddy(Vector2 pos, Player* player, int direction, TextBox* textBox){
 
     this->player = player;
+    this->textBox = textBox;
 
     lives = 999;
     damage = 0;
@@ -163,7 +164,7 @@ Paddy::Paddy(Vector2 pos, Player* player, int direction){
     this->direction = direction;
 
     frameTimer = 0;
-    frameDuration = 0.3f;
+    frameDuration = 0.5f;
     deadTimer = 0;
     padding = 1;
     frames = 2;
@@ -172,11 +173,29 @@ Paddy::Paddy(Vector2 pos, Player* player, int direction){
     currentFrame = 0;
 
     alive = true;
-    isAttacking = true;
+    isAttacking = false;
     remove = false;
     damaged = false;
 
     HitBox = {position.x, position.y, 31, 33};
     attackingSprite = LoadTexture("sprites/characters/PaddySheet.png");
 
+}
+
+void Paddy::Update(float deltatime){
+    if(player->dead) return;
+    if(player->HandlePickingUp(HitBox, true)){
+        textBox->SetText({"Hola, querido Teddy"}, 3, "paddy");
+    }
+}
+
+void Paddy::Draw(float deltatime){
+    Rectangle source = {(float)currentFrame*(frameW + padding), 0, (float)frameW*direction, (float)frameH};
+    DrawTextureRec(attackingSprite, source, position, WHITE);
+    frameTimer += deltatime;
+    if(frameTimer >= frameDuration){
+        frameTimer = 0;
+        currentFrame++;
+        if(currentFrame >= frames) currentFrame = 0;
+    }
 }
