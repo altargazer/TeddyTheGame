@@ -63,7 +63,11 @@ public:
 class Paddy : public Enemies{
 public:
     TextBox* textBox;
-    Paddy(Vector2 pos, Player* player, int direction, TextBox* textBox);
+    int level;
+    bool initial;
+    bool condition;
+    //in the first level, the condition is to get all the ingridients
+    Paddy(Vector2 pos, Player* player, int direction, TextBox* textBox, int level);
 
     void Update(float deltatime) override;
     void Draw(float deltatime) override;

@@ -353,5 +353,5 @@ void Player::HandleDead(){
     lives = 6;
     pos = lastCheckPoint;
     direction = 1;
-    textBox->SetText({"¡Que bien he dormido!"}, 5, "teddy");
+    textBox->EnqueuDialogue({{"¡Que bien he dormido!"}, 5, "teddy"});
 }

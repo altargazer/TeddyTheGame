@@ -4,6 +4,7 @@
 #include <raylib.h>
 #include <iostream>
 #include <vector>
+#include <queue>
 
 class TextBox{
 public:
@@ -23,9 +24,19 @@ public:
     Texture2D paddy;
     Texture2D teddy;
 
+    struct Dialogue{
+        std::vector<std::string> messages;
+        float duration;
+        std::string character;
+    };
+
+    std::queue<Dialogue> dialogueQueue;
+
     TextBox();
 
-    void SetText(std::vector<std::string> message, float duration, std::string character);
+    void SetDialogue(const Dialogue& dialogue);
+    void EnqueuDialogue(const Dialogue& dialogue);
+    void FinishDialogue();
     void Update(float deltatime);
     void Draw();
 

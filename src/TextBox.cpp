@@ -1,5 +1,6 @@
 #include <raylib.h>
 #include <iostream>
+#include <queue>
 #include "include/TextBox.h"
 
 TextBox::TextBox(){
@@ -13,20 +14,38 @@ TextBox::TextBox(){
     calvo = LoadTexture("sprites/characters/retratoCalvo.png");
 }
 
-void TextBox::SetText(std::vector<std::string> message, float duration, std::string character){
-    multiple = message;
+void TextBox::SetDialogue(const Dialogue& dialogue){
+    multiple = dialogue.messages;
     index = 0;
 
-    if(character == "pigeon") retrato = pigeon;
-    if(character == "teddy") retrato = pigeon; //Todo
-    if(character == "calvo") retrato = calvo; //Todo
-    if(character == "paddy") retrato = pigeon;
+    if(dialogue.character == "pigeon") retrato = pigeon;
+    if(dialogue.character == "teddy") retrato = pigeon; //Todo
+    if(dialogue.character == "calvo") retrato = calvo; //Todo
+    if(dialogue.character == "paddy") retrato = pigeon;
 
     this->text = multiple[index];
-    this->duration = duration;
+    this->duration = dialogue.duration;
     timer = 0;
     active = true;
     size = (int) multiple.size();
+}
+
+void TextBox::EnqueuDialogue(const Dialogue& dialogue){
+    dialogueQueue.push(dialogue);
+
+    if(!active){
+        SetDialogue(dialogueQueue.front());
+        dialogueQueue.pop();
+    }
+}
+
+void TextBox::FinishDialogue(){
+    if(!dialogueQueue.empty()){
+        SetDialogue(dialogueQueue.front());
+        dialogueQueue.pop();
+    } else{
+        active = false;
+    }
 }
 
 void TextBox::Update(float deltatime){
@@ -35,7 +54,7 @@ void TextBox::Update(float deltatime){
     if(size == 1 || index == size - 1){
         timer += deltatime;
         if (timer >= duration) {
-            active = false;
+            FinishDialogue();
             return;
         }
     }
@@ -46,15 +65,14 @@ void TextBox::Update(float deltatime){
             index++;
             
             if(index >= size){
-                active = false;
+                FinishDialogue();
                 return;
             }
 
             text = multiple[index];
             return;
         }
-
-        active = false;
+        FinishDialogue();
     }
     
 }

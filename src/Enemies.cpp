@@ -152,10 +152,10 @@ Rata::Rata(Vector2 pos, Player* player, int maxL, int maxR){
     deadSprite = LoadTexture("sprites/characters/ratDead.png");
 }
 
-Paddy::Paddy(Vector2 pos, Player* player, int direction, TextBox* textBox){
-
+Paddy::Paddy(Vector2 pos, Player* player, int direction, TextBox* textBox, int level){
     this->player = player;
     this->textBox = textBox;
+    this->level = level;
 
     lives = 999;
     damage = 0;
@@ -163,8 +163,11 @@ Paddy::Paddy(Vector2 pos, Player* player, int direction, TextBox* textBox){
     position = pos;
     this->direction = direction;
 
+    initial = true;
+    condition = false;
+
     frameTimer = 0;
-    frameDuration = 0.5f;
+    frameDuration = 0.6f;
     deadTimer = 0;
     padding = 1;
     frames = 2;
@@ -177,15 +180,43 @@ Paddy::Paddy(Vector2 pos, Player* player, int direction, TextBox* textBox){
     remove = false;
     damaged = false;
 
-    HitBox = {position.x, position.y, 31, 33};
+    HitBox = {position.x-5, position.y, 31+5, 33};
     attackingSprite = LoadTexture("sprites/characters/PaddySheet.png");
 
 }
 
 void Paddy::Update(float deltatime){
     if(player->dead) return;
+
     if(player->HandlePickingUp(HitBox, true)){
-        textBox->SetText({"Hola, querido Teddy"}, 3, "paddy");
+        switch (level){
+            case 1:
+                if(initial){
+                    textBox->EnqueuDialogue({
+                        {"Hola, Teddy! Espero que te estés portando bien.", 
+                        "¿Tienes hambre? ¿Qué tal si te preparo una deliciosa tarta \nde queso?",
+                        "Aunque... no tengo aquí los ingredientes, necesito que me los traigas."
+                    }, 5, "paddy"});
+                    textBox->EnqueuDialogue({{"¿¿Por qué tengo que buscarlos yo??"}, 5, "teddy"});
+                    textBox->EnqueuDialogue({{"Porque los has dejado tú tirados por ahí."}, 5, "paddy"});
+                    textBox->EnqueuDialogue({{"Ah.", "No sé de qué me hablas pero te traeré tus ingredientes."}, 5, "teddy"});
+                    textBox->EnqueuDialogue({{"¿Estás seguro que sabes qué ingredientes son los correctos?"}, 5, "paddy"});
+                    textBox->EnqueuDialogue({{"¡Claro que sí! Ahora mismo vuelvo"}, 5, "teddy"});
+                    initial = false;
+                }
+                else if(!condition){
+                    textBox->EnqueuDialogue({{"¿Aún no me has traído los ingredientes?", "Si necesitas ayuda puedo ir contigo."}, 5, "paddy"});
+                    textBox->EnqueuDialogue({{"¡No, no! El Teddy puede solo."}, 5, "teddy"});
+                }
+                else{
+                    textBox->EnqueuDialogue({{"¡Muchas gracias, Teddy!", "Aunque... no voy a usar la gasolina, gracias."}, 5, "paddy"});
+                }
+
+                break;
+
+            default:
+                textBox->EnqueuDialogue({{"No tengo nada que decir"}, 3, "paddy"});
+        }
     }
 }
 

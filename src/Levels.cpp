@@ -40,7 +40,7 @@ Levels::Levels(int id, Player* player, TextBox* textBox, float exitX, float exit
         weapon = LoadTexture("sprites/objects/weapon2.png");
         background = LoadTexture("sprites/maps/Level1.png");
 
-        talkedToPaddy = true;
+        talkedToPaddy = false;
         countFoods = 0;
         egg = LoadTexture("sprites/objects/egg.png");
         sugar = LoadTexture("sprites/objects/sugar.png");
@@ -93,12 +93,12 @@ Levels::Levels(int id, Player* player, TextBox* textBox, float exitX, float exit
         };;
 
         //add enemies here
+        Paddy* paddy = new Paddy({1650, 838}, player, 1, textBox, 1);
+        enemies.push_back(paddy);
         MicroCalvi* calvi1 = new MicroCalvi({544, 910}, player, 416, 694);
         enemies.push_back(calvi1);
         //Rata* rat1 = new Rata({1650, 845}, player, 1536, 1792);
         //enemies.push_back(rat1);
-        Paddy* paddy = new Paddy({1650, 838}, player, 1, textBox);
-        enemies.push_back(paddy);
     }
 
     //Level 2
@@ -141,7 +141,7 @@ void Levels::ManageObjects(){
                         if(player->HandlePickingUp(weaponColl, true)){
                             player->hasWeapon = true;
                             colliders[i][j] = 0;
-                            textBox->SetText({"Has conseguido un arma!", "Haz click izquierdo para atacar"}, 5, "calvo");
+                            textBox->EnqueuDialogue({{"Has conseguido un arma!", "Haz click izquierdo para atacar"}, 5, "calvo"});
                         }
                     }
 
@@ -243,7 +243,7 @@ void Levels::PigeonSytem(int id){
     switch (id){
         //initial
         case 0:
-            textBox->SetText({"Las reglas del club de la lucha son:", "Nadie habla del club de la lucha", "NADIE habla del club de la lucha", "Y no me acuerdo"}, 5, "pigeon");
+            textBox->EnqueuDialogue({{"Las reglas del club de la lucha son:", "Nadie habla del club de la lucha", "NADIE habla del club de la lucha", "Y no me acuerdo"}, 5, "pigeon"});
             break;
 
     }
@@ -290,7 +290,7 @@ void Levels::ControlFalling(){
             return;
         }
         player->pos = player->lastCheckPoint;
-        textBox->SetText({"Upsi, me he tropezado"}, 5, "teddy");
+        textBox->EnqueuDialogue({{"Upsi, me he tropezado"}, 5, "teddy"});
     }    
 }
 
