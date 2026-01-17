@@ -141,7 +141,7 @@ void Levels::ManageObjects(){
                         if(player->HandlePickingUp(weaponColl, true)){
                             player->hasWeapon = true;
                             colliders[i][j] = 0;
-                            textBox->EnqueuDialogue({{"Has conseguido un arma!", "Haz click izquierdo para atacar"}, 5, "calvo"});
+                            textBox->EnqueuDialogue({{"¡Has conseguido el Palo de la Tigrosura!", "Haz click izquierdo para atacar.", "No me mates, por favor."}, 5, "calvo"});
                         }
                     }
 
@@ -243,9 +243,18 @@ void Levels::PigeonSytem(int id){
     switch (id){
         //initial
         case 0:
-            textBox->EnqueuDialogue({{"Las reglas del club de la lucha son:", "Nadie habla del club de la lucha", "NADIE habla del club de la lucha", "Y no me acuerdo"}, 5, "pigeon"});
+            textBox->EnqueuDialogue({
+                {"Buenos días, Señor Teddy. Paloma #134 a su servicio.", 
+                    "He sido enviada para informarle del funcionamiento de este videojuego.", 
+                    "Los controles son: \n\t· A y D para moverse a izquierda y derecha. \n\t· SPACE para saltar. \n\t· E para interectuar.",
+                    "Si se encuentra cansado, le recomiendo que duerma cada vez que \ntenga ocasión.\nEse será el lugar en el que reaparezca en caso de... accidente.",
+                    "No olvide que la cocoa le ayudará a mantenerse sano y feliz.",
+                }, 5, "pigeon"});
+            textBox->EnqueuDialogue({{"Muchas gracias, soldado. Puedes descansar."}, 5, "teddy"});
+            textBox->EnqueuDialogue({{"Señor, sí, señor."}, 5, "pigeon"});
             break;
-
+        default:
+                textBox->EnqueuDialogue({{"No tengo nada que decir."}, 5, "pigeon"});
     }
 }
 

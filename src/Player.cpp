@@ -223,10 +223,10 @@ void Player::DrawTop(){
         counter += 80;
     }
 
-    counter += 650;
+    counter += 640;
     std::string coins = std::to_string(money) + "x";
     DrawText((coins.c_str()), counter, 25, 50, BLACK);
-    counter += 80;
+    counter += 90;
     DrawTexture(monedita, counter, 20, WHITE);
 
     counter += 100;
