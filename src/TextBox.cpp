@@ -12,6 +12,8 @@ TextBox::TextBox(){
     arrow = LoadTexture("sprites/objects/arrow.png");
     pigeon = LoadTexture("sprites/characters/retratoPigeon.png");
     calvo = LoadTexture("sprites/characters/retratoCalvo.png");
+    teddy = LoadTexture("sprites/characters/retratoTeddy.png");
+    paddy = LoadTexture("sprites/characters/retratoPaddy.png");
 }
 
 void TextBox::SetDialogue(const Dialogue& dialogue){
@@ -19,9 +21,9 @@ void TextBox::SetDialogue(const Dialogue& dialogue){
     index = 0;
 
     if(dialogue.character == "pigeon") retrato = pigeon;
-    if(dialogue.character == "teddy") retrato = pigeon; //Todo
-    if(dialogue.character == "calvo") retrato = calvo; //Todo
-    if(dialogue.character == "paddy") retrato = pigeon;
+    if(dialogue.character == "teddy") retrato = teddy;
+    if(dialogue.character == "calvo") retrato = calvo;
+    if(dialogue.character == "paddy") retrato = paddy;
 
     this->text = multiple[index];
     this->duration = dialogue.duration;

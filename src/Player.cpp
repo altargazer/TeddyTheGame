@@ -145,6 +145,7 @@ void Player::Update(float deltaTime) {
 
     //I only need padding when direction = -1
     attackAnim.paddingLeft = direction == 1 ? 0 : 25;
+    deadAnim.paddingLeft = direction == 1 ? 0 : 4;
 
     if(walking || jumping || attacking) idle = false;
     else idle = true;
