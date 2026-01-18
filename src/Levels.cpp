@@ -3,6 +3,8 @@
 #include "include/TextBox.h"
 #include <raylib.h>
 #include <iostream>
+#include <fstream>
+#include <sstream>
 
 /*
 OBJECTS:
@@ -40,8 +42,16 @@ Levels::Levels(int id, Player* player, TextBox* textBox, float exitX, float exit
         weapon = LoadTexture("sprites/objects/weapon2.png");
         background = LoadTexture("sprites/maps/Level1.png");
 
-        talkedToPaddy = false;
+        startedMission = false;
         countFoods = 0;
+        foods = {false, false, false, false, false, false};
+        eggBig = LoadTexture("sprites/objects/eggBig.png");
+        sugarBig = LoadTexture("sprites/objects/sugarBig.png");
+        cheeseBig = LoadTexture("sprites/objects/cheeseBig.png");
+        flourBig = LoadTexture("sprites/objects/flourBig.png");
+        nataBig = LoadTexture("sprites/objects/nataBig.png");
+        gasBig = LoadTexture("sprites/objects/gasBig.png");
+
         egg = LoadTexture("sprites/objects/egg.png");
         sugar = LoadTexture("sprites/objects/sugar.png");
         cheese = LoadTexture("sprites/objects/cheese.png");
@@ -52,53 +62,25 @@ Levels::Levels(int id, Player* player, TextBox* textBox, float exitX, float exit
         //max to fall
         maxDown = 1216;
 
-        //colliders
-        colliders = 
-        {
-            {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-            {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-            {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-            {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-            {0,0,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-            {0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-            {0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-            {0,1,0,0,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-            {0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-            {0,1,0,0,0,0,0,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5,0,0,0,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-            {0,1,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-            {0,1,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-            {0,0,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-            {0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-            {0,1,0,0,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,3,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-            {0,0,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-            {0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-            {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-            {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-            {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-            {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-            {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-            {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-            {0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5,0,0,0,0,0,0,0,0,0,0},
-            {0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0},
-            {0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-            {0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-            {0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1},
-            {0,0,1,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5,0,0,0,0,0,0,0,0,0,0,0,3,0,0,0,0,1,0,0,0,0,0,0,0},
-            {0,0,1,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,0,0,10,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,1,1,1,1,1,0,0,1,0,0,0,0,0,0,0},
-            {0,0,1,0,0,0,0,20,0,0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5,0,0,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,0},
-            {0,0,0,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,0},
-            {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4,0,1,0,0,1,0,0,0,0,0,0,0},
-            {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,0,0,1,0,0,0,0,0,0,0},
-            {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1,0,0,1,0,0,0,0,0,0,0}
-        };;
+        colliders = LoadColliders("sprites/maps/Level1.csv");
 
-        //add enemies here
+        //add enemies here (if any)
         Paddy* paddy = new Paddy({1650, 838}, player, 1, textBox, 1);
         enemies.push_back(paddy);
         MicroCalvi* calvi1 = new MicroCalvi({544, 910}, player, 416, 694);
         enemies.push_back(calvi1);
         //Rata* rat1 = new Rata({1650, 845}, player, 1536, 1792);
         //enemies.push_back(rat1);
+
+        //add bad floors here (if any)
+        BadFloor clean1 = {{1696, 288, 96, 32}, {1568, 230}, "Uy, no debería pisar donde ha limpiado Paddy."};
+        badFloors.push_back(clean1);
+        BadFloor clean2 = {{1632, 384, 256, 32}, {1568, 230}, "Uy, no debería pisar donde ha limpiado Paddy."};
+        badFloors.push_back(clean2);
+        BadFloor clean3 = {{1952, 384, 224, 32}, {1568, 230}, "Uy, no debería pisar donde ha limpiado Paddy."};
+        badFloors.push_back(clean3);
+        BadFloor clean4 = {{2016, 128, 128, 32}, {1568, 230}, "Uy, no debería pisar donde ha limpiado Paddy."};
+        badFloors.push_back(clean4);
     }
 
     //Level 2
@@ -129,14 +111,15 @@ void Levels::ManageCollisions(){
 void Levels::ManageObjects(){
     for(int i = 0; i < (int)colliders.size(); i++){
         for(int j = 0; j < (int)colliders[i].size(); j++){
-            if(colliders[i][j] != 1 && colliders[i][j] != 0){
+            int num = colliders[i][j];
+            if(num != 1 && num != 0){
                 float posy = i*32;
                 float posx = j*32;
-                DrawObject(colliders[i][j], posx, posy);
+                DrawObject(num, posx, posy);
                 //Food items and weapon are only on Level 1
                 if(id == 1){
                     //Weapon
-                    if(colliders[i][j] == 2){
+                    if(num == 2){
                         Rectangle weaponColl = {posx+4, posy+4, 24, 28};
                         if(player->HandlePickingUp(weaponColl, true)){
                             player->hasWeapon = true;
@@ -146,9 +129,36 @@ void Levels::ManageObjects(){
                     }
 
                     //Food Items TO-DO
+                    else if(num == 6){
+                        Rectangle eggColl = {posx+4, posy+4, 20, 20};
+                        if(player->HandlePickingUp(eggColl, true)){
+                            foods[0] = true;
+                            countFoods++;
+                            colliders[i][j] = 0;
+                            textBox->EnqueuDialogue({{"¡Huevos, perfecto! Espero que no se me rompan por el camino..."}, 5, "teddy"});
+                        }
+                    }
+                    else if(num == 7){
+                        Rectangle sugarColl = {posx+4, posy+4, 20, 20};
+                        if(player->HandlePickingUp(sugarColl, true)){
+                            foods[1] = true;
+                            countFoods++;
+                            colliders[i][j] = 0;
+                            textBox->EnqueuDialogue({{"El azúcar también tiene pinta de que es necesario para una rica tarta dulcecita."}, 5, "teddy"});
+                        }
+                    }
+                    else if(num == 8){
+                        Rectangle gasColl = {posx+4, posy+4, 20, 20};
+                        if(player->HandlePickingUp(gasColl, true)){
+                            foods[2] = true;
+                            countFoods++;
+                            colliders[i][j] = 0;
+                            textBox->EnqueuDialogue({{"¡Ooh, rica gasolina para echarle por encima!\nSe me haría la boca agua si tuviera glándulas salivales."}, 5, "teddy"});
+                        }
+                    }
                 }
                 //cocoa: increase 1 life
-                if(colliders[i][j] == 3){
+                if(num == 3){
                     Rectangle cocoaColl = {posx+7, posy+14, 18, 21};
                     if(player->HandlePickingUp(cocoaColl, true)){
                         if(player->lives < 6){
@@ -159,7 +169,7 @@ void Levels::ManageObjects(){
                 }
 
                 //bed: update last chekpoint
-                if(colliders[i][j] >= 10 && colliders[i][j] <=19){
+                else if(num >= 10 && num <=19){
                     Rectangle bedColl = {posx, posy, 80, 64};
                     if(player->HandlePickingUp(bedColl, true)){
                         player->lastCheckPoint = {posx+10, posy + 32};
@@ -168,7 +178,7 @@ void Levels::ManageObjects(){
                 }
 
                 //coin: increase player.coins
-                if(colliders[i][j] == 5){
+                else if(num == 5){
                     Rectangle coinColl = {posx, posy, 17, 16};
                     if(player->HandlePickingUp(coinColl, false)){
                         player->money++;
@@ -177,20 +187,20 @@ void Levels::ManageObjects(){
                 }
 
                 //coco: inscrease player.cocos
-                if(colliders[i][j] == 4){
+                else if(num == 4){
                     Rectangle cocoColl = {posx, posy, 16, 15};
-                    if(player->HandlePickingUp(cocoColl, false)){
+                    if(player->HandlePickingUp(cocoColl, true)){
                         player->cocos++;
+                        textBox->EnqueuDialogue({{"Otro rico coco para Paddy."}, 3, "teddy"});
                         colliders[i][j] = 0;
                     }
                 }
 
                 //pigeon: say something
-                if(colliders[i][j] >= 20 && colliders[i][j] <=29){
+                else if(num >= 20 && num <=29){
                     Rectangle pigeonColl = {posx, posy, 31, 28};
-                    //TODO: system for different pigeons
                     if(player->HandlePickingUp(pigeonColl, true)){
-                        PigeonSytem(colliders[i][j]-20);
+                        PigeonSytem(num-20);
                     }
                 }
             }
@@ -203,6 +213,15 @@ void Levels::DrawObject(int id,float posX,float posY){
     if(this->id == 1){
         if(id == 2){
             DrawTexture(weapon, posX, posY+5, WHITE);
+        }
+        else if(id == 6){
+            DrawTexture(egg, posX, posY+20, WHITE);
+        }
+        else if(id == 7){
+            DrawTexture(sugar, posX, posY+15, WHITE);
+        }
+        else if(id == 8){
+            DrawTexture(gas, posX, posY+15, WHITE);
         }
     }
     if(id == 3){
@@ -239,6 +258,21 @@ void Levels::ManageEnemies(float deltatime){
     }
 }
 
+void Levels::ManageBadFloors(){
+    for(int i = 0; i<(int)badFloors.size(); i++){
+        if(CheckCollisionRecs(badFloors[i].area, player->HitBox)){
+            player->lives--;
+            if(player->lives <= 0){
+                player->HandleDead();
+                player->dead = true;
+                return;
+            }
+            player->pos = badFloors[i].newPos;
+            textBox->EnqueuDialogue({{badFloors[i].message}, 5, "teddy"});
+        }
+    }
+}
+
 void Levels::PigeonSytem(int id){
     switch (id){
         //initial
@@ -268,23 +302,24 @@ void Levels::DrawFoods(){
     float ypos = GetScreenHeight() - 110;
     for(int i = 0; i<6; i++){
         DrawRectangleLinesEx({xpos, ypos, height-20, height-20}, 1.0f, WHITE);
-        if(i == 0){
-            DrawTexture(egg, xpos, ypos, WHITE);
+
+        if(i == 0 && foods[i]){
+            DrawTexture(eggBig, xpos, ypos, WHITE);
         }
-        else if (i == 1){
-            DrawTexture(sugar, xpos, ypos, WHITE);
+        else if (i == 1 && foods[i]){
+            DrawTexture(sugarBig, xpos, ypos, WHITE);
         }
-        else if (i == 2){
-            DrawTexture(gas, xpos, ypos, WHITE);
+        else if (i == 2 && foods[i]){
+            DrawTexture(gasBig, xpos, ypos, WHITE);
         }
-        else if (i == 3){
-            DrawTexture(flour, xpos, ypos, WHITE);
+        else if (i == 3 && foods[i]){
+            DrawTexture(flourBig, xpos, ypos, WHITE);
         }
-        else if (i == 4){
-            DrawTexture(cheese, xpos, ypos, WHITE);
+        else if (i == 4 && foods[i]){
+            DrawTexture(cheeseBig, xpos, ypos, WHITE);
         }
-        else if (i == 5){
-            DrawTexture(nata, xpos, ypos, WHITE);
+        else if (i == 5 && foods[i]){
+            DrawTexture(nataBig, xpos, ypos, WHITE);
         }
         xpos += (10 + height-20);
     }
@@ -299,10 +334,30 @@ void Levels::ControlFalling(){
             return;
         }
         player->pos = player->lastCheckPoint;
+        player->speed.y = 0;
         textBox->EnqueuDialogue({{"Upsi, me he tropezado"}, 5, "teddy"});
     }    
 }
 
 bool Levels::ReachedExit(Player* player){
     return CheckCollisionRecs(exitRec, player->HitBox);
+}
+
+std::vector<std::vector<int>> Levels::LoadColliders(const std::string& filename){
+    std::vector<std::vector<int>> colliders;
+    std:: ifstream file(filename);
+    std::string line;
+    while(std::getline(file, line)){
+        std::vector<int> row;
+        std::stringstream ss(line);
+        std::string num;
+        
+        while(std::getline(ss, num, ',')){
+            row.push_back(std::stoi(num));
+        }
+
+        colliders.push_back(row);
+    }
+
+    return colliders;
 }

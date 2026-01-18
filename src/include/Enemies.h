@@ -7,7 +7,7 @@
 class Enemies{
 public:
 
-    virtual ~Enemies() {}
+    virtual ~Enemies(){}
 
     //stats
     int lives;
@@ -45,6 +45,10 @@ public:
     int frameH;
     int currentFrame;
 
+    //paddy
+    bool initial;
+    bool condition;
+
     virtual void Update(float deltatime);
     virtual void Draw(float deltatime);
     bool CheckCollision();
@@ -64,8 +68,7 @@ class Paddy : public Enemies{
 public:
     TextBox* textBox;
     int level;
-    bool initial;
-    bool condition;
+
     //in the first level, the condition is to get all the ingridients
     Paddy(Vector2 pos, Player* player, int direction, TextBox* textBox, int level);
 

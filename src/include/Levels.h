@@ -3,6 +3,9 @@
 
 #include <raylib.h>
 #include <vector>
+#include <fstream>
+#include <iostream>
+#include <sstream>
 #include "Player.h"
 #include "TextBox.h"
 #include "Enemies.h"
@@ -17,15 +20,20 @@ public:
     Rectangle exitRec;
     int maxDown; //limit for each limit to fall and die
 
+    struct BadFloor{
+        Rectangle area;
+        Vector2 newPos;
+        std::string message;
+    };
+
+    std::vector<BadFloor> badFloors;
+
     //from 1st level
-    bool talkedToPaddy;
+    bool startedMission;
     int countFoods;
-    Texture2D egg;
-    Texture2D nata;
-    Texture2D flour;
-    Texture2D cheese;
-    Texture2D sugar;
-    Texture2D gas;
+    std::vector<bool> foods;
+    Texture2D egg, nata, flour, cheese, sugar, gas;
+    Texture2D eggBig, nataBig, flourBig, cheeseBig, sugarBig, gasBig;
 
     //map
     Texture2D background;
@@ -50,9 +58,11 @@ public:
     bool ReachedExit(Player* p);
     void DrawObject(int id,float posX,float posY);
     void ManageEnemies(float deltatime);
+    void ManageBadFloors();
     void ControlFalling();
     void PigeonSytem(int id);
     void DrawFoods();
+    std::vector<std::vector<int>> LoadColliders(const std::string& file);
 };
 
 

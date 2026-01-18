@@ -64,11 +64,12 @@ int main() {
         DrawTexture(fondo, 0,0, WHITE);
         DrawTexture(fondo, fondo.width, 0, WHITE);
         //DrawRectangle(0, 0, 1500, 900, Fade({245, 232, 210, 200}, 0.8f));
-        DrawRectangle(0, 0, 1500, 900, Fade(WHITE, 0.8f));
+        DrawRectangle(0, 0, 1500, 900, Fade(WHITE, 0.5f));
         
         BeginMode2D(camera);
         
         currentLevel->Draw();
+        currentLevel->ManageBadFloors();
         currentLevel->ManageCollisions();
         currentLevel->ControlFalling();
 
@@ -86,15 +87,15 @@ int main() {
         player.HandleAnimation(deltatime);
         currentLevel->ManageObjects();
         player.Draw();
-
-        
         currentLevel->ManageEnemies(deltatime);
 
         EndMode2D();
         
         textBox.Draw();
         player.DrawTop();
-        if(level == 1 && currentLevel->talkedToPaddy){
+
+        //specific to level 1
+        if(level == 1 && !currentLevel->enemies[0]->initial){
             currentLevel->DrawFoods();
         }
 
