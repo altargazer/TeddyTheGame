@@ -65,7 +65,7 @@ Levels::Levels(int id, Player* player, TextBox* textBox, float exitX, float exit
         colliders = LoadColliders("sprites/maps/Level1.csv");
 
         //add enemies here (if any)
-        Paddy* paddy = new Paddy({1650, 838}, player, 1, textBox, 1);
+        Paddy* paddy = new Paddy({1690, 838}, player, 1, textBox, 1);
         enemies.push_back(paddy);
         MicroCalvi* calvi1 = new MicroCalvi({544, 910}, player, 416, 694);
         enemies.push_back(calvi1);
@@ -73,13 +73,13 @@ Levels::Levels(int id, Player* player, TextBox* textBox, float exitX, float exit
         //enemies.push_back(rat1);
 
         //add bad floors here (if any)
-        BadFloor clean1 = {{1696, 288, 96, 32}, {1568, 230}, "Uy, no debería pisar donde ha limpiado Paddy."};
+        BadFloor clean1 = {{1696, 288, 96, 32}, {1568, 235}, "Uy, no debería pisar donde ha limpiado Paddy."};
         badFloors.push_back(clean1);
-        BadFloor clean2 = {{1632, 384, 256, 32}, {1568, 230}, "Uy, no debería pisar donde ha limpiado Paddy."};
+        BadFloor clean2 = {{1632, 384, 224, 32}, {1568, 235}, "Uy, no debería pisar donde ha limpiado Paddy."};
         badFloors.push_back(clean2);
-        BadFloor clean3 = {{1952, 384, 224, 32}, {1568, 230}, "Uy, no debería pisar donde ha limpiado Paddy."};
+        BadFloor clean3 = {{1952, 384, 224, 32}, {1568, 235}, "Uy, no debería pisar donde ha limpiado Paddy."};
         badFloors.push_back(clean3);
-        BadFloor clean4 = {{2016, 128, 128, 32}, {1568, 230}, "Uy, no debería pisar donde ha limpiado Paddy."};
+        BadFloor clean4 = {{2016, 128, 128, 32}, {1568, 235}, "Uy, no debería pisar donde ha limpiado Paddy."};
         badFloors.push_back(clean4);
     }
 
@@ -132,6 +132,10 @@ void Levels::ManageObjects(){
                     else if(num == 6){
                         Rectangle eggColl = {posx+4, posy+4, 20, 20};
                         if(player->HandlePickingUp(eggColl, true)){
+                            if(enemies[0]->initial){
+                                textBox->EnqueuDialogue({{"¿Debería comerme esto?\nHm, seguramente Paddy se enfadaría. Mejor no."}, 5, "teddy"});
+                                continue;
+                            }
                             foods[0] = true;
                             countFoods++;
                             colliders[i][j] = 0;
@@ -141,15 +145,23 @@ void Levels::ManageObjects(){
                     else if(num == 7){
                         Rectangle sugarColl = {posx+4, posy+4, 20, 20};
                         if(player->HandlePickingUp(sugarColl, true)){
+                            if(enemies[0]->initial){
+                                textBox->EnqueuDialogue({{"¿Debería comerme esto?\nHm, seguramente Paddy se enfadaría. Mejor no."}, 5, "teddy"});
+                                continue;
+                            }
                             foods[1] = true;
                             countFoods++;
                             colliders[i][j] = 0;
-                            textBox->EnqueuDialogue({{"El azúcar también tiene pinta de que es necesario para una rica tarta dulcecita."}, 5, "teddy"});
+                            textBox->EnqueuDialogue({{"El azúcar también tiene pinta de que es necesario para una rica \ntarta dulcecita."}, 5, "teddy"});
                         }
                     }
                     else if(num == 8){
                         Rectangle gasColl = {posx+4, posy+4, 20, 20};
                         if(player->HandlePickingUp(gasColl, true)){
+                            if(enemies[0]->initial){
+                                textBox->EnqueuDialogue({{"¿Debería comerme esto?\nHm, seguramente Paddy se enfadaría. Mejor no."}, 5, "teddy"});
+                                continue;
+                            }
                             foods[2] = true;
                             countFoods++;
                             colliders[i][j] = 0;

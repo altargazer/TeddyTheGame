@@ -25,7 +25,7 @@ int main() {
     InitWindow(screenWidth, screenHeight, "Teddy: The Game");
 
     TextBox textBox;
-    Player player(&textBox, screenWidth / 2-640, screenHeight / 2 + 100, 1);
+    Player player(&textBox, screenWidth / 2-620, screenHeight / 2 + 200, 1);
     player.hasWeapon = false; //at the beggining he doesn't have the weapon
     Levels level1(1, &player, &textBox, 96, 864);
     Levels level2(2, &player, &textBox, 96, 864);
@@ -47,16 +47,6 @@ int main() {
         
         float deltatime = GetFrameTime();
 
-        player.Update(deltatime);
-        player.JumpAndGravity();
-        player.UpdatePositions();
-
-        textBox.Update(deltatime);
-
-        if(level == 1 && currentLevel->ReachedExit(&player)){
-            //ChangeLevel(2, &level2, player, 0, 0);
-        }
-
         //Drawing Starts Here
         BeginDrawing();
         ClearBackground(WHITE);
@@ -67,6 +57,19 @@ int main() {
         DrawRectangle(0, 0, 1500, 900, Fade(WHITE, 0.5f));
         
         BeginMode2D(camera);
+
+        player.Update(deltatime);
+        player.JumpAndGravity();
+        player.UpdatePositions();
+
+        textBox.Update(deltatime);
+
+        if(level == 1 && currentLevel->ReachedExit(&player)){
+            //delete Level 1 to free that memory
+            //ChangeLevel(2, &level2, player, 0, 0);
+            //player.pos = {}
+            //player.lastCheckPoint = player.pos
+        }
         
         currentLevel->Draw();
         currentLevel->ManageBadFloors();

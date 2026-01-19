@@ -19,7 +19,7 @@ Player::Player(TextBox* textBox, float startX, float startY, int dir){
     direction = dir;
     jumpPower = 12;
     coolDown = 0;
-    lastCheckPoint = {128, 896};
+    lastCheckPoint = {128, 962};
 
     lives = 4;
     money = 15;
