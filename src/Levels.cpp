@@ -69,8 +69,12 @@ Levels::Levels(int id, Player* player, TextBox* textBox, float exitX, float exit
         enemies.push_back(paddy);
         MicroCalvi* calvi1 = new MicroCalvi({544, 910}, player, 416, 694);
         enemies.push_back(calvi1);
-        //Rata* rat1 = new Rata({1650, 845}, player, 1536, 1792);
-        //enemies.push_back(rat1);
+        Rata* rat1 = new Rata({416, 224+14}, player, 256, 416);
+        enemies.push_back(rat1);
+        Rata* rat2 = new Rata({1920, 192+14}, player, 1824, 1920);
+        enemies.push_back(rat2);
+        Rata* rat3 = new Rata({928, 608+14}, player, 928, 1152);
+        enemies.push_back(rat3);
 
         //add bad floors here (if any)
         BadFloor clean1 = {{1696, 288, 96, 32}, {1568, 235}, "Uy, no debería pisar donde ha limpiado Paddy."};
