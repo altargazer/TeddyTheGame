@@ -24,6 +24,7 @@ void Enemies::Update(float deltatime){
             lives--;
             position.x += 30*player->direction;
             if(lives <= 0){
+                player->experience += experience;
                 alive = false;
                 return;
             } 
@@ -52,6 +53,10 @@ void Enemies::Draw(float deltatime){
     //DrawRectangleRec(HitBox, Fade(RED, 0.5));
     if(!alive){
         deadTimer += deltatime;
+        if(deadTimer <= 3){
+            std::string exp = "+" + std::to_string(experience) + " exp.";
+            DrawText(exp.c_str(), player->pos.x, player->pos.y -15, 10, GREEN);
+        }
         if(deadTimer <= 5){
             DrawTexture(deadSprite, position.x, position.y + HitBox.height - deadSprite.height, WHITE);
         } else{
@@ -88,12 +93,14 @@ MicroCalvi::MicroCalvi(Vector2 pos, Player* player, int maxL, int maxR){
     this->player = player;
 
     lives = 3;
+    maxLives = 3;
     damage = 1;
     velocity = 2;
     position = pos;
     direction = 1;
     maxRight = maxR;
     maxLeft = maxL;
+    experience = 20;
 
     frameTimer = 0;
     frameDuration = 0.3f;
@@ -125,12 +132,14 @@ Rata::Rata(Vector2 pos, Player* player, int maxL, int maxR){
     this->player = player;
 
     lives = 2;
+    maxLives = 2;
     damage = 1;
     velocity = 1.5;
     position = pos;
     direction = 1;
     maxRight = maxR;
     maxLeft = maxL;
+    experience = 10;
 
     frameTimer = 0;
     frameDuration = 0.3f;

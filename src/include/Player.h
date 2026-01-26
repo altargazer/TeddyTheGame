@@ -19,6 +19,8 @@ public:
     int cocos;
     float coolDown;
     Vector2 lastCheckPoint;
+    int experience;
+    int level;
 
     //attack
     float attTimer;
@@ -39,6 +41,7 @@ public:
 
     //objects
     Rectangle HitBox;
+    Rectangle FeetBox;
     Rectangle attackHitBox;
     TextBox* textBox;
     Texture2D lifeFull;
@@ -90,6 +93,7 @@ public:
     void DrawTop();
     void TakeDamage(int damage);
     void HandleDead();
+    void UpgradeLevel();
 
 };
 

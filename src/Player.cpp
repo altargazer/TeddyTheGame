@@ -20,6 +20,8 @@ Player::Player(TextBox* textBox, float startX, float startY, int dir){
     jumpPower = 12;
     coolDown = 0;
     lastCheckPoint = {128, 962};
+    experience = 0;
+    level = 1;
 
     lives = 4;
     money = 15;
@@ -45,6 +47,7 @@ Player::Player(TextBox* textBox, float startX, float startY, int dir){
 
     HitBox = {pos.x + 5, pos.y + 3, width - 4, height - 10};
     attackHitBox = {pos.x + width - 3, pos.y, 31, height};
+    FeetBox = {pos.x, pos.y + height - 5, width, 5};
 
     idleSheet = LoadTexture("sprites/player/PlayerIdle.png");
     walkingSheet = LoadTexture("sprites/player/PlayerWalk.png");
@@ -95,6 +98,8 @@ Player::Player(TextBox* textBox, float startX, float startY, int dir){
 }
 
 void Player::Update(float deltaTime) {
+
+    UpgradeLevel();
 
     if(dead){
         deadTimer += deltaTime;
@@ -186,9 +191,11 @@ void Player::UpdatePositions(){
     if(direction == 1){
         HitBox = {pos.x + 5, pos.y + 3, width - 5, height - 10};
         attackHitBox = {pos.x + width - 3, pos.y, 31, height};
+        FeetBox = {pos.x + 5, pos.y + height - 10, width - 10, 5};
     } else{
         HitBox = {pos.x, pos.y + 3, width - 5, height - 10};
         attackHitBox = {pos.x - 30, pos.y, 31, height};
+        FeetBox = {pos.x + 5, pos.y + height - 10, width - 10, 5};
         if(walking){
             HitBox.x -= 1;
         }
@@ -211,6 +218,7 @@ void Player::Draw() {
 
     //DrawRectangleRec(HitBox, {200, 0, 0, 100});
     //DrawRectangleRec(attackHitBox, {200, 0, 0, 100});
+    //DrawRectangleRec(FeetBox, RED);
 }
 
 void Player::DrawTop(){
@@ -355,4 +363,22 @@ void Player::HandleDead(){
     pos = lastCheckPoint;
     direction = 1;
     textBox->EnqueuDialogue({{"¡Que bien he dormido!"}, 5, "teddy"});
+}
+
+void Player::UpgradeLevel(){
+    if(level == 1 && experience >= 40){
+        experience = 0;
+        level = 2;
+        textBox->teddy = LoadTexture("sprites/characters/retratoTeddyGuay.png");
+        textBox->EnqueuDialogue({{"¡Felicidades! Has subido al nivel 2. La foto del Teddy ha sido actualizada como recompensa"}, 5, "calvo"});
+        textBox->EnqueuDialogue({{"¿Qué narices signi-?"}, 2, "teddy"});
+        textBox->EnqueuDialogue({{"!!!"}, 2, "teddy"});
+        textBox->EnqueuDialogue({{"¡Toma ya, que guapo está el Teddy!"}, 3, "teddy"});
+        return;
+    }
+
+    else if(level == 2 && experience >= 60){
+        experience = 0;
+        level = 3;
+    }
 }

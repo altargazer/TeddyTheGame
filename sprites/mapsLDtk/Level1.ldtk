@@ -120,13 +120,13 @@
 	], "entities": [], "tilesets": [
 		{
 			"__cWid": 5,
-			"__cHei": 6,
+			"__cHei": 7,
 			"identifier": "Cocina",
 			"uid": 1,
 			"relPath": "../maps/Cocina.png",
 			"embedAtlas": null,
 			"pxWid": 160,
-			"pxHei": 192,
+			"pxHei": 224,
 			"tileGridSize": 32,
 			"spacing": 0,
 			"padding": 0,
@@ -136,8 +136,8 @@
 			"customData": [],
 			"savedSelections": [],
 			"cachedPixelData": {
-				"opaqueTiles": "001100001100111111111111111111",
-				"averageColors": "eebbeffffecbffffeebbefffea42e432fa42f432ea42e432fb52f942fb52fb52f942fb52fa42f432f432f432f321f632f632f632f632fa53fa53fa53"
+				"opaqueTiles": "00110000110011111111111111111111111",
+				"averageColors": "eebbeffffecbffffeebbefffea42e432fa42f432ea42e432fb52f942fb52fb52f942fb52fa42f432f432f432f321f632f632f632f632fa53fa53fa53f866f866f632f632f632"
 			}
 		}
 	], "enums": [], "externalEnums": [], "levelFields": [] },

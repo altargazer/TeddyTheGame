@@ -77,18 +77,18 @@ Levels::Levels(int id, Player* player, TextBox* textBox, float exitX, float exit
         enemies.push_back(rat3);
 
         //add bad floors here (if any)
-        BadFloor clean1 = {{1696, 288, 96, 32}, {1568, 235}, "Uy, no debería pisar donde ha limpiado Paddy."};
+        BadFloor clean1 = {{1696, 288, 96, 10}, {1568, 235}, "Uy, no debería pisar donde ha limpiado Paddy."};
         badFloors.push_back(clean1);
-        BadFloor clean2 = {{1632, 384, 224, 32}, {1568, 235}, "Uy, no debería pisar donde ha limpiado Paddy."};
+        BadFloor clean2 = {{1632, 384, 224, 10}, {1568, 235}, "Uy, no debería pisar donde ha limpiado Paddy."};
         badFloors.push_back(clean2);
-        BadFloor clean3 = {{1952, 384, 224, 32}, {1568, 235}, "Uy, no debería pisar donde ha limpiado Paddy."};
+        BadFloor clean3 = {{1952, 384, 224, 10}, {1568, 235}, "Uy, no debería pisar donde ha limpiado Paddy."};
         badFloors.push_back(clean3);
-        BadFloor clean4 = {{2016, 128, 128, 32}, {1568, 235}, "Uy, no debería pisar donde ha limpiado Paddy."};
+        BadFloor clean4 = {{2016, 128, 128, 10}, {1568, 235}, "Uy, no debería pisar donde ha limpiado Paddy."};
         badFloors.push_back(clean4);
     }
 
     //Level 2
-    if(id == 2){
+    else if(id == 2){
         
     }
 
@@ -269,6 +269,9 @@ void Levels::ManageEnemies(float deltatime){
         else{
             enemies[i]->Update(deltatime);
             enemies[i]->Draw(deltatime);
+            if(player->dead){
+                enemies[i]->lives = enemies[i]->maxLives;
+            }
             i++;
         }
     }
@@ -276,7 +279,7 @@ void Levels::ManageEnemies(float deltatime){
 
 void Levels::ManageBadFloors(){
     for(int i = 0; i<(int)badFloors.size(); i++){
-        if(CheckCollisionRecs(badFloors[i].area, player->HitBox)){
+        if(CheckCollisionRecs(badFloors[i].area, player->FeetBox)){
             player->lives--;
             if(player->lives <= 0){
                 player->HandleDead();

@@ -11,6 +11,7 @@ public:
 
     //stats
     int lives;
+    int maxLives;
     int damage;
     int velocity;
     int direction;
@@ -19,6 +20,7 @@ public:
     float deadTimer;
     Vector2 position;
     float cooldown;
+    int experience;
 
     //states
     bool isAttacking;
