@@ -78,4 +78,19 @@ public:
     void Draw(float deltatime) override;
 };
 
+class Wall : public Enemies{
+public:
+
+    TextBox* textBox;
+
+    Texture2D sheet;
+    Rectangle normal;
+    Rectangle broken1;
+    Rectangle broken2;
+
+    Wall(float level, Vector2 pos, int height, int width, Player* player, TextBox* textBox);
+    void Draw(float deltatime) override;
+    void Update(float deltatime) override;
+};
+
 #endif 

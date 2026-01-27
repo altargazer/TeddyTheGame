@@ -61,7 +61,7 @@ void TextBox::Update(float deltatime){
         }
     }
 
-    if(IsMouseButtonPressed(MOUSE_LEFT_BUTTON)){
+    if(IsKeyPressed(KEY_SPACE)){
         //for multiple words
         if(size > 1){
             index++;

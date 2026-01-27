@@ -17,6 +17,7 @@ public:
     int lives;
     int money;
     int cocos;
+    int calvis;
     float coolDown;
     Vector2 lastCheckPoint;
     int experience;
@@ -36,7 +37,7 @@ public:
     bool attacking;
     bool hasWeapon;
     bool damaged;
-    bool dead; //to do: for timer if needed
+    bool dead;
     bool sleeping;
 
     //objects

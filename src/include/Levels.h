@@ -36,6 +36,7 @@ public:
     Texture2D eggBig, nataBig, flourBig, cheeseBig, sugarBig, gasBig;
 
     //map
+    Texture2D levelMap;
     Texture2D background;
     std::vector<std::vector<int>> colliders;
 
@@ -62,6 +63,7 @@ public:
     void ControlFalling();
     void PigeonSytem(int id);
     void DrawFoods();
+    void DrawBackground();
     std::vector<std::vector<int>> LoadColliders(const std::string& file);
 };
 

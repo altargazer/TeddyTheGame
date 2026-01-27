@@ -14,13 +14,20 @@ OBJECTS:
 3: Cocoa
 4: Coco
 5: Money
-6:
-7: 
-8:
-9: 
-10-19: reserved for beds (checkpoints)
+6: food1
+7: food2
+8: food3
+9: food4
+10:food5
+11: food6
+12: beds (one per level)
 20-29: reserved for pigeons
 */
+
+template<typename Base, typename T>
+inline bool instanceof(const T *ptr) {
+   return dynamic_cast<const Base*>(ptr) != nullptr;
+}
 
 Levels::Levels(int id, Player* player, TextBox* textBox, float exitX, float exitY){
 
@@ -40,7 +47,8 @@ Levels::Levels(int id, Player* player, TextBox* textBox, float exitX, float exit
     if(id == 1){
         //sprites specific to this level
         weapon = LoadTexture("sprites/objects/weapon2.png");
-        background = LoadTexture("sprites/maps/Level1.png");
+        levelMap = LoadTexture("sprites/maps/Level1.png");
+        background = LoadTexture("sprites/maps/fondoCocina.png");
 
         startedMission = false;
         countFoods = 0;
@@ -75,6 +83,12 @@ Levels::Levels(int id, Player* player, TextBox* textBox, float exitX, float exit
         enemies.push_back(rat2);
         Rata* rat3 = new Rata({928, 608+14}, player, 928, 1152);
         enemies.push_back(rat3);
+        Rata* rat4 = new Rata({2560, 896+14}, player, 2560, 2976);
+        enemies.push_back(rat4);
+        Rata* rat5 = new Rata({2848, 896+14}, player, 2560, 2976);
+        enemies.push_back(rat5);
+        Wall* wall1 = new Wall(1, {1312, 992}, 64, 64, player, textBox);
+        enemies.push_back(wall1);
 
         //add bad floors here (if any)
         BadFloor clean1 = {{1696, 288, 96, 10}, {1568, 235}, "Uy, no debería pisar donde ha limpiado Paddy."};
@@ -85,6 +99,14 @@ Levels::Levels(int id, Player* player, TextBox* textBox, float exitX, float exit
         badFloors.push_back(clean3);
         BadFloor clean4 = {{2016, 128, 128, 10}, {1568, 235}, "Uy, no debería pisar donde ha limpiado Paddy."};
         badFloors.push_back(clean4);
+        BadFloor hot1 = {{2976, 448, 32, 10}, {2720, 288}, "¡Ahh que me quemo!."};
+        badFloors.push_back(hot1);
+        BadFloor hot2 = {{2816, 512, 32, 10}, {2720, 288}, "¡Ahh que me quemo!."};
+        badFloors.push_back(hot2);
+        BadFloor hot3 = {{2944, 576, 64, 10}, {2720, 288}, "¡Ahh que me quemo!."};
+        badFloors.push_back(hot3);
+        BadFloor hot4 = {{2688, 800, 32, 10}, {2624, 608}, "¡Ahh que me quemo!."};
+        badFloors.push_back(hot4);
     }
 
     //Level 2
@@ -95,7 +117,15 @@ Levels::Levels(int id, Player* player, TextBox* textBox, float exitX, float exit
 }
 
 void Levels::Draw(){
-    DrawTexture(background, 0, 0, WHITE);
+    DrawTexture(levelMap, 0, 0, WHITE);
+}
+
+void Levels::DrawBackground(){
+    if(id == 1){
+        DrawTexture(background, 0,0, WHITE);
+        DrawTexture(background, background.width, 0, WHITE);
+        DrawRectangle(0, 0, 1500, 900, Fade(WHITE, 0.5f));
+    }
 }
 
 void Levels::ManageCollisions(){
@@ -132,7 +162,7 @@ void Levels::ManageObjects(){
                         }
                     }
 
-                    //Food Items TO-DO
+                    //Food Items
                     else if(num == 6){
                         Rectangle eggColl = {posx+4, posy+4, 20, 20};
                         if(player->HandlePickingUp(eggColl, true)){
@@ -172,6 +202,45 @@ void Levels::ManageObjects(){
                             textBox->EnqueuDialogue({{"¡Ooh, rica gasolina para echarle por encima!\nSe me haría la boca agua si tuviera glándulas salivales."}, 5, "teddy"});
                         }
                     }
+                    else if(num == 9){
+                        Rectangle flourColl = {posx+4, posy+4, 20, 20};
+                        if(player->HandlePickingUp(flourColl, true)){
+                            if(enemies[0]->initial){
+                                textBox->EnqueuDialogue({{"¿Debería comerme esto?\nHm, seguramente Paddy se enfadaría. Mejor no."}, 5, "teddy"});
+                                continue;
+                            }
+                            foods[3] = true;
+                            countFoods++;
+                            colliders[i][j] = 0;
+                            textBox->EnqueuDialogue({{"COCAINA.", "Ah no, es harina.\nPues supongo que le pondremos eso a la tarta :("}, 5, "teddy"});
+                        }
+                    }
+                    else if(num == 10){
+                        Rectangle cheeseColl = {posx+4, posy+4, 20, 20};
+                        if(player->HandlePickingUp(cheeseColl, true)){
+                            if(enemies[0]->initial){
+                                textBox->EnqueuDialogue({{"¿Debería comerme esto?\nHm, seguramente Paddy se enfadaría. Mejor no."}, 5, "teddy"});
+                                continue;
+                            }
+                            foods[4] = true;
+                            countFoods++;
+                            colliders[i][j] = 0;
+                            textBox->EnqueuDialogue({{"¡Queso! Igual debería darle esto a las ratas para que me dejen en paz...", "Ah claro, supongo que es más importante llevarla para hcer la tarta de queso.\nTendré que matar a las ratas, entonces."}, 5, "teddy"});
+                        }
+                    }
+                    else if(num == 11){
+                        Rectangle nataColl = {posx+4, posy+4, 20, 20};
+                        if(player->HandlePickingUp(nataColl, true)){
+                            if(enemies[0]->initial){
+                                textBox->EnqueuDialogue({{"¿Debería comerme esto?\nHm, seguramente Paddy se enfadaría. Mejor no."}, 5, "teddy"});
+                                continue;
+                            }
+                            foods[5] = true;
+                            countFoods++;
+                            colliders[i][j] = 0;
+                            textBox->EnqueuDialogue({{"Oh no."}, 5, "teddy"});
+                        }
+                    }
                 }
                 //cocoa: increase 1 life
                 if(num == 3){
@@ -185,7 +254,7 @@ void Levels::ManageObjects(){
                 }
 
                 //bed: update last chekpoint
-                else if(num >= 10 && num <=19){
+                else if(num == 12){
                     Rectangle bedColl = {posx, posy, 80, 64};
                     if(player->HandlePickingUp(bedColl, true)){
                         player->lastCheckPoint = {posx+10, posy + 32};
@@ -234,10 +303,19 @@ void Levels::DrawObject(int id,float posX,float posY){
             DrawTexture(egg, posX, posY+20, WHITE);
         }
         else if(id == 7){
-            DrawTexture(sugar, posX, posY+15, WHITE);
+            DrawTexture(sugar, posX, posY+20, WHITE);
         }
         else if(id == 8){
-            DrawTexture(gas, posX, posY+15, WHITE);
+            DrawTexture(gas, posX, posY+20, WHITE);
+        }
+        else if(id == 9){
+            DrawTexture(flour, posX, posY+20, WHITE);
+        }
+        else if(id == 10){
+            DrawTexture(cheese, posX, posY+20, WHITE);
+        }
+        else if(id == 11){
+            DrawTexture(nata, posX, posY+20, WHITE);
         }
     }
     if(id == 3){
@@ -246,7 +324,7 @@ void Levels::DrawObject(int id,float posX,float posY){
     else if(id == 4){
         DrawTexture(coco, posX, posY+17, WHITE);
     }
-    else if(id >= 10 && id <= 19){
+    else if(id == 12){
         DrawTexture(bed, posX, posY, WHITE);
     }
     else if(id == 5){
@@ -261,6 +339,11 @@ void Levels::ManageEnemies(float deltatime){
     int i = 0;
     while(i < (int)enemies.size()){
         if(enemies[i]->remove){
+
+            if(instanceof<MicroCalvi>(enemies[i])){
+                player->calvis++;
+            }
+
             //to free the memory space:
             delete enemies[i];
             //to remove the element from the vector:
@@ -301,7 +384,7 @@ void Levels::PigeonSytem(int id){
                     "He sido enviada para informarle del funcionamiento de este videojuego.", 
                     "Los controles son: \n\t· A y D para moverse a izquierda y derecha. \n\t· SPACE para saltar. \n\t· E para interectuar.",
                     "Si se encuentra cansado, le recomiendo que duerma cada vez que \ntenga ocasión.\nEse será el lugar en el que reaparezca en caso de... accidente.",
-                    "No olvide que la cocoa le ayudará a mantenerse sano y feliz.",
+                    "No olvide que la cocoa le ayudará a mantenerse sano y feliz."
                 }, 5, "pigeon"});
             textBox->EnqueuDialogue({{"Muchas gracias, soldado. Puedes descansar."}, 5, "teddy"});
             textBox->EnqueuDialogue({{"Señor, sí, señor."}, 5, "pigeon"});

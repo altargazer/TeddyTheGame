@@ -14,14 +14,15 @@ Player::Player(TextBox* textBox, float startX, float startY, int dir){
     height = 37;
     width = 29;
     speed.x = 5;
-    gravity = 0.6f;
+    gravity = 0.5f;
     speed.y = gravity;
     direction = dir;
-    jumpPower = 12;
+    jumpPower = 10;
     coolDown = 0;
     lastCheckPoint = {128, 962};
     experience = 0;
     level = 1;
+    calvis = 0;
 
     lives = 4;
     money = 15;

@@ -11,6 +11,7 @@ Levels* currentLevel;
 int level;
 int fadeTimer;
 float alpha;
+bool menu;
 
 void ChangeLevel(int next, Levels* nextLevel, Player& player, int x, int y){
     level = next;
@@ -39,8 +40,6 @@ int main() {
     camera.rotation = 0.0f;
     camera.zoom = 3.0f;
 
-    Texture2D fondo = LoadTexture("sprites/maps/fondoCocina.png");
-
     SetTargetFPS(60);
 
     while (!WindowShouldClose()){
@@ -51,10 +50,7 @@ int main() {
         BeginDrawing();
         ClearBackground(WHITE);
         
-        DrawTexture(fondo, 0,0, WHITE);
-        DrawTexture(fondo, fondo.width, 0, WHITE);
-        //DrawRectangle(0, 0, 1500, 900, Fade({245, 232, 210, 200}, 0.8f));
-        DrawRectangle(0, 0, 1500, 900, Fade(WHITE, 0.5f));
+        currentLevel->DrawBackground();
         
         BeginMode2D(camera);
 
@@ -65,6 +61,7 @@ int main() {
         textBox.Update(deltatime);
 
         if(level == 1 && currentLevel->ReachedExit(&player)){
+            //menu = true
             //delete Level 1 to free that memory
             //ChangeLevel(2, &level2, player, 0, 0);
             //player.pos = {}

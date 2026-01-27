@@ -41,7 +41,7 @@ void Enemies::Update(float deltatime){
     if(position.x > maxRight) position.x = maxRight;
     if(position.x < maxLeft) position.x = maxLeft;
 
-    if(CheckCollision()){
+    if(CheckCollisionRecs(player->HitBox, HitBox)){
         player->TakeDamage(damage);
         position.x -= 10*direction;
     }
@@ -53,7 +53,7 @@ void Enemies::Draw(float deltatime){
     //DrawRectangleRec(HitBox, Fade(RED, 0.5));
     if(!alive){
         deadTimer += deltatime;
-        if(deadTimer <= 3){
+        if(deadTimer <= 2){
             std::string exp = "+" + std::to_string(experience) + " exp.";
             DrawText(exp.c_str(), player->pos.x, player->pos.y -15, 10, GREEN);
         }
@@ -237,5 +237,90 @@ void Paddy::Draw(float deltatime){
         frameTimer = 0;
         currentFrame++;
         if(currentFrame >= frames) currentFrame = 0;
+    }
+}
+
+Wall::Wall(float level, Vector2 pos, int height, int width, Player* player, TextBox* textBox){
+
+    this->player = player;
+    this->textBox = textBox;
+
+    lives = 3;
+    maxLives = 3;
+    position = pos;
+    experience = 5;
+
+    deadTimer = 0;
+
+    damaged = false;
+
+    alive = true;
+    remove = false;
+
+    HitBox = {position.x, position.y, (float)width, (float)height};
+    if(level == 1){
+        sheet = LoadTexture("sprites/maps/wallLevel1.png");
+    }
+
+    normal = {0, 0, (float)width, (float)height};
+    broken1 = {(float)width+1, 0, (float)width, (float)height};
+    broken2 = {(float)width*2+2, 0, (float)width, (float)height};
+}
+
+void Wall::Update(float deltatime){
+    if(!alive) return;
+
+    if(CheckCollisionRecs(player->HitBox, HitBox)){
+        if(player->pos.x - position.x < 0){
+            player->pos.x = position.x - player->width;
+        } else player->pos.x = position.x + 32;
+    }
+
+    if(damaged){
+        cooldown += deltatime;
+        if(cooldown >= player->attMaxTimer){
+            cooldown = 0;
+            damaged = false;
+        }
+    }
+
+    if(player->attacking && !damaged){
+        if(CheckCollisionRecs(HitBox, player->attackHitBox)){
+            damaged = true;
+            lives--;
+            if(lives <= 0){
+                player->experience += experience;
+                alive = false;
+                textBox->EnqueuDialogue({{"... Espero que a nadie le importe que haya roto eso jiji"}, 3, "teddy"});
+                return;
+            } 
+        }
+    }
+
+    HitBox = {position.x, position.y, HitBox.width, HitBox.height};
+}
+
+void Wall::Draw(float deltatime){
+    if(!alive){
+        deadTimer += deltatime;
+        if(deadTimer <= 2){
+            std::string exp = "+" + std::to_string(experience) + " exp.";
+            DrawText(exp.c_str(), player->pos.x, player->pos.y -15, 10, GREEN);
+        }else{
+            remove = true;
+        }
+        return;
+    }
+    
+    switch (lives){
+        case 3:
+            DrawTextureRec(sheet, normal, position, WHITE);
+            break;
+        case 2: 
+            DrawTextureRec(sheet, broken1, position, WHITE);
+            break;
+        case 1:
+            DrawTextureRec(sheet, broken2, position, WHITE);
+            break;
     }
 }
