@@ -222,13 +222,17 @@ void Paddy::Update(float deltatime){
                     textBox->EnqueuDialogue({{"¿Aún no me has traído los ingredientes?", "Si necesitas ayuda puedo ir contigo."}, 5, "paddy"});
                     textBox->EnqueuDialogue({{"¡No, no! El Teddy puede solo."}, 5, "teddy"});
                 }
-                else{
+                else if(!condition2){
                     textBox->EnqueuDialogue({{"¡Muchas gracias, Teddy!", "Aunque... te ha faltado la mermelada."}, 5, "paddy"});
                     textBox->EnqueuDialogue({{"He traído algo mejor: ¡Gasolina!"}, 5, "teddy"});
                     textBox->EnqueuDialogue({{"No."}, 3, "paddy"});
                     textBox->EnqueuDialogue({{"Vale :)"}, 3, "teddy"});
                     textBox->EnqueuDialogue({{"En fin, ahora mismo te hago la tarta de queso.", "*Fiuuum*", "Ya está, Teddy."}, 3, "paddy"});
-                    if(!textBox->active) condition2 = true;
+                    //black out??
+                    condition2 = true;
+                }
+                else{
+                    textBox->EnqueuDialogue({{"Que aproveche, Teddy"}, 5, "paddy"});
                 }
 
                 break;

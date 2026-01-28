@@ -24,9 +24,9 @@ Player::Player(TextBox* textBox, float startX, float startY, int dir){
     level = 1;
     calvis = 0;
 
-    lives = 4;
-    money = 15;
-    cocos = 5;
+    lives = 6;
+    money = 0;
+    cocos = 0;
 
     this->textBox = textBox;
 

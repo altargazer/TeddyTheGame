@@ -32,7 +32,7 @@ public:
     bool startedMission;
     int countFoods;
     std::vector<bool> foods;
-    Texture2D egg, nata, flour, cheese, sugar, gas;
+    Texture2D egg, nata, flour, cheese, sugar, gas, cake;
     Texture2D eggBig, nataBig, flourBig, cheeseBig, sugarBig, gasBig;
 
     //map

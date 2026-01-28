@@ -66,6 +66,7 @@ Levels::Levels(int id, Player* player, TextBox* textBox, float exitX, float exit
         flour = LoadTexture("sprites/objects/flour.png");
         nata = LoadTexture("sprites/objects/nata.png");
         gas = LoadTexture("sprites/objects/gas.png");
+        cake = LoadTexture("sprites/objects/nata.png"); //todo
 
         //max to fall
         maxDown = 1216;
@@ -99,13 +100,13 @@ Levels::Levels(int id, Player* player, TextBox* textBox, float exitX, float exit
         badFloors.push_back(clean3);
         BadFloor clean4 = {{2016, 128, 128, 10}, {1568, 235}, "Uy, no debería pisar donde ha limpiado Paddy."};
         badFloors.push_back(clean4);
-        BadFloor hot1 = {{2976, 448, 32, 10}, {2720, 288}, "¡Ahh que me quemo!."};
+        BadFloor hot1 = {{2976, 448, 32, 10}, {2720, 288}, "¡Ahh que me quemo!"};
         badFloors.push_back(hot1);
-        BadFloor hot2 = {{2816, 512, 32, 10}, {2720, 288}, "¡Ahh que me quemo!."};
+        BadFloor hot2 = {{2816, 512, 32, 10}, {2720, 288}, "¡Ahh que me quemo!"};
         badFloors.push_back(hot2);
-        BadFloor hot3 = {{2944, 576, 64, 10}, {2720, 288}, "¡Ahh que me quemo!."};
+        BadFloor hot3 = {{2944, 576, 64, 10}, {2720, 288}, "¡Ahh que me quemo!"};
         badFloors.push_back(hot3);
-        BadFloor hot4 = {{2688, 800, 32, 10}, {2624, 608}, "¡Ahh que me quemo!."};
+        BadFloor hot4 = {{2688, 800, 32, 10}, {2624, 608}, "¡Ahh que me quemo!"};
         badFloors.push_back(hot4);
     }
 
@@ -259,6 +260,14 @@ void Levels::ManageObjects(){
                             if(countFoods == 6) enemies[0]->condition = true;
                         }
                     }
+                    else if(num == 13 && enemies[0]->condition2){
+                        Rectangle cakeColl = {posx+4, posy+4, 20, 20};
+                        if(player->HandlePickingUp(cakeColl, true)){
+                            textBox->EnqueuDialogue({{"¡ÑAM!"}, 3, "teddy"});
+                            colliders[i][j] = 0;
+                            //finish level
+                        }
+                    }
                 }
                 //cocoa: increase 1 life
                 if(num == 3){
@@ -334,6 +343,9 @@ void Levels::DrawObject(int id,float posX,float posY){
         }
         else if(id == 11){
             DrawTexture(nata, posX, posY+20, WHITE);
+        }
+        else if(id == 13 && enemies[0]->condition2){
+            DrawTexture(cake, posX, posY+20, WHITE);
         }
     }
     if(id == 3){
