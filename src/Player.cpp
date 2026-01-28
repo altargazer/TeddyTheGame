@@ -100,8 +100,6 @@ Player::Player(TextBox* textBox, float startX, float startY, int dir){
 
 void Player::Update(float deltaTime) {
 
-    UpgradeLevel();
-
     if(dead){
         deadTimer += deltaTime;
         if(deadTimer >= deadAnim.frameDuration * deadAnim.frames){
@@ -368,7 +366,6 @@ void Player::HandleDead(){
 
 void Player::UpgradeLevel(){
     if(level == 1 && experience >= 40){
-        experience = 0;
         level = 2;
         textBox->teddy = LoadTexture("sprites/characters/retratoTeddyGuay.png");
         textBox->EnqueuDialogue({{"¡Felicidades! Has subido al nivel 2. La foto del Teddy ha sido actualizada como recompensa"}, 5, "calvo"});
@@ -378,8 +375,7 @@ void Player::UpgradeLevel(){
         return;
     }
 
-    else if(level == 2 && experience >= 60){
-        experience = 0;
+    else if(level == 2 && experience >= 100){
         level = 3;
     }
 }

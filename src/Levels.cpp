@@ -120,6 +120,18 @@ void Levels::Draw(){
     DrawTexture(levelMap, 0, 0, WHITE);
 }
 
+void Levels::Update(){
+    bool attacking = false;
+    for(int i = 0; (std::size_t)i<enemies.size(); i++){
+        if(enemies[i]->isAttacking){
+            attacking = true;
+        }
+    }
+    if(!attacking){
+        player->UpgradeLevel();
+    }
+}
+
 void Levels::DrawBackground(){
     if(id == 1){
         DrawTexture(background, 0,0, WHITE);
@@ -166,20 +178,21 @@ void Levels::ManageObjects(){
                     else if(num == 6){
                         Rectangle eggColl = {posx+4, posy+4, 20, 20};
                         if(player->HandlePickingUp(eggColl, true)){
-                            if(enemies[0]->initial){
+                            if(!enemies[0]->initial){
                                 textBox->EnqueuDialogue({{"¿Debería comerme esto?\nHm, seguramente Paddy se enfadaría. Mejor no."}, 5, "teddy"});
                                 continue;
                             }
                             foods[0] = true;
                             countFoods++;
                             colliders[i][j] = 0;
-                            textBox->EnqueuDialogue({{"¡Huevos, perfecto! Espero que no se me rompan por el camino..."}, 5, "teddy"});
+                            textBox->EnqueuDialogue({{"Huevos... Espero que no se me rompan por el camino."}, 5, "teddy"});
+                            if(countFoods == 6) enemies[0]->condition = true;
                         }
                     }
                     else if(num == 7){
                         Rectangle sugarColl = {posx+4, posy+4, 20, 20};
                         if(player->HandlePickingUp(sugarColl, true)){
-                            if(enemies[0]->initial){
+                            if(!enemies[0]->initial){
                                 textBox->EnqueuDialogue({{"¿Debería comerme esto?\nHm, seguramente Paddy se enfadaría. Mejor no."}, 5, "teddy"});
                                 continue;
                             }
@@ -187,12 +200,13 @@ void Levels::ManageObjects(){
                             countFoods++;
                             colliders[i][j] = 0;
                             textBox->EnqueuDialogue({{"El azúcar también tiene pinta de que es necesario para una rica \ntarta dulcecita."}, 5, "teddy"});
+                            if(countFoods == 6) enemies[0]->condition = true;
                         }
                     }
                     else if(num == 8){
                         Rectangle gasColl = {posx+4, posy+4, 20, 20};
                         if(player->HandlePickingUp(gasColl, true)){
-                            if(enemies[0]->initial){
+                            if(!enemies[0]->initial){
                                 textBox->EnqueuDialogue({{"¿Debería comerme esto?\nHm, seguramente Paddy se enfadaría. Mejor no."}, 5, "teddy"});
                                 continue;
                             }
@@ -200,12 +214,13 @@ void Levels::ManageObjects(){
                             countFoods++;
                             colliders[i][j] = 0;
                             textBox->EnqueuDialogue({{"¡Ooh, rica gasolina para echarle por encima!\nSe me haría la boca agua si tuviera glándulas salivales."}, 5, "teddy"});
+                            if(countFoods == 6) enemies[0]->condition = true;
                         }
                     }
                     else if(num == 9){
                         Rectangle flourColl = {posx+4, posy+4, 20, 20};
                         if(player->HandlePickingUp(flourColl, true)){
-                            if(enemies[0]->initial){
+                            if(!enemies[0]->initial){
                                 textBox->EnqueuDialogue({{"¿Debería comerme esto?\nHm, seguramente Paddy se enfadaría. Mejor no."}, 5, "teddy"});
                                 continue;
                             }
@@ -213,12 +228,13 @@ void Levels::ManageObjects(){
                             countFoods++;
                             colliders[i][j] = 0;
                             textBox->EnqueuDialogue({{"COCAINA.", "Ah no, es harina.\nPues supongo que le pondremos eso a la tarta :("}, 5, "teddy"});
+                            if(countFoods == 6) enemies[0]->condition = true;
                         }
                     }
                     else if(num == 10){
                         Rectangle cheeseColl = {posx+4, posy+4, 20, 20};
                         if(player->HandlePickingUp(cheeseColl, true)){
-                            if(enemies[0]->initial){
+                            if(!enemies[0]->initial){
                                 textBox->EnqueuDialogue({{"¿Debería comerme esto?\nHm, seguramente Paddy se enfadaría. Mejor no."}, 5, "teddy"});
                                 continue;
                             }
@@ -226,12 +242,13 @@ void Levels::ManageObjects(){
                             countFoods++;
                             colliders[i][j] = 0;
                             textBox->EnqueuDialogue({{"¡Queso! Igual debería darle esto a las ratas para que me dejen en paz...", "Ah claro, supongo que es más importante llevarla para hcer la tarta de queso.\nTendré que matar a las ratas, entonces."}, 5, "teddy"});
+                            if(countFoods == 6) enemies[0]->condition = true;
                         }
                     }
                     else if(num == 11){
                         Rectangle nataColl = {posx+4, posy+4, 20, 20};
                         if(player->HandlePickingUp(nataColl, true)){
-                            if(enemies[0]->initial){
+                            if(!enemies[0]->initial){
                                 textBox->EnqueuDialogue({{"¿Debería comerme esto?\nHm, seguramente Paddy se enfadaría. Mejor no."}, 5, "teddy"});
                                 continue;
                             }
@@ -239,6 +256,7 @@ void Levels::ManageObjects(){
                             countFoods++;
                             colliders[i][j] = 0;
                             textBox->EnqueuDialogue({{"Oh no."}, 5, "teddy"});
+                            if(countFoods == 6) enemies[0]->condition = true;
                         }
                     }
                 }
@@ -425,6 +443,10 @@ void Levels::DrawFoods(){
         }
         xpos += (10 + height-20);
     }
+
+    if(enemies[0]->condition2){
+        DrawText("TARTA", 20, 20, 40, PINK);
+   }
 }
 
 void Levels::ControlFalling(){

@@ -50,6 +50,7 @@ public:
     //paddy
     bool initial;
     bool condition;
+    bool condition2;
 
     virtual void Update(float deltatime);
     virtual void Draw(float deltatime);

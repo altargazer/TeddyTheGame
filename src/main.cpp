@@ -69,6 +69,7 @@ int main() {
         }
         
         currentLevel->Draw();
+        currentLevel->Update();
         currentLevel->ManageBadFloors();
         currentLevel->ManageCollisions();
         currentLevel->ControlFalling();
@@ -95,7 +96,7 @@ int main() {
         player.DrawTop();
 
         //specific to level 1
-        if(level == 1 && !currentLevel->enemies[0]->initial){
+        if(level == 1 && currentLevel->enemies[0]->initial){
             currentLevel->DrawFoods();
         }
 

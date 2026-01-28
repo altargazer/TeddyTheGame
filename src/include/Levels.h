@@ -54,6 +54,7 @@ public:
     //methods
     Levels(int id, Player* player, TextBox* textBox, float exitX, float exitY);
     void Draw();
+    void Update();
     void ManageCollisions();
     void ManageObjects();
     bool ReachedExit(Player* p);
