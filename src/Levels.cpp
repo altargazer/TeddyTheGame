@@ -29,11 +29,12 @@ inline bool instanceof(const T *ptr) {
    return dynamic_cast<const Base*>(ptr) != nullptr;
 }
 
-Levels::Levels(int id, Player* player, TextBox* textBox, float exitX, float exitY){
+Levels::Levels(int id, Player* player, TextBox* textBox, float exitX, float exitY, Camera2D* camera){
 
     this->id = id;
     this->player = player;
     this->textBox = textBox;
+    this->camera = camera;
 
     exitRec = {exitX, exitY, 32, 32};
 
@@ -74,7 +75,7 @@ Levels::Levels(int id, Player* player, TextBox* textBox, float exitX, float exit
         colliders = LoadColliders("sprites/maps/Level1.csv");
 
         //add enemies here (if any)
-        Paddy* paddy = new Paddy({1690, 838}, player, 1, textBox, 1);
+        Paddy* paddy = new Paddy({1690, 838}, player, 1, textBox, 1, camera);
         enemies.push_back(paddy);
         MicroCalvi* calvi1 = new MicroCalvi({544, 910}, player, 416, 694);
         enemies.push_back(calvi1);
@@ -455,10 +456,6 @@ void Levels::DrawFoods(){
         }
         xpos += (10 + height-20);
     }
-
-    if(enemies[0]->condition2){
-        DrawText("TARTA", 20, 20, 40, PINK);
-   }
 }
 
 void Levels::ControlFalling(){

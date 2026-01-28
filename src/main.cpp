@@ -28,17 +28,18 @@ int main() {
     TextBox textBox;
     Player player(&textBox, screenWidth / 2-620, screenHeight / 2 + 200, 1);
     player.hasWeapon = false; //at the beggining he doesn't have the weapon
-    Levels level1(1, &player, &textBox, 96, 864);
-    Levels level2(2, &player, &textBox, 96, 864);
-    
-    currentLevel = &level1;
-    level = 1;
 
     Camera2D camera = { 0 };
     camera.target = (Vector2) {player.pos.x + player.width / 2.0f, player.pos.y + player.height / 2.0f - 20};
     camera.offset = (Vector2) {screenWidth/2.0f, screenHeight/2.0f};
     camera.rotation = 0.0f;
     camera.zoom = 3.0f;
+
+    Levels level1(1, &player, &textBox, 96, 864, &camera);
+    Levels level2(2, &player, &textBox, 96, 864, &camera);
+    
+    currentLevel = &level1;
+    level = 1;
 
     SetTargetFPS(60);
 

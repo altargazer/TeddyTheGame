@@ -51,6 +51,7 @@ public:
     bool initial;
     bool condition;
     bool condition2;
+    bool condition3;
 
     virtual void Update(float deltatime);
     virtual void Draw(float deltatime);
@@ -70,13 +71,15 @@ public:
 class Paddy : public Enemies{
 public:
     TextBox* textBox;
+    Camera2D* camera;
     int level;
 
     //in the first level, the condition is to get all the ingridients
-    Paddy(Vector2 pos, Player* player, int direction, TextBox* textBox, int level);
+    Paddy(Vector2 pos, Player* player, int direction, TextBox* textBox, int level, Camera2D* camera);
 
     void Update(float deltatime) override;
     void Draw(float deltatime) override;
+    void FadeBlack(float deltatime);
 };
 
 class Wall : public Enemies{

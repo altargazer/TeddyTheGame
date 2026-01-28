@@ -19,6 +19,7 @@ public:
     TextBox* textBox;
     Rectangle exitRec;
     int maxDown; //limit for each limit to fall and die
+    Camera2D* camera;
 
     struct BadFloor{
         Rectangle area;
@@ -52,7 +53,7 @@ public:
     std::vector<Enemies*> enemies;
 
     //methods
-    Levels(int id, Player* player, TextBox* textBox, float exitX, float exitY);
+    Levels(int id, Player* player, TextBox* textBox, float exitX, float exitY, Camera2D* camera);
     void Draw();
     void Update();
     void ManageCollisions();
