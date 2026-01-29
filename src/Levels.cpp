@@ -29,14 +29,14 @@ inline bool instanceof(const T *ptr) {
    return dynamic_cast<const Base*>(ptr) != nullptr;
 }
 
-Levels::Levels(int id, Player* player, TextBox* textBox, float exitX, float exitY, Camera2D* camera){
+Levels::Levels(int id, Player* player, TextBox* textBox, Camera2D* camera){
 
     this->id = id;
     this->player = player;
     this->textBox = textBox;
     this->camera = camera;
 
-    exitRec = {exitX, exitY, 32, 32};
+    finished = false;
 
     cocoa = LoadTexture("sprites/objects/cocoa.png");
     bed = LoadTexture("sprites/objects/bed.png");
@@ -470,10 +470,6 @@ void Levels::ControlFalling(){
         player->speed.y = 0;
         textBox->EnqueuDialogue({{"Upsi, me he tropezado"}, 5, "teddy"});
     }    
-}
-
-bool Levels::ReachedExit(Player* player){
-    return CheckCollisionRecs(exitRec, player->HitBox);
 }
 
 std::vector<std::vector<int>> Levels::LoadColliders(const std::string& filename){

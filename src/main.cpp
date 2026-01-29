@@ -6,8 +6,11 @@
 #include "include/Levels.h"
 #include "include/TextBox.h"
 #include "include/Enemies.h"
+#include "include/Menus.h"
 
 Levels* currentLevel;
+Menus* currentMenu;
+int menuNum;
 int level;
 int fadeTimer;
 float alpha;
@@ -35,11 +38,16 @@ int main() {
     camera.rotation = 0.0f;
     camera.zoom = 3.0f;
 
-    Levels level1(1, &player, &textBox, 96, 864, &camera);
-    Levels level2(2, &player, &textBox, 96, 864, &camera);
+    Levels level1(1, &player, &textBox, &camera);
+    Levels level2(2, &player, &textBox, &camera);
+
+    Menus menu1(1, 0);
     
     currentLevel = &level1;
+    currentMenu = &menu1;
     level = 1;
+    menuNum = 1;
+    menu = true;
 
     SetTargetFPS(60);
 
@@ -50,6 +58,12 @@ int main() {
         //Drawing Starts Here
         BeginDrawing();
         ClearBackground(WHITE);
+
+        if(menu){
+            currentMenu->Draw();
+            EndDrawing();
+            continue;
+        }
         
         currentLevel->DrawBackground();
         
@@ -61,7 +75,7 @@ int main() {
 
         textBox.Update(deltatime);
 
-        if(level == 1 && currentLevel->ReachedExit(&player)){
+        if(level == 1 && currentLevel->finished){
             //menu = true
             //delete Level 1 to free that memory
             //ChangeLevel(2, &level2, player, 0, 0);
@@ -97,7 +111,7 @@ int main() {
         player.DrawTop();
 
         //specific to level 1
-        if(level == 1 && currentLevel->enemies[0]->initial){
+        if(level == 1 && currentLevel->enemies[0]->initial && !currentLevel->enemies[0]->condition3){
             currentLevel->DrawFoods();
         }
 

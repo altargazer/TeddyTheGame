@@ -52,6 +52,7 @@ public:
     bool condition;
     bool condition2;
     bool condition3;
+    bool canTalk;
 
     virtual void Update(float deltatime);
     virtual void Draw(float deltatime);

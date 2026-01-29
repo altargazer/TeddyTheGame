@@ -177,6 +177,7 @@ Paddy::Paddy(Vector2 pos, Player* player, int direction, TextBox* textBox, int l
     condition = false;
     condition2 = false;
     condition3 = false;
+    canTalk = true;
 
     frameTimer = 0;
     frameDuration = 0.6f;
@@ -204,14 +205,15 @@ Paddy::Paddy(Vector2 pos, Player* player, int direction, TextBox* textBox, int l
 void Paddy::Update(float deltatime){
     if(player->dead) return;
 
-    //this is for level 1, so that the cake only appears when the dialogue is done
-    if(condition3 && !textBox->active){
-        condition2 = true;
-    }
+    switch (level){
+        case 1:
+            if(condition3 && !textBox->active){
+                condition2 = true;
+            }
 
-    if(player->HandlePickingUp(HitBox, true)){
-        switch (level){
-            case 1:
+            if(!canTalk) return;
+
+            if(player->HandlePickingUp(HitBox, true)){
                 if(!initial){
                     textBox->EnqueuDialogue({
                         {"Hola, Teddy! Espero que te estés portando bien.", 
@@ -230,23 +232,19 @@ void Paddy::Update(float deltatime){
                     textBox->EnqueuDialogue({{"¡No, no! El Teddy puede solo."}, 5, "teddy"});
                 }
                 else if(!condition2){
-
                     textBox->EnqueuDialogue({{"¡Muchas gracias, Teddy!", "Aunque... te ha faltado la mermelada."}, 5, "paddy"});
                     textBox->EnqueuDialogue({{"He traído algo mejor: ¡Gasolina!"}, 5, "teddy"});
                     textBox->EnqueuDialogue({{"No."}, 3, "paddy"});
                     textBox->EnqueuDialogue({{"Vale :)"}, 3, "teddy"});
                     textBox->EnqueuDialogue({{"En fin, ahora mismo te hago la tarta de queso.", "*Fiuuum*", "Ya está, Teddy."}, 3, "paddy"});
                     condition3 = true;
+                    canTalk = false;
                 }
-                else{
-                    textBox->EnqueuDialogue({{"Que aproveche, Teddy"}, 5, "paddy"});
-                }
-
-                break;
-
-            default:
-                textBox->EnqueuDialogue({{"No tengo nada que decir"}, 3, "paddy"});
-        }
+            }
+            break;
+        
+        default:
+            textBox->EnqueuDialogue({{"No tengo nada que decir"}, 3, "paddy"});
     }
 }
 
