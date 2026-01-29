@@ -67,7 +67,7 @@ Levels::Levels(int id, Player* player, TextBox* textBox, float exitX, float exit
         flour = LoadTexture("sprites/objects/flour.png");
         nata = LoadTexture("sprites/objects/nata.png");
         gas = LoadTexture("sprites/objects/gas.png");
-        cake = LoadTexture("sprites/objects/nata.png"); //todo
+        cake = LoadTexture("sprites/objects/tarta.png");
 
         //max to fall
         maxDown = 1216;
