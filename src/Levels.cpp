@@ -264,9 +264,8 @@ void Levels::ManageObjects(){
                     else if(num == 13 && enemies[0]->condition2){
                         Rectangle cakeColl = {posx+4, posy+4, 20, 20};
                         if(player->HandlePickingUp(cakeColl, true)){
-                            textBox->EnqueuDialogue({{"¡ÑAM!"}, 3, "teddy"});
                             colliders[i][j] = 0;
-                            //finish level
+                            finished = true;
                         }
                     }
                 }

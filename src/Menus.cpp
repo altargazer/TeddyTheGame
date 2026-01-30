@@ -1,4 +1,5 @@
 #include "include/Menus.h"
+#include "include/Player.h"
 #include <raylib.h>
 
 Menus::Menus(int id, int prev){
@@ -15,12 +16,27 @@ Menus::Menus(int id, int prev){
     else if(id == 1){
         jugar = LoadTexture("sprites/menus/start.png");
     }
+    else if(id == 2){
+
+    }
 }
 
-void Menus::Draw(){
+void Menus::Draw(Player* player){
     if(id == 1){
         int middle = GetScreenWidth()/2 - MeasureText("Teddy: The Game", 100)/2;
         DrawText("Teddy: The Game", middle, 100, 100, BLACK);
+    }
+
+    else if(id > 1){
+        std::string coins = "Monedas: " + player->money;
+        std::string cocos = "Cocos: " + player->cocos;
+        std::string calvis = "Calvis asesinados " + player->calvis;
+        int middle = GetScreenWidth()/2 - MeasureText(coins.c_str(), 50)/2;
+        DrawText(coins.c_str(), middle, 170, 50, BLACK);
+        middle = GetScreenWidth()/2 - MeasureText(cocos.c_str(), 50)/2;
+        DrawText(cocos.c_str(), middle, 240, 50, BLACK);
+        middle = GetScreenWidth()/2 - MeasureText(calvis.c_str(), 50)/2;
+        DrawText(calvis.c_str(), middle, 310, 50, BLACK);
     }
 }
 

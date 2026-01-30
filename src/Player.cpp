@@ -22,8 +22,8 @@ Player::Player(TextBox* textBox, float startX, float startY, int dir){
     lastCheckPoint = {128, 962};
     experience = 0;
     level = 1;
+    
     calvis = 0;
-
     lives = 6;
     money = 0;
     cocos = 0;
@@ -233,13 +233,13 @@ void Player::DrawTop(){
     counter += 640;
     std::string coins = std::to_string(money) + "x";
     DrawText((coins.c_str()), counter, 25, 50, BLACK);
-    counter += 90;
+    counter += MeasureText(coins.c_str(), 50) + 10;
     DrawTexture(monedita, counter, 20, WHITE);
 
     counter += 100;
     std::string coquitos = std::to_string(cocos) + "x";
     DrawText((coquitos.c_str()), counter, 25, 50, BLACK);
-    counter += 68;
+    counter += MeasureText(coquitos.c_str(), 50) + 10;
     DrawTexture(coquito, counter, 22, WHITE);
 }
 

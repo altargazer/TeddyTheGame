@@ -42,6 +42,7 @@ int main() {
     Levels level2(2, &player, &textBox, &camera);
 
     Menus menu1(1, 0);
+    Menus menu2(2, 1);
     
     currentLevel = &level1;
     currentMenu = &menu1;
@@ -60,15 +61,18 @@ int main() {
         ClearBackground(WHITE);
 
         if(menu){
-            currentMenu->Draw();
+            currentMenu->Draw(&player);
             currentMenu->Update();
 
             if(menuNum == 1 && currentMenu->jugarFlag){
                 menu = false;
+                menuNum = 2;
+                currentMenu = &menu2;
             }
 
             if(menuNum == 2 && currentMenu->siguienteFlag){
                 //ChangeLevel o solamente quitar el menu?
+                ChangeLevel(2, &level2, player, 0, 0);
             }
 
             EndDrawing();
@@ -86,7 +90,7 @@ int main() {
         textBox.Update(deltatime);
 
         if(level == 1 && currentLevel->finished){
-            //menu = true
+            menu = true;
             //delete Level 1 to free that memory??
             //ChangeLevel(2, &level2, player, 0, 0);
             //player.pos = {}

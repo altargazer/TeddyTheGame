@@ -3,6 +3,7 @@
 
 #include <raylib.h>
 #include <iostream>
+#include "Player.h"
 
 class Menus{
 public:
@@ -31,7 +32,7 @@ public:
     bool resumirFlag;
 
     Menus(int id, int prev);
-    void Draw();
+    void Draw(Player* player);
     void Update();
     bool DrawAndHandleBtn(Texture2D sheet, Vector2 position);
 
