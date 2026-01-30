@@ -61,6 +61,16 @@ int main() {
 
         if(menu){
             currentMenu->Draw();
+            currentMenu->Update();
+
+            if(menuNum == 1 && currentMenu->jugarFlag){
+                menu = false;
+            }
+
+            if(menuNum == 2 && currentMenu->siguienteFlag){
+                //ChangeLevel o solamente quitar el menu?
+            }
+
             EndDrawing();
             continue;
         }
@@ -77,7 +87,7 @@ int main() {
 
         if(level == 1 && currentLevel->finished){
             //menu = true
-            //delete Level 1 to free that memory
+            //delete Level 1 to free that memory??
             //ChangeLevel(2, &level2, player, 0, 0);
             //player.pos = {}
             //player.lastCheckPoint = player.pos

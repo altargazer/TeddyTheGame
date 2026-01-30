@@ -17,17 +17,23 @@ public:
         6: To level 6
     */
     int prevLevel;
-   Texture2D background;
-   Texture2D coin;
-   Texture2D coconut;
-   Texture2D calvi; // for calvis killed counter
+    Texture2D background;
+    Texture2D coin;
+    Texture2D coconut;
+    Texture2D calvi; // for calvis killed counter
 
-   Rectangle start; //for first screen
-   Rectangle goToNext; //for inbetween levels
-   Rectangle resume; //for pause
+    Texture2D jugar;
+    Texture2D siguiente;
+    Texture2D resumir;
 
-   Menus(int id, int prev);
-   void Draw();
+    bool jugarFlag;
+    bool siguienteFlag;
+    bool resumirFlag;
+
+    Menus(int id, int prev);
+    void Draw();
+    void Update();
+    bool DrawAndHandleBtn(Texture2D sheet, Vector2 position);
 
 };
 
