@@ -2,6 +2,10 @@
 #include "include/Player.h"
 #include <raylib.h>
 
+int getMiddle(std::string text, int fontSize){
+    return (GetScreenWidth()/2 - MeasureText(text.c_str(), fontSize)/2);
+}
+
 Menus::Menus(int id, int prev){
     this->id = id;
     prevLevel = prev;
@@ -16,8 +20,12 @@ Menus::Menus(int id, int prev){
     else if(id == 1){
         jugar = LoadTexture("sprites/menus/start.png");
     }
-    else if(id == 2){
-
+    else if(id > 1){
+        coin = LoadTexture("sprites/objects/coin.png");
+        coconut = LoadTexture("sprites/objects/coco.png");
+        calvi = LoadTexture("sprites/objects/calvoHead.png");
+        siguiente = LoadTexture("sprites/menus/next.png");
+        salir = LoadTexture("sprites/menus/salir.png");
     }
 }
 
@@ -28,15 +36,22 @@ void Menus::Draw(Player* player){
     }
 
     else if(id > 1){
-        std::string coins = "Monedas: " + player->money;
-        std::string cocos = "Cocos: " + player->cocos;
-        std::string calvis = "Calvis asesinados " + player->calvis;
-        int middle = GetScreenWidth()/2 - MeasureText(coins.c_str(), 50)/2;
-        DrawText(coins.c_str(), middle, 170, 50, BLACK);
-        middle = GetScreenWidth()/2 - MeasureText(cocos.c_str(), 50)/2;
+
+        std::string top = "¡Nivel " + std::to_string(id - 1) + " superado!";
+        DrawText(top.c_str(), getMiddle(top, 60), 80, 60, BLACK);
+
+        std::string coins = std::to_string(player->money) + "x";
+        std::string cocos = std::to_string(player->cocos) + "x";
+        std::string calvis = std::to_string(player->calvis) + "x";
+        int middle = GetScreenWidth()/2 - (MeasureText(coins.c_str(), 50) + coin.width +10)/2;
+        DrawText(coins.c_str(), middle, 160, 50, BLACK);
+        DrawTexture(coin, middle + MeasureText(coins.c_str(), 50) + 10, 155, WHITE);
+        middle = GetScreenWidth()/2 - (MeasureText(cocos.c_str(), 50) + coconut.width +10)/2;
         DrawText(cocos.c_str(), middle, 240, 50, BLACK);
-        middle = GetScreenWidth()/2 - MeasureText(calvis.c_str(), 50)/2;
-        DrawText(calvis.c_str(), middle, 310, 50, BLACK);
+        DrawTexture(coconut, middle + MeasureText(cocos.c_str(), 50) + 10, 235, WHITE);
+        middle = GetScreenWidth()/2 - (MeasureText(calvis.c_str(), 50) + calvi.width + 10)/2;
+        DrawText(calvis.c_str(), middle, 320, 50, BLACK);
+        DrawTexture(calvi, middle + MeasureText(calvis.c_str(), 50) + 10, 315, WHITE);
     }
 }
 
@@ -45,6 +60,16 @@ void Menus::Update(){
         Vector2 pos = {GetScreenWidth()/2 - (float)jugar.width/3/2, 250};
         if(DrawAndHandleBtn(jugar, pos)){
             jugarFlag = true;
+        }
+    }
+    else if(id > 1){
+        Vector2 pos = {GetScreenWidth()/2 - (float)salir.width/3/2 - (float)siguiente.width/3/2 - 20, 400};
+        if(DrawAndHandleBtn(salir, pos)){
+
+        }
+        pos = {pos.x + (float)salir.width/3 + 20, pos.y};
+        if(DrawAndHandleBtn (siguiente, pos)){
+            siguienteFlag = true;
         }
     }
 }

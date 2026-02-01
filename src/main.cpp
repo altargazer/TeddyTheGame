@@ -72,7 +72,7 @@ int main() {
 
             if(menuNum == 2 && currentMenu->siguienteFlag){
                 //ChangeLevel o solamente quitar el menu?
-                ChangeLevel(2, &level2, player, 0, 0);
+                //ChangeLevel(2, &level2, player, 0, 0);
             }
 
             EndDrawing();

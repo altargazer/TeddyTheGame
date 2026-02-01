@@ -26,6 +26,7 @@ public:
     Texture2D jugar;
     Texture2D siguiente;
     Texture2D resumir;
+    Texture2D salir;
 
     bool jugarFlag;
     bool siguienteFlag;
