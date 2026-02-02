@@ -361,17 +361,17 @@ void Player::HandleDead(){
     lives = 6;
     pos = lastCheckPoint;
     direction = 1;
-    textBox->EnqueuDialogue({{"¡Que bien he dormido!"}, 5, "teddy"});
+    textBox->EnqueuDialogue({{"O-oh el Teddy ha tenido una pesadilla horrible."}, "teddy"});
 }
 
 void Player::UpgradeLevel(){
     if(level == 1 && experience >= 40){
         level = 2;
         textBox->teddy = LoadTexture("sprites/characters/retratoTeddyGuay.png");
-        textBox->EnqueuDialogue({{"¡Felicidades! Has subido al nivel 2. La foto del Teddy ha sido actualizada como recompensa"}, 5, "calvo"});
-        textBox->EnqueuDialogue({{"¿Qué narices signi-?"}, 2, "teddy"});
-        textBox->EnqueuDialogue({{"!!!"}, 2, "teddy"});
-        textBox->EnqueuDialogue({{"¡Toma ya, que guapo está el Teddy!"}, 3, "teddy"});
+        textBox->EnqueuDialogue({{"¡Felicidades! Has subido al nivel 2. La foto del Teddy ha sido actualizada como recompensa"}, "calvo"});
+        textBox->EnqueuDialogue({{"¿Qué narices signi-?"}, "teddy"});
+        textBox->EnqueuDialogue({{"!!!"}, "teddy"});
+        textBox->EnqueuDialogue({{"¡Toma ya, que guapo está el Teddy!"}, "teddy"});
         return;
     }
 

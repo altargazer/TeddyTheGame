@@ -43,6 +43,7 @@ int main() {
 
     Menus menu1(1, 0);
     Menus menu2(2, 1);
+    Menus menu3(3, 2);
     
     currentLevel = &level1;
     currentMenu = &menu1;
@@ -66,13 +67,14 @@ int main() {
 
             if(menuNum == 1 && currentMenu->jugarFlag){
                 menu = false;
-                menuNum = 2;
+                menuNum++;
                 currentMenu = &menu2;
             }
 
             if(menuNum == 2 && currentMenu->siguienteFlag){
-                //ChangeLevel o solamente quitar el menu?
-                //ChangeLevel(2, &level2, player, 0, 0);
+                menu = false;
+                menuNum++;
+                currentMenu = &menu3;
             }
 
             EndDrawing();
@@ -87,15 +89,7 @@ int main() {
         player.JumpAndGravity();
         player.UpdatePositions();
 
-        textBox.Update(deltatime);
-
-        if(level == 1 && currentLevel->finished){
-            menu = true;
-            //delete Level 1 to free that memory??
-            //ChangeLevel(2, &level2, player, 0, 0);
-            //player.pos = {}
-            //player.lastCheckPoint = player.pos
-        }
+        textBox.Update();
         
         currentLevel->Draw();
         currentLevel->Update();
@@ -127,6 +121,13 @@ int main() {
         //specific to level 1
         if(level == 1 && currentLevel->enemies[0]->initial && !currentLevel->enemies[0]->condition3){
             currentLevel->DrawFoods();
+        }
+
+        if(level == 1 && currentLevel->finished){
+            menu = true;
+            ChangeLevel(2, &level2, player, 0, 0);
+            currentLevel = &level2;
+            player.lastCheckPoint = player.pos;
         }
 
         //Position of player for development

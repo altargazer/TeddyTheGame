@@ -5,8 +5,6 @@
 
 TextBox::TextBox(){
     active = false;
-    timer = 0;
-    duration = 0;
     index = -1;
 
     arrow = LoadTexture("sprites/objects/arrow.png");
@@ -26,8 +24,6 @@ void TextBox::SetDialogue(const Dialogue& dialogue){
     if(dialogue.character == "paddy") retrato = paddy;
 
     this->text = multiple[index];
-    this->duration = dialogue.duration;
-    timer = 0;
     active = true;
     size = (int) multiple.size();
 }
@@ -50,18 +46,10 @@ void TextBox::FinishDialogue(){
     }
 }
 
-void TextBox::Update(float deltatime){
+void TextBox::Update(){
     if(!active) return;
 
-    if(size == 1 || index == size - 1){
-        timer += deltatime;
-        if (timer >= duration) {
-            FinishDialogue();
-            return;
-        }
-    }
-
-    if(IsKeyPressed(KEY_SPACE)){
+    if(IsKeyPressed(KEY_ENTER)){
         //for multiple words
         if(size > 1){
             index++;
@@ -93,7 +81,4 @@ void TextBox::Draw(){
     DrawTexture(arrow, 1420, 230, WHITE);
 
     DrawText(text.c_str(), 25 + 200, 115, 35, BLACK);
-
-    //TO-Do opción para retrato con booleano en el constructor
-    //TO-Do flecha para avanzar
 }

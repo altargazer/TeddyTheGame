@@ -215,28 +215,29 @@ void Paddy::Update(float deltatime){
 
             if(player->HandlePickingUp(HitBox, true)){
                 if(!initial){
+                    textBox->EnqueuDialogue({{"Comida."}, "teddy"});
                     textBox->EnqueuDialogue({
                         {"Hola, Teddy! Espero que te estés portando bien.", 
                         "¿Tienes hambre? ¿Qué tal si te preparo una deliciosa tarta \nde queso?",
                         "Aunque... no tengo aquí los ingredientes, necesito que me los traigas."
-                    }, 5, "paddy"});
-                    textBox->EnqueuDialogue({{"¿¿Por qué tengo que buscarlos yo??"}, 5, "teddy"});
-                    textBox->EnqueuDialogue({{"Porque los has dejado tú tirados por ahí."}, 5, "paddy"});
-                    textBox->EnqueuDialogue({{"Ah.", "No sé de qué me hablas pero te traeré tus ingredientes."}, 5, "teddy"});
-                    textBox->EnqueuDialogue({{"¿Estás seguro que sabes qué ingredientes son los correctos?"}, 5, "paddy"});
-                    textBox->EnqueuDialogue({{"¡Claro que sí! Ahora mismo vuelvo"}, 5, "teddy"});
+                    }, "paddy"});
+                    textBox->EnqueuDialogue({{"¿¿Por qué tengo que buscarlos yo??"}, "teddy"});
+                    textBox->EnqueuDialogue({{"Porque los has dejado tú tirados por ahí."}, "paddy"});
+                    textBox->EnqueuDialogue({{"Ah.", "No sé de qué me hablas pero te traeré tus ingredientes."}, "teddy"});
+                    textBox->EnqueuDialogue({{"¿Estás seguro que sabes qué ingredientes son los correctos?"}, "paddy"});
+                    textBox->EnqueuDialogue({{"¡Claro que sí! Ahora mismo vuelvo"}, "teddy"});
                     initial = true;
                 }
                 else if(!condition){
-                    textBox->EnqueuDialogue({{"¿Aún no me has traído los ingredientes?", "Si necesitas ayuda puedo ir contigo."}, 5, "paddy"});
-                    textBox->EnqueuDialogue({{"¡No, no! El Teddy puede solo."}, 5, "teddy"});
+                    textBox->EnqueuDialogue({{"¿Aún no me has traído los ingredientes?", "Si necesitas ayuda puedo ir contigo."}, "paddy"});
+                    textBox->EnqueuDialogue({{"¡No, no! El Teddy puede solo."}, "teddy"});
                 }
                 else if(!condition2){
-                    textBox->EnqueuDialogue({{"¡Muchas gracias, Teddy!", "Aunque... te ha faltado la mermelada."}, 5, "paddy"});
-                    textBox->EnqueuDialogue({{"He traído algo mejor: ¡Gasolina!"}, 5, "teddy"});
-                    textBox->EnqueuDialogue({{"No."}, 3, "paddy"});
-                    textBox->EnqueuDialogue({{"Vale :)"}, 3, "teddy"});
-                    textBox->EnqueuDialogue({{"En fin, ahora mismo te hago la tarta de queso.", "*Fiuuum*", "Ya está, Teddy."}, 3, "paddy"});
+                    textBox->EnqueuDialogue({{"¡Muchas gracias, Teddy!", "Aunque... te ha faltado la mermelada."}, "paddy"});
+                    textBox->EnqueuDialogue({{"He traído algo mejor: ¡Gasolina!"}, "teddy"});
+                    textBox->EnqueuDialogue({{"No."}, "paddy"});
+                    textBox->EnqueuDialogue({{"Vale :)"}, "teddy"});
+                    textBox->EnqueuDialogue({{"En fin, ahora mismo te hago la tarta de queso.", "*Fiuuum*", "Ya está, Teddy."}, "paddy"});
                     condition3 = true;
                     canTalk = false;
                 }
@@ -244,7 +245,7 @@ void Paddy::Update(float deltatime){
             break;
         
         default:
-            textBox->EnqueuDialogue({{"No tengo nada que decir"}, 3, "paddy"});
+            textBox->EnqueuDialogue({{"No tengo nada que decir"}, "paddy"});
     }
 }
 
@@ -315,7 +316,7 @@ void Wall::Update(float deltatime){
             if(lives <= 0){
                 player->experience += experience;
                 alive = false;
-                textBox->EnqueuDialogue({{"... Espero que a nadie le importe que haya roto eso jiji"}, 3, "teddy"});
+                textBox->EnqueuDialogue({{"... Espero que a nadie le importe que haya roto eso jiji"}, "teddy"});
                 return;
             } 
         }

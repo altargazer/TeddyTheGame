@@ -12,8 +12,6 @@ public:
     std::string text;
     std::vector<std::string> multiple;
     bool active;
-    float timer;
-    float duration; //time that it lasts if not clicked
     int index; //index for multiple messages
     int size;
 
@@ -26,7 +24,6 @@ public:
 
     struct Dialogue{
         std::vector<std::string> messages;
-        float duration;
         std::string character;
     };
 
@@ -37,7 +34,7 @@ public:
     void SetDialogue(const Dialogue& dialogue);
     void EnqueuDialogue(const Dialogue& dialogue);
     void FinishDialogue();
-    void Update(float deltatime);
+    void Update();
     void Draw();
 
 };
