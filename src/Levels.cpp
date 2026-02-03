@@ -143,6 +143,10 @@ void Levels::DrawBackground(){
         DrawTexture(background, background.width, 0, WHITE);
         DrawRectangle(0, 0, 1500, 900, Fade(WHITE, 0.5f));
     }
+    else if(id == 2){
+        DrawTexture(background, 0,0, WHITE);
+        DrawTexture(background, background.width, 0, WHITE);
+    }
 }
 
 void Levels::ManageCollisions(){
