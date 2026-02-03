@@ -284,7 +284,7 @@ Wall::Wall(float level, Vector2 pos, int height, int width, Player* player, Text
 
     HitBox = {position.x, position.y, (float)width, (float)height};
     if(level == 1){
-        sheet = LoadTexture("sprites/maps/wallLevel1.png");
+        sheet = LoadTexture("sprites/maps/Level1Wall.png");
     }
 
     normal = {0, 0, (float)width, (float)height};

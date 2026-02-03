@@ -19,7 +19,7 @@ Player::Player(TextBox* textBox, float startX, float startY, int dir){
     direction = dir;
     jumpPower = 10;
     coolDown = 0;
-    lastCheckPoint = {128, 962};
+    lastCheckPoint = {startX, startY};
     experience = 0;
     level = 1;
     
@@ -361,7 +361,7 @@ void Player::HandleDead(){
     lives = 6;
     pos = lastCheckPoint;
     direction = 1;
-    textBox->EnqueuDialogue({{"O-oh el Teddy ha tenido una pesadilla horrible."}, "teddy"});
+    textBox->SetDialogue({{"O-oh el Teddy ha tenido una pesadilla horrible."}, "teddy"});
 }
 
 void Player::UpgradeLevel(){

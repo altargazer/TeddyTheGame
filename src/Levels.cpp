@@ -47,10 +47,13 @@ Levels::Levels(int id, Player* player, TextBox* textBox, Camera2D* camera){
     //Level 1
     if(id == 1){
         //sprites specific to this level
-        weapon = LoadTexture("sprites/objects/weapon2.png");
         levelMap = LoadTexture("sprites/maps/Level1.png");
-        background = LoadTexture("sprites/maps/fondoCocina.png");
+        background = LoadTexture("sprites/maps/Level1BG.png");
+        colliders = LoadColliders("sprites/maps/Level1.csv");
 
+        maxDown = 1216;
+
+        weapon = LoadTexture("sprites/objects/weapon2.png");
         startedMission = false;
         countFoods = 0;
         foods = {false, false, false, false, false, false};
@@ -68,11 +71,6 @@ Levels::Levels(int id, Player* player, TextBox* textBox, Camera2D* camera){
         nata = LoadTexture("sprites/objects/nata.png");
         gas = LoadTexture("sprites/objects/gas.png");
         cake = LoadTexture("sprites/objects/tarta.png");
-
-        //max to fall
-        maxDown = 1216;
-
-        colliders = LoadColliders("sprites/maps/Level1.csv");
 
         //add enemies here (if any)
         Paddy* paddy = new Paddy({1690, 838}, player, 1, textBox, 1, camera);
@@ -113,7 +111,12 @@ Levels::Levels(int id, Player* player, TextBox* textBox, Camera2D* camera){
 
     //Level 2
     else if(id == 2){
-        
+        //max to fall
+        maxDown = 1216;
+
+        levelMap = LoadTexture("sprites/maps/Level2.png");
+        background = LoadTexture("sprites/maps/Level2BG.png");
+        colliders = LoadColliders("sprites/maps/Level2.csv");
     }
 
 }

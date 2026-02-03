@@ -29,7 +29,7 @@ int main() {
     InitWindow(screenWidth, screenHeight, "Teddy: The Game");
 
     TextBox textBox;
-    Player player(&textBox, screenWidth / 2-620, screenHeight / 2 + 200, 1);
+    Player player(&textBox, 128, 947, 1);
     player.hasWeapon = false; //at the beggining he doesn't have the weapon
 
     Camera2D camera = { 0 };
@@ -125,7 +125,7 @@ int main() {
 
         if(level == 1 && currentLevel->finished){
             menu = true;
-            ChangeLevel(2, &level2, player, 0, 0);
+            ChangeLevel(2, &level2, player, 96, 96);
             currentLevel = &level2;
             player.lastCheckPoint = player.pos;
         }

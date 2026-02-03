@@ -49,7 +49,7 @@ void TextBox::FinishDialogue(){
 void TextBox::Update(){
     if(!active) return;
 
-    if(IsKeyPressed(KEY_ENTER)){
+    if(IsMouseButtonPressed(MOUSE_BUTTON_RIGHT)){
         //for multiple words
         if(size > 1){
             index++;
