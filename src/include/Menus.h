@@ -8,16 +8,17 @@
 class Menus{
 public:
 
-    int id;
+    float id;
     /*
         0: Pause
         1: Starting Game
+        1.5: Introduction to Fase 1
         2: To level 2
+        2.5: Introduction to Fase 2
         3: To level 3
         ...
         6: To level 6
     */
-    int prevLevel;
     Texture2D background;
     Texture2D coin;
     Texture2D coconut;
@@ -32,7 +33,7 @@ public:
     bool siguienteFlag;
     bool resumirFlag;
 
-    Menus(int id, int prev);
+    Menus(float id);
     void Draw(Player* player);
     void Update();
     bool DrawAndHandleBtn(Texture2D sheet, Vector2 position);

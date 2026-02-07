@@ -6,9 +6,8 @@ int getMiddle(std::string text, int fontSize){
     return (GetScreenWidth()/2 - MeasureText(text.c_str(), fontSize)/2);
 }
 
-Menus::Menus(int id, int prev){
+Menus::Menus(float id){
     this->id = id;
-    prevLevel = prev;
 
     jugarFlag = false;
     siguienteFlag = false;
@@ -19,6 +18,7 @@ Menus::Menus(int id, int prev){
     }
     else if(id == 1){
         jugar = LoadTexture("sprites/menus/start.png");
+        background = LoadTexture("sprites/menus/initialScreen.png");
     }
     else if(id > 1){
         coin = LoadTexture("sprites/objects/coin.png");
@@ -31,14 +31,17 @@ Menus::Menus(int id, int prev){
 
 void Menus::Draw(Player* player){
     if(id == 1){
+        DrawTexture(background, 0, 0, WHITE);
         int middle = GetScreenWidth()/2 - MeasureText("Teddy: The Game", 100)/2;
         DrawText("Teddy: The Game", middle, 100, 100, BLACK);
     }
 
-    else if(id > 1){
+    else if(id > 1 && (int)(id*10) % 10 == 0){
 
         std::string top = "¡Nivel " + std::to_string(id - 1) + " superado!";
         DrawText(top.c_str(), getMiddle(top, 60), 80, 60, BLACK);
+
+        //TODO añadir mensaje como atributo e imprimirlo para cada nivel
 
         std::string coins = std::to_string(player->money) + "x";
         std::string cocos = std::to_string(player->cocos) + "x";
@@ -53,6 +56,11 @@ void Menus::Draw(Player* player){
         DrawText(calvis.c_str(), middle, 320, 50, BLACK);
         DrawTexture(calvi, middle + MeasureText(calvis.c_str(), 50) + 10, 315, WHITE);
     }
+
+    else if (id == 1.5){
+        std::string top = "Fase 1 del Plan Ultra Secreto para el Objetivo Ultra Secreto del Teddy:\nLa Red de Información";
+        DrawText(top.c_str(), getMiddle(top, 50), 80, 50, BLACK);
+    }
 }
 
 void Menus::Update(){
@@ -62,7 +70,7 @@ void Menus::Update(){
             jugarFlag = true;
         }
     }
-    else if(id > 1){
+    else if(id > 1 && (int)(id*10) % 10 == 0){
         Vector2 pos = {GetScreenWidth()/2 - (float)salir.width/3/2 - (float)siguiente.width/3/2 - 20, 400};
         if(DrawAndHandleBtn(salir, pos)){
 
@@ -71,6 +79,9 @@ void Menus::Update(){
         if(DrawAndHandleBtn (siguiente, pos)){
             siguienteFlag = true;
         }
+    }
+    else{
+        return;
     }
 }
 

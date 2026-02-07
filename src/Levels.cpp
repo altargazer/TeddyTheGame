@@ -44,8 +44,18 @@ Levels::Levels(int id, Player* player, TextBox* textBox, Camera2D* camera){
     pigeon = LoadTexture("sprites/objects/pigeon.png");
     coco = LoadTexture("sprites/objects/cocoSmall.png");
 
+    if(id == 0){
+        maxDown = 576;
+
+        levelMap = LoadTexture("sprites/maps/Level0Tileset.png");
+        colliders = LoadColliders("sprites/maps/Level0.csv");
+
+        Paddy* paddy = new Paddy({288, 230}, player, 1, textBox, 0, camera);
+        enemies.push_back(paddy);
+    }
+
     //Level 1
-    if(id == 1){
+    else if(id == 1){
         //sprites specific to this level
         levelMap = LoadTexture("sprites/maps/Level1.png");
         background = LoadTexture("sprites/maps/Level1BG.png");
@@ -135,10 +145,19 @@ void Levels::Update(){
     if(!attacking){
         player->UpgradeLevel();
     }
+
+    if(id == 0){
+        if(enemies[0]->condition){
+            finished = true;
+        }
+    }
 }
 
 void Levels::DrawBackground(){
-    if(id == 1){
+    if(id == 0){
+        ClearBackground({231, 230, 226, 1});
+    }
+    else if(id == 1){
         DrawTexture(background, 0,0, WHITE);
         DrawTexture(background, background.width, 0, WHITE);
         DrawRectangle(0, 0, 1500, 900, Fade(WHITE, 0.5f));

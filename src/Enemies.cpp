@@ -3,6 +3,8 @@
 #include <cmath>
 #include "include/Enemies.h"
 
+//GENERAL ENEMIES
+
 void Enemies::Update(float deltatime){
     if(!alive) return;
     
@@ -85,6 +87,8 @@ bool Enemies::CheckCollision(){
     return (CheckCollisionRecs(HitBox, player->HitBox));
 }
 
+//MICROCALVI
+
 MicroCalvi::MicroCalvi(Vector2 pos, Player* player, int maxL, int maxR){
     //standing: 13 x 23
     //walking: 13 + 1 padding x 24
@@ -122,8 +126,6 @@ MicroCalvi::MicroCalvi(Vector2 pos, Player* player, int maxL, int maxR){
     deadSprite = LoadTexture("sprites/characters/microCalviDead.png");
 }
 
-//MicroCalvi::Draw is the same as parent
-
 Rata::Rata(Vector2 pos, Player* player, int maxL, int maxR){
     //standing: 26 x 22
     //walking: 26 + 1 padding x 22
@@ -160,6 +162,8 @@ Rata::Rata(Vector2 pos, Player* player, int maxL, int maxR){
     attackingSprite = LoadTexture("sprites/characters/ratAttack.png");
     deadSprite = LoadTexture("sprites/characters/ratDead.png");
 }
+
+//PADDY
 
 Paddy::Paddy(Vector2 pos, Player* player, int direction, TextBox* textBox, int level, Camera2D* camera){
     this->player = player;
@@ -205,47 +209,60 @@ Paddy::Paddy(Vector2 pos, Player* player, int direction, TextBox* textBox, int l
 void Paddy::Update(float deltatime){
     if(player->dead) return;
 
-    switch (level){
-        case 1:
-            if(condition3 && !textBox->active){
-                condition2 = true;
-            }
+    if(level == 0){
+        if(initial && !textBox->active){
+            condition = true;
+        }
 
-            if(!canTalk) return;
-
-            if(player->HandlePickingUp(HitBox, true)){
-                if(!initial){
-                    textBox->EnqueuDialogue({{"Comida."}, "teddy"});
-                    textBox->EnqueuDialogue({
-                        {"Hola, Teddy! Espero que te estés portando bien.", 
-                        "¿Tienes hambre? ¿Qué tal si te preparo una deliciosa tarta \nde queso?",
-                        "Aunque... no tengo aquí los ingredientes, necesito que me los traigas."
-                    }, "paddy"});
-                    textBox->EnqueuDialogue({{"¿¿Por qué tengo que buscarlos yo??"}, "teddy"});
-                    textBox->EnqueuDialogue({{"Porque los has dejado tú tirados por ahí."}, "paddy"});
-                    textBox->EnqueuDialogue({{"Ah.", "No sé de qué me hablas pero te traeré tus ingredientes."}, "teddy"});
-                    textBox->EnqueuDialogue({{"¿Estás seguro que sabes qué ingredientes son los correctos?"}, "paddy"});
-                    textBox->EnqueuDialogue({{"¡Claro que sí! Ahora mismo vuelvo"}, "teddy"});
-                    initial = true;
-                }
-                else if(!condition){
-                    textBox->EnqueuDialogue({{"¿Aún no me has traído los ingredientes?", "Si necesitas ayuda puedo ir contigo."}, "paddy"});
-                    textBox->EnqueuDialogue({{"¡No, no! El Teddy puede solo."}, "teddy"});
-                }
-                else if(!condition2){
-                    textBox->EnqueuDialogue({{"¡Muchas gracias, Teddy!", "Aunque... te ha faltado la mermelada."}, "paddy"});
-                    textBox->EnqueuDialogue({{"He traído algo mejor: ¡Gasolina!"}, "teddy"});
-                    textBox->EnqueuDialogue({{"No."}, "paddy"});
-                    textBox->EnqueuDialogue({{"Vale :)"}, "teddy"});
-                    textBox->EnqueuDialogue({{"En fin, ahora mismo te hago la tarta de queso.", "*Fiuuum*", "Ya está, Teddy."}, "paddy"});
-                    condition3 = true;
-                    canTalk = false;
-                }
+        if(player->HandlePickingUp(HitBox, true)){
+            if(!initial){
+                textBox->EnqueuDialogue({{"Hola, Teddy."}, "paddy"});
+                textBox->EnqueuDialogue({{"..."}, "teddy"});
+                textBox->EnqueuDialogue({{"¿Hola?"}, "paddy"});
+                textBox->EnqueuDialogue({{"..."}, "teddy"});
+                textBox->EnqueuDialogue({{"¿Qué pasa, Teddy?"}, "paddy"});
+                textBox->EnqueuDialogue({{"...no te lo puedo decir, es alto secreto."}, "teddy"});
+                initial = true;
             }
-            break;
+        }
+    }
+
+    else if(level == 1){
+        if(condition3 && !textBox->active){
+            condition2 = true;
+        }
+
+        if(!canTalk) return;
         
-        default:
-            textBox->EnqueuDialogue({{"No tengo nada que decir"}, "paddy"});
+        if(player->HandlePickingUp(HitBox, true)){
+            if(!initial){
+                textBox->EnqueuDialogue({{"Comida."}, "teddy"});
+                textBox->EnqueuDialogue({
+                    {"Hola, Teddy! Espero que te estés portando bien.", 
+                    "¿Tienes hambre? ¿Qué tal si te preparo una deliciosa tarta \nde queso?",
+                    "Aunque... no tengo aquí los ingredientes, necesito que me los traigas."
+                }, "paddy"});
+                textBox->EnqueuDialogue({{"¿¿Por qué tengo que buscarlos yo??"}, "teddy"});
+                textBox->EnqueuDialogue({{"Porque los has dejado tú tirados por ahí."}, "paddy"});
+                textBox->EnqueuDialogue({{"Ah.", "No sé de qué me hablas pero te traeré tus ingredientes."}, "teddy"});
+                textBox->EnqueuDialogue({{"¿Estás seguro que sabes qué ingredientes son los correctos?"}, "paddy"});
+                textBox->EnqueuDialogue({{"¡Claro que sí! Ahora mismo vuelvo"}, "teddy"});
+                initial = true;
+            }
+            else if(!condition){
+                textBox->EnqueuDialogue({{"¿Aún no me has traído los ingredientes?", "Si necesitas ayuda puedo ir contigo."}, "paddy"});
+                textBox->EnqueuDialogue({{"¡No, no! El Teddy puede solo."}, "teddy"});
+            }
+            else if(!condition2){
+                textBox->EnqueuDialogue({{"¡Muchas gracias, Teddy!", "Aunque... te ha faltado la mermelada."}, "paddy"});
+                textBox->EnqueuDialogue({{"He traído algo mejor: ¡Gasolina!"}, "teddy"});
+                textBox->EnqueuDialogue({{"No."}, "paddy"});
+                textBox->EnqueuDialogue({{"Vale :)"}, "teddy"});
+                textBox->EnqueuDialogue({{"En fin, ahora mismo te hago la tarta de queso.", "*Fiuuum*", "Ya está, Teddy."}, "paddy"});
+                condition3 = true;
+                canTalk = false;
+            }
+        }
     }
 }
 
@@ -263,6 +280,8 @@ void Paddy::Draw(float deltatime){
 void Paddy::FadeBlack(float deltatime){
 
 }
+
+//WALL
 
 Wall::Wall(float level, Vector2 pos, int height, int width, Player* player, TextBox* textBox){
 

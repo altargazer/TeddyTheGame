@@ -10,11 +10,12 @@
 
 Levels* currentLevel;
 Menus* currentMenu;
-int menuNum;
+float menuNum;
 int level;
 int fadeTimer;
 float alpha;
 bool menu;
+float menuTimer;
 
 void ChangeLevel(int next, Levels* nextLevel, Player& player, int x, int y){
     level = next;
@@ -29,7 +30,7 @@ int main() {
     InitWindow(screenWidth, screenHeight, "Teddy: The Game");
 
     TextBox textBox;
-    Player player(&textBox, 128, 947, 1);
+    Player player(&textBox, 64, 160, 1);
     player.hasWeapon = false; //at the beggining he doesn't have the weapon
 
     Camera2D camera = { 0 };
@@ -38,16 +39,18 @@ int main() {
     camera.rotation = 0.0f;
     camera.zoom = 3.0f;
 
+    Levels level0(0, &player, &textBox, &camera);
     Levels level1(1, &player, &textBox, &camera);
     Levels level2(2, &player, &textBox, &camera);
 
-    Menus menu1(1, 0);
-    Menus menu2(2, 1);
-    Menus menu3(3, 2);
+    Menus menu1(1);
+    Menus intermedio1(1.5);
+    Menus menu2(2);
+    Menus menu3(3);
     
-    currentLevel = &level1;
+    currentLevel = &level0;
     currentMenu = &menu1;
-    level = 1;
+    level = 0;
     menuNum = 1;
     menu = true;
 
@@ -67,13 +70,22 @@ int main() {
 
             if(menuNum == 1 && currentMenu->jugarFlag){
                 menu = false;
-                menuNum++;
-                currentMenu = &menu2;
+                menuNum += 0.5;
+                currentMenu = &intermedio1;
             }
 
-            if(menuNum == 2 && currentMenu->siguienteFlag){
+            else if(menuNum == 1.5){
+                menuTimer += deltatime;
+                if(menuTimer >= 5){
+                    menu = false;
+                    menuNum += 0.5;
+                    currentMenu = &menu2;
+                }
+            }
+
+            else if(menuNum == 2 && currentMenu->siguienteFlag){
                 menu = false;
-                menuNum++;
+                menuNum += 0.5;
                 currentMenu = &menu3;
             }
 
@@ -123,7 +135,15 @@ int main() {
             currentLevel->DrawFoods();
         }
 
-        if(level == 1 && currentLevel->finished){
+        if(level == 0 && currentLevel->finished){
+            menuTimer = 0;
+            menu = true;
+            ChangeLevel(1, &level1, player, 128, 947);
+            currentLevel = &level1;
+            player.lastCheckPoint = player.pos;
+        }
+
+        else if(level == 1 && currentLevel->finished){
             menu = true;
             ChangeLevel(2, &level2, player, 96, 96);
             currentLevel = &level2;
