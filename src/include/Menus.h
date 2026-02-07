@@ -35,8 +35,8 @@ public:
     bool siguienteFlag;
     bool resumirFlag;
 
-    Menus(float id, float deltatime);
-    void Draw(Player* player);
+    Menus(float id);
+    void Draw(Player* player, float deltatime);
     void Update();
     bool DrawAndHandleBtn(Texture2D sheet, Vector2 position);
 
