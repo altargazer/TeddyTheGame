@@ -65,7 +65,7 @@ int main() {
         ClearBackground(WHITE);
 
         if(menu){
-            currentMenu->Draw(&player);
+            currentMenu->Draw(&player, deltatime);
             currentMenu->Update();
 
             if(menuNum == 1 && currentMenu->jugarFlag){

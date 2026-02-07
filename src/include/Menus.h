@@ -29,11 +29,13 @@ public:
     Texture2D resumir;
     Texture2D salir;
 
+    Font interFont;
+
     bool jugarFlag;
     bool siguienteFlag;
     bool resumirFlag;
 
-    Menus(float id);
+    Menus(float id, float deltatime);
     void Draw(Player* player);
     void Update();
     bool DrawAndHandleBtn(Texture2D sheet, Vector2 position);

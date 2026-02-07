@@ -6,6 +6,10 @@ int getMiddle(std::string text, int fontSize){
     return (GetScreenWidth()/2 - MeasureText(text.c_str(), fontSize)/2);
 }
 
+int getMiddle(std::string text, int fontSize, Font font){
+    return (GetScreenWidth()/2 - MeasureTextEx(font, text.c_str(), fontSize, 0).x/2);
+}
+
 Menus::Menus(float id){
     this->id = id;
 
@@ -20,18 +24,21 @@ Menus::Menus(float id){
         jugar = LoadTexture("sprites/menus/start.png");
         background = LoadTexture("sprites/menus/initialScreen.png");
     }
-    else if(id > 1){
+    else if(id > 1 && (int)(id*10) % 10 == 0){
         coin = LoadTexture("sprites/objects/coin.png");
         coconut = LoadTexture("sprites/objects/coco.png");
         calvi = LoadTexture("sprites/objects/calvoHead.png");
         siguiente = LoadTexture("sprites/menus/next.png");
         salir = LoadTexture("sprites/menus/salir.png");
     }
+    else{
+        interFont = LoadFontEx("fonts/04B_19.ttf", 96, 0, 250);;
+    }
 }
 
-void Menus::Draw(Player* player){
+void Menus::Draw(Player* player, float deltatime){
     if(id == 1){
-        DrawTexture(background, 0, 0, WHITE);
+        //DrawTexture(background, 0, 0, WHITE);
         int middle = GetScreenWidth()/2 - MeasureText("Teddy: The Game", 100)/2;
         DrawText("Teddy: The Game", middle, 100, 100, BLACK);
     }
@@ -58,8 +65,13 @@ void Menus::Draw(Player* player){
     }
 
     else if (id == 1.5){
-        std::string top = "Fase 1 del Plan Ultra Secreto para el Objetivo Ultra Secreto del Teddy:\nLa Red de Información";
-        DrawText(top.c_str(), getMiddle(top, 50), 80, 50, BLACK);
+        std::string line1 = "Fase 1:";
+        std::string line2 = "(del Plan Ultra Secreto para\nel Objetivo Ultra Secreto del Teddy)";
+        std::string line3 = "LA RED DE INFORMACION";
+
+        DrawTextEx(interFont, line1.c_str(), (Vector2){(float)getMiddle(line1, 60, interFont), 100}, 60, 2, BLACK);
+        DrawTextEx(interFont, line2.c_str(), (Vector2){(float)getMiddle(line2, 40, interFont), 170}, 40, 2, BLACK);
+        DrawTextEx(interFont, line3.c_str(), (Vector2){(float)getMiddle(line3, 70, interFont), 260}, 70, 2, BLACK);
     }
 }
 
