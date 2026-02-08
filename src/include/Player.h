@@ -43,6 +43,7 @@ public:
     //objects
     Rectangle HitBox;
     Rectangle FeetBox;
+    Rectangle interactBox;
     Rectangle attackHitBox;
     TextBox* textBox;
     Texture2D lifeFull;

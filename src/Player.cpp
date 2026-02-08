@@ -49,6 +49,7 @@ Player::Player(TextBox* textBox, float startX, float startY, int dir){
     HitBox = {pos.x + 5, pos.y + 3, width - 4, height - 10};
     attackHitBox = {pos.x + width - 3, pos.y, 31, height};
     FeetBox = {pos.x, pos.y + height - 5, width, 5};
+    interactBox = {pos.x, pos.y, width + 32, height};
 
     idleSheet = LoadTexture("sprites/player/PlayerIdle.png");
     walkingSheet = LoadTexture("sprites/player/PlayerWalk.png");
@@ -191,10 +192,12 @@ void Player::UpdatePositions(){
         HitBox = {pos.x + 5, pos.y + 3, width - 5, height - 10};
         attackHitBox = {pos.x + width - 3, pos.y, 31, height};
         FeetBox = {pos.x + 5, pos.y + height - 10, width - 10, 5};
+        interactBox = {pos.x, pos.y, width + 32, height};
     } else{
         HitBox = {pos.x, pos.y + 3, width - 5, height - 10};
         attackHitBox = {pos.x - 30, pos.y, 31, height};
         FeetBox = {pos.x + 5, pos.y + height - 10, width - 10, 5};
+        interactBox = {pos.x - 32, pos.y, width + 32, height};
         if(walking){
             HitBox.x -= 1;
         }
@@ -330,9 +333,9 @@ void Player::HandleCollisions(Rectangle tile){
 bool Player::HandlePickingUp(Rectangle coll, bool pressing){
     if(sleeping || dead) return false;
     if(!pressing){
-        if(CheckCollisionRecs(HitBox, coll)) return true;
+        if(CheckCollisionRecs(interactBox, coll)) return true;
     }
-    if (CheckCollisionRecs(HitBox, coll)){
+    if (CheckCollisionRecs(interactBox, coll)){
         if(direction == 1){
             DrawTexture(keyInteract, pos.x + 25, pos.y - 7, WHITE);
         } else DrawTexture(keyInteract, pos.x - 8, pos.y - 7, WHITE);
