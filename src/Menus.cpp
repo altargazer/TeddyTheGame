@@ -7,7 +7,7 @@ int getMiddle(std::string text, int fontSize){
 }
 
 int getMiddle(std::string text, int fontSize, Font font){
-    return (GetScreenWidth()/2 - MeasureTextEx(font, text.c_str(), fontSize, 0).x/2);
+    return (GetScreenWidth()/2 - MeasureTextEx(font, text.c_str(), fontSize, 3).x/2);
 }
 
 Menus::Menus(float id){
@@ -69,9 +69,10 @@ void Menus::Draw(Player* player, float deltatime){
         std::string line2 = "(del Plan Ultra Secreto para\nel Objetivo Ultra Secreto del Teddy)";
         std::string line3 = "LA RED DE INFORMACION";
 
-        DrawTextEx(interFont, line1.c_str(), (Vector2){(float)getMiddle(line1, 60, interFont), 100}, 60, 2, BLACK);
-        DrawTextEx(interFont, line2.c_str(), (Vector2){(float)getMiddle(line2, 40, interFont), 170}, 40, 2, BLACK);
-        DrawTextEx(interFont, line3.c_str(), (Vector2){(float)getMiddle(line3, 70, interFont), 260}, 70, 2, BLACK);
+        DrawTextEx(interFont, line1.c_str(), (Vector2){(float)getMiddle(line1, 80, interFont), 100}, 80, 3, RED);
+        DrawTextEx(interFont, line2.c_str(), (Vector2){(float)getMiddle(line2, 60, interFont), 180}, 80, 2, BLACK);
+        DrawRectangleLines((float)getMiddle(line3, 100, interFont) - 15, 340, MeasureTextEx(interFont, line3.c_str(), 100, 3).x, MeasureTextEx(interFont, line3.c_str(), 100, 3).y, RED);
+        DrawTextEx(interFont, line3.c_str(), (Vector2){(float)getMiddle(line3, 100, interFont), 350}, 100, 3, BLACK);
     }
 }
 

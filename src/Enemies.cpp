@@ -198,7 +198,7 @@ Paddy::Paddy(Vector2 pos, Player* player, int direction, TextBox* textBox, int l
     damaged = false;
 
     if(direction == 1){
-        HitBox = {position.x- 40, position.y, 50, 33};
+        HitBox = {position.x - 20, position.y, 30, 33};
     } else {
         HitBox = {position.x + 33 + 30, position.y, 50, 33};
     }
@@ -225,19 +225,19 @@ void Paddy::Update(float deltatime){
                 textBox->EnqueuDialogue({{"Pero parece que me lo quieres contar."}, "paddy"});
                 textBox->EnqueuDialogue({{"No, no. Es altísimo secreto."}, "teddy"});
                 textBox->EnqueuDialogue({{"Bueno vale, no pasa nada. Tampoco me interesa."}, "paddy"});
-                textBox->EnqueuDialogue({{"...", "...", "...", "Ay, si insisted tanto, te lo contaré. Aunque no te puedo dar detalles"}, "teddy"});
+                textBox->EnqueuDialogue({{". . .", ". . . . . .", ". . . . . . . . .", ". . . . . . . . . . . . . . .", "Ay, si insisted tanto, te lo contaré. Aunque no te puedo dar detalles."}, "teddy"});
                 textBox->EnqueuDialogue({{"...menos mal, no sé cómo iba a dormir esta noche sin saberlo."}, "paddy"});
                 textBox->EnqueuDialogue({{"Lo sé, lo sé.", "Bueno, ahí va: ¡el Teddy tiene un plan maestro!"}, "teddy"});
-                textBox->EnqueuDialogue({{"Teddy, tu siempre tienes un \"plan maestro\""}, "paddy"});
+                textBox->EnqueuDialogue({{"Teddy, tu siempre tienes un \"plan maestro.\""}, "paddy"});
                 textBox->EnqueuDialogue({{"Paddy, no uses comillas, no tenemos dedos."}, "teddy"});
                 textBox->EnqueuDialogue({{"Ah, sí, perdona."}, "paddy"});
-                textBox->EnqueuDialogue({{"¡Pero este plan es especial! Es el Plan Ultra Secreto para el Objetivo Ultra Secreto del Teddy.\nTambién conocido como el PUSOUS."}, "teddy"});
+                textBox->EnqueuDialogue({{"¡Pero este plan es especial! Es el Plan Ultra Secreto para el Objetivo \nUltra Secreto del Teddy. También conocido como el PUSOUST."}, "teddy"});
                 textBox->EnqueuDialogue({{"¿Ese es el nombre oficial?"}, "paddy"});
                 textBox->EnqueuDialogue({{"Aún me lo estoy pensando."}, "teddy"});
                 textBox->EnqueuDialogue({{"¿Y en qué consiste este plan, exactamente?"}, "paddy"});
-                textBox->EnqueuDialogue({{"Ay, ay, ay, pequeño Paddy.", "Como claramente indica su nombre provisional, el plan y sus objetivos son ultra secretos y no puedo compartirlos contigo.", "Si lo hiciera, tendría que matarte jiji,"}, "teddy"});
-                textBox->EnqueuDialogue({{"Nada de jiji.", "Está bien, puedes quedarte con tus secretos, pero ya sabes que te estoy vigilando.", "Siempre."}, "paddy"});
-                textBox->EnqueuDialogue({{"¡No te preocupes! Solo la mayoría de las fases implican que haya víctimas mortales."}, "teddy"});
+                textBox->EnqueuDialogue({{"Ay, ay, ay, pequeño Paddy.", "Como claramente indica su nombre provisional, el plan y sus objetivos \nson ultra secretos y no puedo compartirlos contigo.", "Si lo hiciera, tendría que matarte jiji."}, "teddy"});
+                textBox->EnqueuDialogue({{"Nada de jiji.", "Está bien, puedes quedarte con tus secretos, pero ya sabes que te \nestoy vigilando.", "Siempre."}, "paddy"});
+                textBox->EnqueuDialogue({{"¡No te preocupes! Solo la mayoría de las fases implican que haya \nvíctimas mortales."}, "teddy"});
                 textBox->EnqueuDialogue({{"¿Qué?"}, "paddy"});
                 textBox->EnqueuDialogue({{"¿Qué?", "Bueno jaja, me tengo que ir. La Fase 1 está a punto de empezar."}, "teddy"});
                 textBox->EnqueuDialogue({{"No sé si me fío de este plan tuyo, Teddy."}, "paddy"});

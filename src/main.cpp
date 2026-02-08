@@ -21,6 +21,7 @@ void ChangeLevel(int next, Levels* nextLevel, Player& player, int x, int y){
     level = next;
     currentLevel = nextLevel;
     player.pos = {(float)x, (float)y};
+    player.direction = 1;
 }
 
 int main() {
@@ -129,6 +130,13 @@ int main() {
         
         textBox.Draw();
         player.DrawTop();
+
+        //specific to level 0
+        if(level == 0 && currentLevel->enemies[0]->condition){
+            if(currentLevel->DrawEjecutar()){
+                currentLevel->finished = true;
+            }
+        }
 
         //specific to level 1
         if(level == 1 && currentLevel->enemies[0]->initial && !currentLevel->enemies[0]->condition3){

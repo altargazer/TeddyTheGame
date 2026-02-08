@@ -29,6 +29,9 @@ public:
 
     std::vector<BadFloor> badFloors;
 
+    //for 0st level
+    Texture2D ejecutarButton;
+
     //from 1st level
     bool startedMission;
     int countFoods;
@@ -65,6 +68,7 @@ public:
     void PigeonSytem(int id);
     void DrawFoods();
     void DrawBackground();
+    bool DrawEjecutar();
     std::vector<std::vector<int>> LoadColliders(const std::string& file);
 };
 

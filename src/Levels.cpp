@@ -50,6 +50,8 @@ Levels::Levels(int id, Player* player, TextBox* textBox, Camera2D* camera){
         levelMap = LoadTexture("sprites/maps/Level0Tileset.png");
         colliders = LoadColliders("sprites/maps/Level0.csv");
 
+        ejecutarButton = LoadTexture("sprites/objects/ejecutar.png");
+
         Paddy* paddy = new Paddy({288, 230}, player, 1, textBox, 0, camera);
         enemies.push_back(paddy);
     }
@@ -144,12 +146,6 @@ void Levels::Update(){
     }
     if(!attacking){
         player->UpgradeLevel();
-    }
-
-    if(id == 0){
-        if(enemies[0]->condition){
-            finished = true;
-        }
     }
 }
 
@@ -481,6 +477,33 @@ void Levels::DrawFoods(){
         }
         xpos += (10 + height-20);
     }
+}
+
+bool Levels::DrawEjecutar(){
+    bool action = false;
+    int btnState = 0; //0: normal, 1:hovering, 2:pressing
+    float frameWidth = ejecutarButton.width/3;
+    float frameHeight = ejecutarButton.height;
+    Vector2 mousePoint = { 0.0f, 0.0f };
+    Vector2 position = {GetScreenWidth()/2 - frameWidth/2, GetScreenHeight()/2 - frameHeight/2};
+    Rectangle btnBounds = {position.x, position.y, frameWidth, frameHeight};
+    Rectangle source = {0, 0, frameWidth, frameHeight};
+
+    mousePoint = GetMousePosition();
+
+    if (CheckCollisionPointRec(mousePoint, btnBounds)){
+        if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)) btnState = 2;
+        else btnState = 1;
+
+        if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT)) action = true;
+    }
+    else btnState = 0;
+
+    source.x = btnState*(ejecutarButton.width/3);
+
+    DrawTextureRec(ejecutarButton, source, position, WHITE);
+    
+    return action;
 }
 
 void Levels::ControlFalling(){
