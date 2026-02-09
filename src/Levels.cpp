@@ -29,6 +29,25 @@ inline bool instanceof(const T *ptr) {
    return dynamic_cast<const Base*>(ptr) != nullptr;
 }
 
+std::vector<std::vector<int>> LoadColliders(const std::string& filename){
+    std::vector<std::vector<int>> colliders;
+    std:: ifstream file(filename);
+    std::string line;
+    while(std::getline(file, line)){
+        std::vector<int> row;
+        std::stringstream ss(line);
+        std::string num;
+        
+        while(std::getline(ss, num, ',')){
+            row.push_back(std::stoi(num));
+        }
+
+        colliders.push_back(row);
+    }
+
+    return colliders;
+}
+
 Levels::Levels(int id, Player* player, TextBox* textBox, Camera2D* camera){
 
     this->id = id;
@@ -137,18 +156,6 @@ void Levels::Draw(){
     DrawTexture(levelMap, 0, 0, WHITE);
 }
 
-void Levels::Update(){
-    bool attacking = false;
-    for(int i = 0; (std::size_t)i<enemies.size(); i++){
-        if(enemies[i]->isAttacking){
-            attacking = true;
-        }
-    }
-    if(!attacking){
-        player->UpgradeLevel();
-    }
-}
-
 void Levels::DrawBackground(){
     if(id == 0){
         ClearBackground({231, 230, 226, 1});
@@ -162,6 +169,21 @@ void Levels::DrawBackground(){
         DrawTexture(background, 0,0, WHITE);
         DrawTexture(background, background.width, 0, WHITE);
     }
+}
+
+void Levels::Update(){
+    bool attacking = false;
+    for(int i = 0; (std::size_t)i<enemies.size(); i++){
+        if(enemies[i]->isAttacking){
+            attacking = true;
+        }
+    }
+    if(!attacking){
+        player->UpgradeLevel();
+    }
+
+    ManageBadFloors();
+    ControlFalling();
 }
 
 void Levels::ManageCollisions(){
@@ -387,6 +409,25 @@ void Levels::DrawObject(int id,float posX,float posY){
     }
 }
 
+void Levels::PigeonSytem(int id){
+    switch (id){
+        //initial
+        case 0:
+            textBox->EnqueuDialogue({
+                {"Buenos días, Señor Teddy. Paloma #134 a su servicio.", 
+                    "He sido enviada para informarle del funcionamiento de este videojuego.", 
+                    "Los controles son: \n\t· A y D para moverse a izquierda y derecha. \n\t· SPACE para saltar. \n\t· E para interectuar.",
+                    "Si se encuentra cansado, le recomiendo que duerma cada vez que \ntenga ocasión.\nEse será el lugar en el que reaparezca en caso de... accidente.",
+                    "No olvide que la cocoa le ayudará a mantenerse sano y feliz."
+                }, "pigeon"});
+            textBox->EnqueuDialogue({{"Muchas gracias, soldado. Puedes descansar."}, "teddy"});
+            textBox->EnqueuDialogue({{"Señor, sí, señor."}, "pigeon"});
+            break;
+        default:
+                textBox->EnqueuDialogue({{"No tengo nada que decir."}, "pigeon"});
+    }
+}
+
 void Levels::ManageEnemies(float deltatime){
     int i = 0;
     while(i < (int)enemies.size()){
@@ -427,23 +468,18 @@ void Levels::ManageBadFloors(){
     }
 }
 
-void Levels::PigeonSytem(int id){
-    switch (id){
-        //initial
-        case 0:
-            textBox->EnqueuDialogue({
-                {"Buenos días, Señor Teddy. Paloma #134 a su servicio.", 
-                    "He sido enviada para informarle del funcionamiento de este videojuego.", 
-                    "Los controles son: \n\t· A y D para moverse a izquierda y derecha. \n\t· SPACE para saltar. \n\t· E para interectuar.",
-                    "Si se encuentra cansado, le recomiendo que duerma cada vez que \ntenga ocasión.\nEse será el lugar en el que reaparezca en caso de... accidente.",
-                    "No olvide que la cocoa le ayudará a mantenerse sano y feliz."
-                }, "pigeon"});
-            textBox->EnqueuDialogue({{"Muchas gracias, soldado. Puedes descansar."}, "teddy"});
-            textBox->EnqueuDialogue({{"Señor, sí, señor."}, "pigeon"});
-            break;
-        default:
-                textBox->EnqueuDialogue({{"No tengo nada que decir."}, "pigeon"});
-    }
+void Levels::ControlFalling(){
+    if(player->pos.y >= maxDown){
+        player->lives--;
+        if(player->lives <= 0){
+            player->HandleDead();
+            player->dead = true;
+            return;
+        }
+        player->pos = player->lastCheckPoint;
+        player->speed.y = 0;
+        textBox->EnqueuDialogue({{"Upsi, me he tropezado"}, "teddy"});
+    }    
 }
 
 void Levels::DrawFoods(){
@@ -504,37 +540,4 @@ bool Levels::DrawEjecutar(){
     DrawTextureRec(ejecutarButton, source, position, WHITE);
     
     return action;
-}
-
-void Levels::ControlFalling(){
-    if(player->pos.y >= maxDown){
-        player->lives--;
-        if(player->lives <= 0){
-            player->HandleDead();
-            player->dead = true;
-            return;
-        }
-        player->pos = player->lastCheckPoint;
-        player->speed.y = 0;
-        textBox->EnqueuDialogue({{"Upsi, me he tropezado"}, "teddy"});
-    }    
-}
-
-std::vector<std::vector<int>> Levels::LoadColliders(const std::string& filename){
-    std::vector<std::vector<int>> colliders;
-    std:: ifstream file(filename);
-    std::string line;
-    while(std::getline(file, line)){
-        std::vector<int> row;
-        std::stringstream ss(line);
-        std::string num;
-        
-        while(std::getline(ss, num, ',')){
-            row.push_back(std::stoi(num));
-        }
-
-        colliders.push_back(row);
-    }
-
-    return colliders;
 }

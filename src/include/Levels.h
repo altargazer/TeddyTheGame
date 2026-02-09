@@ -13,11 +13,11 @@
 class Levels{
 public:
 
-    //attr
+    //atributos
     int id;
     Player* player;
     TextBox* textBox;
-    int maxDown; //limit for each limit to fall and die
+    int maxDown; //límite hasta que se puede bajar hasta morir
     Camera2D* camera;
     bool finished;
 
@@ -29,22 +29,22 @@ public:
 
     std::vector<BadFloor> badFloors;
 
-    //for 0st level
+    //Level 0
     Texture2D ejecutarButton;
 
-    //from 1st level
+    //Level 1
     bool startedMission;
     int countFoods;
     std::vector<bool> foods;
     Texture2D egg, nata, flour, cheese, sugar, gas, cake;
     Texture2D eggBig, nataBig, flourBig, cheeseBig, sugarBig, gasBig;
 
-    //map
+    //Mapa
     Texture2D levelMap;
     Texture2D background;
     std::vector<std::vector<int>> colliders;
 
-    //objects
+    //Objetos
     Texture2D weapon;
     Texture2D cocoa;
     Texture2D coco;
@@ -52,24 +52,26 @@ public:
     Texture2D coin;
     Texture2D pigeon;
 
-    //enemies
     std::vector<Enemies*> enemies;
 
-    //methods
+    //methods general
     Levels(int id, Player* player, TextBox* textBox, Camera2D* camera);
     void Draw();
+    void DrawBackground();
     void Update();
     void ManageCollisions();
     void ManageObjects();
     void DrawObject(int id,float posX,float posY);
+    void PigeonSytem(int id);
     void ManageEnemies(float deltatime);
     void ManageBadFloors();
     void ControlFalling();
-    void PigeonSytem(int id);
-    void DrawFoods();
-    void DrawBackground();
+
+    //Level 0
     bool DrawEjecutar();
-    std::vector<std::vector<int>> LoadColliders(const std::string& file);
+    
+    //Level 1
+    void DrawFoods();
 };
 
 

@@ -80,7 +80,6 @@ public:
 
     void Update(float deltatime) override;
     void Draw(float deltatime) override;
-    void FadeBlack(float deltatime);
 };
 
 class Wall : public Enemies{

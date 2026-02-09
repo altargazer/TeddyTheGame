@@ -170,6 +170,57 @@ void Player::Update(float deltaTime) {
     }
 }
 
+void Player::HandleCollisions(Rectangle tile){
+    //Not colliding
+    
+    if (!CheckCollisionRecs(HitBox, tile)) return;
+
+    //Calculate the overlap from every possible side
+    float overlapLeft   = (HitBox.x + HitBox.width) - tile.x;
+    float overlapRight  = (tile.x + tile.width) - HitBox.x;
+    float overlapTop    = (HitBox.y + HitBox.height) - tile.y;
+    float overlapBottom = (tile.y + tile.height) - HitBox.y;
+
+    //Is it colliding with the tile from the left or from the right?
+    float minOverlapX = (overlapLeft < overlapRight) ? overlapLeft : overlapRight;
+    //Is it colliding with the tile from the top or from the bottom?
+    float minOverlapY = (overlapTop < overlapBottom) ? overlapTop : overlapBottom;
+
+    //Is it horizontal or vertical?
+    if (minOverlapX > minOverlapY){
+        //VERTICAL COLLISION
+
+        //Collision from the top (ground)
+        if (overlapTop < overlapBottom){
+            pos.y -= minOverlapY;
+            isGrounded = true;
+            jumping = false;
+            speed.y = 0;
+        }
+        //Collision from the bottom (ceiling)
+        else{
+            pos.y += minOverlapY;
+            speed.y = 0;
+        }
+        UpdatePositions();
+    }
+    
+    else{
+        //HORIZONTAL COLLISION
+        walking = false;
+
+        //colliding from the left
+        if (overlapLeft < overlapRight){
+            pos.x -= minOverlapX;
+        }
+        //colliding from the right
+        else{ 
+            pos.x += minOverlapX;
+        }
+        UpdatePositions();
+    }
+}
+
 void Player::Attack(float deltaTime){
     if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && !attacking) {
         attacking = true;
@@ -222,30 +273,6 @@ void Player::Draw() {
     //DrawRectangleRec(attackHitBox, {200, 0, 0, 100});
     //DrawRectangleRec(FeetBox, RED);
 }
-
-void Player::DrawTop(){
-    int counter = 15;
-    for(int i = 1; i <= 6; i++){
-        if(lives >= i){
-            DrawTexture(lifeFull, counter, 15, WHITE);
-        }
-        else DrawTexture(lifeEmpty, counter, 15, WHITE);
-        counter += 80;
-    }
-
-    counter += 640;
-    std::string coins = std::to_string(money) + "x";
-    DrawText((coins.c_str()), counter, 25, 50, BLACK);
-    counter += MeasureText(coins.c_str(), 50) + 10;
-    DrawTexture(monedita, counter, 20, WHITE);
-
-    counter += 100;
-    std::string coquitos = std::to_string(cocos) + "x";
-    DrawText((coquitos.c_str()), counter, 25, 50, BLACK);
-    counter += MeasureText(coquitos.c_str(), 50) + 10;
-    DrawTexture(coquito, counter, 22, WHITE);
-}
-
 void Player::HandleAnimation(float deltaTime){
     animationTimer += deltaTime;
 
@@ -279,54 +306,19 @@ void Player::JumpAndGravity() {
     }
 }
 
-void Player::HandleCollisions(Rectangle tile){
-    //Not colliding
-    
-    if (!CheckCollisionRecs(HitBox, tile)) return;
-
-    //Calculate the overlap from every possible side
-    float overlapLeft   = (HitBox.x + HitBox.width) - tile.x;
-    float overlapRight  = (tile.x + tile.width) - HitBox.x;
-    float overlapTop    = (HitBox.y + HitBox.height) - tile.y;
-    float overlapBottom = (tile.y + tile.height) - HitBox.y;
-
-    //Is it colliding with the tile from the left or from the right?
-    float minOverlapX = (overlapLeft < overlapRight) ? overlapLeft : overlapRight;
-    //Is it colliding with the tile from the top or from the bottom?
-    float minOverlapY = (overlapTop < overlapBottom) ? overlapTop : overlapBottom;
-
-    //Is it horizontal or vertical?
-    if (minOverlapX > minOverlapY){
-        //VERTICAL COLLISION
-
-        //Collision from the top (ground)
-        if (overlapTop < overlapBottom){
-            pos.y -= minOverlapY;
-            isGrounded = true;
-            jumping = false;
-            speed.y = 0;
-        }
-        //Collision from the bottom (ceiling)
-        else{
-            pos.y += minOverlapY;
-            speed.y = 0;
-        }
-        UpdatePositions();
+void Player::UpgradeLevel(){
+    if(level == 1 && experience >= 40){
+        level = 2;
+        textBox->teddy = LoadTexture("sprites/characters/retratoTeddyGuay.png");
+        textBox->EnqueuDialogue({{"¡Felicidades! Has subido al nivel 2. La foto del Teddy ha sido actualizada como recompensa"}, "calvo"});
+        textBox->EnqueuDialogue({{"¿Qué narices signi-?"}, "teddy"});
+        textBox->EnqueuDialogue({{"!!!"}, "teddy"});
+        textBox->EnqueuDialogue({{"¡Toma ya, que guapo está el Teddy!"}, "teddy"});
+        return;
     }
-    
-    else{
-        //HORIZONTAL COLLISION
-        walking = false;
 
-        //colliding from the left
-        if (overlapLeft < overlapRight){
-            pos.x -= minOverlapX;
-        }
-        //colliding from the right
-        else{ 
-            pos.x += minOverlapX;
-        }
-        UpdatePositions();
+    else if(level == 2 && experience >= 100){
+        level = 3;
     }
 }
 
@@ -367,18 +359,25 @@ void Player::HandleDead(){
     textBox->SetDialogue({{"O-oh el Teddy ha tenido una pesadilla horrible."}, "teddy"});
 }
 
-void Player::UpgradeLevel(){
-    if(level == 1 && experience >= 40){
-        level = 2;
-        textBox->teddy = LoadTexture("sprites/characters/retratoTeddyGuay.png");
-        textBox->EnqueuDialogue({{"¡Felicidades! Has subido al nivel 2. La foto del Teddy ha sido actualizada como recompensa"}, "calvo"});
-        textBox->EnqueuDialogue({{"¿Qué narices signi-?"}, "teddy"});
-        textBox->EnqueuDialogue({{"!!!"}, "teddy"});
-        textBox->EnqueuDialogue({{"¡Toma ya, que guapo está el Teddy!"}, "teddy"});
-        return;
+void Player::DrawTop(){
+    int counter = 15;
+    for(int i = 1; i <= 6; i++){
+        if(lives >= i){
+            DrawTexture(lifeFull, counter, 15, WHITE);
+        }
+        else DrawTexture(lifeEmpty, counter, 15, WHITE);
+        counter += 80;
     }
 
-    else if(level == 2 && experience >= 100){
-        level = 3;
-    }
+    counter += 640;
+    std::string coins = std::to_string(money) + "x";
+    DrawText((coins.c_str()), counter, 25, 50, BLACK);
+    counter += MeasureText(coins.c_str(), 50) + 10;
+    DrawTexture(monedita, counter, 20, WHITE);
+
+    counter += 100;
+    std::string coquitos = std::to_string(cocos) + "x";
+    DrawText((coquitos.c_str()), counter, 25, 50, BLACK);
+    counter += MeasureText(coquitos.c_str(), 50) + 10;
+    DrawTexture(coquito, counter, 22, WHITE);
 }

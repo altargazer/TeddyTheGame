@@ -61,10 +61,10 @@ int main() {
         
         float deltatime = GetFrameTime();
 
-        //Drawing Starts Here
         BeginDrawing();
         ClearBackground(WHITE);
 
+        #pragma region Menús
         if(menu){
             currentMenu->Draw(&player, deltatime);
             currentMenu->Update();
@@ -93,6 +93,7 @@ int main() {
             EndDrawing();
             continue;
         }
+        #pragma endregion
         
         currentLevel->DrawBackground();
         
@@ -101,15 +102,15 @@ int main() {
         player.Update(deltatime);
         player.JumpAndGravity();
         player.UpdatePositions();
+        player.HandleAnimation(deltatime);
 
         textBox.Update();
         
         currentLevel->Draw();
         currentLevel->Update();
-        currentLevel->ManageBadFloors();
         currentLevel->ManageCollisions();
-        currentLevel->ControlFalling();
 
+        #pragma region Cámara
         Vector2 target = {
             player.pos.x + player.width / 2.0f,
             player.pos.y + player.height / 2.0f - 20
@@ -120,8 +121,8 @@ int main() {
         //Only way there is Pixel Perfect:
         camera.target.x = floorf(camera.target.x);
         camera.target.y = floorf(camera.target.y);
+        #pragma endregion
 
-        player.HandleAnimation(deltatime);
         currentLevel->ManageObjects();
         player.Draw();
         currentLevel->ManageEnemies(deltatime);
@@ -131,6 +132,7 @@ int main() {
         textBox.Draw();
         player.DrawTop();
 
+        #pragma region Código de cada Nivel
         //specific to level 0
         if(level == 0 && currentLevel->enemies[0]->condition){
             if(currentLevel->DrawEjecutar()){
@@ -142,7 +144,9 @@ int main() {
         if(level == 1 && currentLevel->enemies[0]->initial && !currentLevel->enemies[0]->condition3){
             currentLevel->DrawFoods();
         }
+        #pragma endregion
 
+        #pragma region Cambio de Nivel
         if(level == 0 && currentLevel->finished){
             menuTimer = 0;
             menu = true;
@@ -157,6 +161,7 @@ int main() {
             currentLevel = &level2;
             player.lastCheckPoint = player.pos;
         }
+        #pragma endregion
 
         //Position of player for development
         std::string position = "X: " + std::to_string((int)player.pos.x) + ", Y:" + std::to_string((int)(player.pos.y+player.height));

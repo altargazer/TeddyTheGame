@@ -299,10 +299,6 @@ void Paddy::Draw(float deltatime){
     }
 }
 
-void Paddy::FadeBlack(float deltatime){
-
-}
-
 //WALL
 
 Wall::Wall(float level, Vector2 pos, int height, int width, Player* player, TextBox* textBox){

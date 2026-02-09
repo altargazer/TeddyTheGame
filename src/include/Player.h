@@ -9,24 +9,18 @@ public:
 
     //stats
     Vector2 speed;
-    int jumpPower;
     Vector2 pos;
-    float height, width;
+    Vector2 lastCheckPoint;
+    int jumpPower;
     float gravity;
     int direction;
-    int lives;
-    int money;
-    int cocos;
-    int calvis;
-    float coolDown;
-    Vector2 lastCheckPoint;
-    int experience;
-    int level;
+    float height, width;
+    int lives, money, cocos, calvis, experience, level;
 
     //attack
     float attTimer;
     float attMaxTimer;
-
+    float coolDown;
     float deadTimer;
 
     //states
@@ -84,18 +78,18 @@ public:
 
     //methods
     void Update(float deltaTime);
-    void Draw();
+    void UpdatePositions();
     void JumpAndGravity();
     void HandleCollisions(Rectangle coll);
-    void UpdatePositions();
+    void Draw();
     void ChangeAnim(Animation* anim);
     void HandleAnimation(float deltaTime);
-    void Attack(float deltaTime);
     bool HandlePickingUp(Rectangle coll, bool pressing);
-    void DrawTop();
+    void UpgradeLevel();
+    void Attack(float deltaTime);
     void TakeDamage(int damage);
     void HandleDead();
-    void UpgradeLevel();
+    void DrawTop();
 
 };
 
