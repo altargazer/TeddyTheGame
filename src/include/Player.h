@@ -2,17 +2,22 @@
 #define PLAYER_H
 
 #include <raylib.h>
+#include <vector>
+#include <fstream>
+#include <iostream>
+#include <sstream>
 #include "TextBox.h"
 
 class Player {
 public:
 
     //stats
-    Vector2 speed;
+    Vector2 vel;
     Vector2 pos;
     Vector2 lastCheckPoint;
     int jumpPower;
     float gravity;
+    float speed;
     int direction;
     float height, width;
     int lives, money, cocos, calvis, experience, level;
@@ -25,7 +30,6 @@ public:
 
     //states
     bool isGrounded;
-    bool jumping;
     bool walking;
     bool idle;
     bool attacking;
@@ -35,15 +39,12 @@ public:
     bool sleeping;
 
     //objects
-    Rectangle HitBox;
-    Rectangle FeetBox;
-    Rectangle interactBox;
-    Rectangle attackHitBox;
     TextBox* textBox;
     Texture2D lifeFull;
     Texture2D lifeEmpty;
     Texture2D monedita;
     Texture2D coquito;
+    std::vector<std::vector<int>> colliders;
 
     //animation
     struct Animation{
@@ -77,19 +78,25 @@ public:
     Player(TextBox* textBox, float startX = 0, float startY = 0, int direction = 1);
 
     //methods
-    void Update(float deltaTime);
-    void UpdatePositions();
-    void JumpAndGravity();
-    void HandleCollisions(Rectangle coll);
+    void Update(float deltatime);
+    void HandleInput();
+    void ApplyMovement(float deltatime);
+    void HandleCollisions(bool horizontal);
     void Draw();
     void ChangeAnim(Animation* anim);
-    void HandleAnimation(float deltaTime);
+    void HandleAnimation(float deltatime);
     bool HandlePickingUp(Rectangle coll, bool pressing);
     void UpgradeLevel();
-    void Attack(float deltaTime);
+    void Attack(float deltatime);
     void TakeDamage(int damage);
     void HandleDead();
     void DrawTop();
+    void ChangeLevel(int level);
+    Rectangle getHitBox();
+    Rectangle getAttackBox();
+    Rectangle getFeetBox();
+    Rectangle getInteractBox();
+    std::vector<std::vector<int>> LoadColliders(const std::string& filename);
 
 };
 

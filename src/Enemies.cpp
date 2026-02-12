@@ -21,7 +21,7 @@ void Enemies::Update(float deltatime){
     }
 
     if(player->attacking && !damaged){
-        if(CheckCollisionRecs(HitBox, player->attackHitBox)){
+        if(CheckCollisionRecs(HitBox, player->getAttackBox())){
             damaged = true;
             lives--;
             position.x += 30*player->direction;
@@ -43,7 +43,7 @@ void Enemies::Update(float deltatime){
     if(position.x > maxRight) position.x = maxRight;
     if(position.x < maxLeft) position.x = maxLeft;
 
-    if(CheckCollisionRecs(player->HitBox, HitBox)){
+    if(CheckCollisionRecs(player->getHitBox(), HitBox)){
         player->TakeDamage(damage);
         position.x -= 10*direction;
     }
@@ -84,7 +84,7 @@ void Enemies::Draw(float deltatime){
 }
 
 bool Enemies::CheckCollision(){
-    return (CheckCollisionRecs(HitBox, player->HitBox));
+    return (CheckCollisionRecs(HitBox, player->getHitBox()));
 }
 
 //MICROCALVI
@@ -332,7 +332,7 @@ Wall::Wall(float level, Vector2 pos, int height, int width, Player* player, Text
 void Wall::Update(float deltatime){
     if(!alive) return;
 
-    if(CheckCollisionRecs(player->HitBox, HitBox)){
+    if(CheckCollisionRecs(player->getHitBox(), HitBox)){
         if(player->pos.x - position.x < 0){
             player->pos.x = position.x - player->width;
         } else player->pos.x = position.x + 32;
@@ -347,7 +347,7 @@ void Wall::Update(float deltatime){
     }
 
     if(player->attacking && !damaged){
-        if(CheckCollisionRecs(HitBox, player->attackHitBox)){
+        if(CheckCollisionRecs(HitBox, player->getAttackBox())){
             damaged = true;
             lives--;
             if(lives <= 0){

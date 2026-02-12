@@ -22,6 +22,14 @@ void ChangeLevel(int next, Levels* nextLevel, Player& player, int x, int y){
     currentLevel = nextLevel;
     player.pos = {(float)x, (float)y};
     player.direction = 1;
+    player.ChangeLevel(next);
+}
+
+void ChangeMenu(Menus* next, bool continueMenu){
+    menuNum += 0.5;
+    menu = continueMenu;
+    menuTimer = 0;
+    currentMenu = next;
 }
 
 int main() {
@@ -47,6 +55,7 @@ int main() {
     Menus menu1(1);
     Menus intermedio1(1.5);
     Menus menu2(2);
+    Menus intermedio2(2.5);
     Menus menu3(3);
     
     currentLevel = &level0;
@@ -77,17 +86,20 @@ int main() {
 
             else if(menuNum == 1.5){
                 menuTimer += deltatime;
-                if(menuTimer >= 5){
-                    menu = false;
-                    menuNum += 0.5;
-                    currentMenu = &menu2;
+                if(menuTimer >= 8){
+                    ChangeMenu(&menu2, false);
                 }
             }
 
             else if(menuNum == 2 && currentMenu->siguienteFlag){
-                menu = false;
-                menuNum += 0.5;
-                currentMenu = &menu3;
+                ChangeMenu(&intermedio2, true);
+            }
+
+            else if(menuNum == 2.5){
+                menuTimer += deltatime;
+                if(menuTimer >= 8){
+                    ChangeMenu(&menu3, false);
+                }
             }
 
             EndDrawing();
@@ -100,15 +112,8 @@ int main() {
         BeginMode2D(camera);
 
         player.Update(deltatime);
-        player.JumpAndGravity();
-        player.UpdatePositions();
         player.HandleAnimation(deltatime);
-
         textBox.Update();
-        
-        currentLevel->Draw();
-        currentLevel->Update();
-        currentLevel->ManageCollisions();
 
         #pragma region Cámara
         Vector2 target = {
@@ -122,6 +127,9 @@ int main() {
         camera.target.x = floorf(camera.target.x);
         camera.target.y = floorf(camera.target.y);
         #pragma endregion
+        
+        currentLevel->Draw();
+        currentLevel->Update();
 
         currentLevel->ManageObjects();
         player.Draw();

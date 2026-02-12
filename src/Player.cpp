@@ -1,7 +1,10 @@
 #include "include/Player.h"
 #include <raylib.h>
 #include <algorithm>
+#include <fstream>
 #include <iostream>
+#include <sstream>
+#include <vector>
 
 //Comments about sprite size:
     //Idle: 29 x 37
@@ -13,15 +16,16 @@ Player::Player(TextBox* textBox, float startX, float startY, int dir){
     pos = {startX, startY};
     height = 37;
     width = 29;
-    speed.x = 5;
-    gravity = 0.5f;
-    speed.y = gravity;
+    speed = 300;
+    gravity = 1000;
+    jumpPower = 480;
     direction = dir;
-    jumpPower = 10;
     coolDown = 0;
     lastCheckPoint = {startX, startY};
     experience = 0;
-    level = 1;
+    level = 0;
+
+    colliders = LoadColliders("sprites/maps/Level0.csv");
     
     calvis = 0;
     lives = 6;
@@ -31,7 +35,6 @@ Player::Player(TextBox* textBox, float startX, float startY, int dir){
     this->textBox = textBox;
 
     isGrounded = false;
-    jumping = false;
     walking = false;
     attacking = false;
     idle = true;
@@ -46,11 +49,6 @@ Player::Player(TextBox* textBox, float startX, float startY, int dir){
     currentFrame = 0;
     animationTimer = 0.0f;
 
-    HitBox = {pos.x + 5, pos.y + 3, width - 4, height - 10};
-    attackHitBox = {pos.x + width - 3, pos.y, 31, height};
-    FeetBox = {pos.x, pos.y + height - 5, width, 5};
-    interactBox = {pos.x, pos.y, width + 32, height};
-
     idleSheet = LoadTexture("sprites/player/PlayerIdle.png");
     walkingSheet = LoadTexture("sprites/player/PlayerWalk.png");
     attackSheet = LoadTexture("sprites/player/PlayerAttack.png");
@@ -61,7 +59,7 @@ Player::Player(TextBox* textBox, float startX, float startY, int dir){
     monedita = LoadTexture("sprites/objects/coin.png");
     coquito = LoadTexture("sprites/objects/coco.png");
 
-
+    #pragma region Animaciones
     idleAnim.sheet = idleSheet;
     idleAnim.frames = 4;
     idleAnim.frameDuration = 0.3f;
@@ -97,12 +95,13 @@ Player::Player(TextBox* textBox, float startX, float startY, int dir){
     deadAnim.paddingRight = 1;
     deadAnim.paddingLeft = 0;
     deadAnim.paddingTop = 0;
+    #pragma endregion
 }
 
-void Player::Update(float deltaTime) {
+void Player::Update(float deltatime) {
 
     if(dead){
-        deadTimer += deltaTime;
+        deadTimer += deltatime;
         if(deadTimer >= deadAnim.frameDuration * deadAnim.frames){
             deadTimer = 0;
             dead = false;
@@ -114,7 +113,7 @@ void Player::Update(float deltaTime) {
     } 
 
     if(sleeping){
-        deadTimer += deltaTime;
+        deadTimer += deltatime;
         if(deadTimer >= deadAnim.frameDuration * deadAnim.frames){
             deadTimer = 0;
             sleeping = false;
@@ -129,40 +128,24 @@ void Player::Update(float deltaTime) {
         return;
     }
 
-    walking = false;
-    isGrounded = false;
-
-    if (IsKeyDown(KEY_D)) {
-        pos.x += speed.x;
-        direction = 1;
-        walking = true;
-    }
-    if (IsKeyDown(KEY_A)) {
-        pos.x -= speed.x;
-        direction = -1;
-        walking = true;
-    }
-    if (IsKeyPressed(KEY_SPACE) && !jumping) {
-        speed.y = -jumpPower;
-        isGrounded = false;
-        jumping = true;
-    }
+    HandleInput();
+    ApplyMovement(deltatime);
 
     //I only need padding when direction = -1
     attackAnim.paddingLeft = direction == 1 ? 0 : 25;
     deadAnim.paddingLeft = direction == 1 ? 0 : 4;
 
-    if(walking || jumping || attacking) idle = false;
+    if(walking || attacking) idle = false;
     else idle = true;
 
     if(walking && !attacking) ChangeAnim(&walkingAnim);
     if(idle) ChangeAnim(&idleAnim);
 
-    if(hasWeapon) Attack(deltaTime);
+    if(hasWeapon) Attack(deltatime);
     if(attacking) ChangeAnim(&attackAnim);
 
     if(damaged){
-        coolDown += deltaTime;
+        coolDown += deltatime;
         if(coolDown >= 1.0f){
             coolDown = 0;
             damaged = false;
@@ -170,65 +153,90 @@ void Player::Update(float deltaTime) {
     }
 }
 
-void Player::HandleCollisions(Rectangle tile){
-    //Not colliding
-    
-    if (!CheckCollisionRecs(HitBox, tile)) return;
-
-    //Calculate the overlap from every possible side
-    float overlapLeft   = (HitBox.x + HitBox.width) - tile.x;
-    float overlapRight  = (tile.x + tile.width) - HitBox.x;
-    float overlapTop    = (HitBox.y + HitBox.height) - tile.y;
-    float overlapBottom = (tile.y + tile.height) - HitBox.y;
-
-    //Is it colliding with the tile from the left or from the right?
-    float minOverlapX = (overlapLeft < overlapRight) ? overlapLeft : overlapRight;
-    //Is it colliding with the tile from the top or from the bottom?
-    float minOverlapY = (overlapTop < overlapBottom) ? overlapTop : overlapBottom;
-
-    //Is it horizontal or vertical?
-    if (minOverlapX > minOverlapY){
-        //VERTICAL COLLISION
-
-        //Collision from the top (ground)
-        if (overlapTop < overlapBottom){
-            pos.y -= minOverlapY;
-            isGrounded = true;
-            jumping = false;
-            speed.y = 0;
-        }
-        //Collision from the bottom (ceiling)
-        else{
-            pos.y += minOverlapY;
-            speed.y = 0;
-        }
-        UpdatePositions();
+void Player::HandleInput(){
+    vel.x = 0;
+    walking = false;
+    if(IsKeyDown(KEY_D)){
+        vel.x = speed;
+        direction = 1;
     }
-    
-    else{
-        //HORIZONTAL COLLISION
-        walking = false;
+    if(IsKeyDown(KEY_A)){
+        vel.x = -speed;
+        direction = -1;
+    }
 
-        //colliding from the left
-        if (overlapLeft < overlapRight){
-            pos.x -= minOverlapX;
-        }
-        //colliding from the right
-        else{ 
-            pos.x += minOverlapX;
-        }
-        UpdatePositions();
+    if(vel.x != 0) walking = true;
+
+    if(IsKeyPressed(KEY_SPACE) && isGrounded){
+        vel.y = -jumpPower;
+        isGrounded = false;
     }
 }
 
-void Player::Attack(float deltaTime){
+void Player::ApplyMovement(float deltatime){
+    pos.x += vel.x * deltatime;
+    HandleCollisions(true);
+
+    vel.y += gravity*deltatime;
+    if(vel.y >= 400) vel.y = 400;
+
+    pos.y += vel.y*deltatime;
+    isGrounded = false;
+    HandleCollisions(false);
+}
+
+void Player::HandleCollisions(bool horizontal){
+    for(int i = 0; i < (int)colliders.size(); i++){
+        for(int j = 0; j < (int)colliders[i].size(); j++){
+            if(colliders[i][j] == 1){
+                float posy = i*32;
+                float posx = j*32;
+                Rectangle tile = {posx, posy, 32, 32};
+                
+                if(!CheckCollisionRecs(getHitBox(), tile)) continue;
+
+                if(horizontal){
+                    float overlapX = std::min(getHitBox().x + getHitBox().width, tile.x + tile.width) - std::max(getHitBox().x, tile.x);
+                    if(vel.x > 0){
+                        //pos.x = tile.x - getHitBox().width;
+                        //para evitar tener que dibujar en otro sitio los sprites:
+                        pos.x -= overlapX;
+                    }
+                    else if(vel.x < 0){
+                        //pos.x = tile.x + tile.width;
+                        pos.x += overlapX;
+                    }
+                    vel.x = 0;
+                }
+                else{
+                    float overlapY = std::min(getHitBox().y + getHitBox().height, tile.y + tile.height) - std::max(getHitBox().y, tile.y);
+                    if(vel.y > 0){
+                        //pos.y = tile.y - getHitBox().height;
+                        pos.y -= overlapY;
+                        isGrounded = true;
+                        vel.y = 0;
+                        return;
+                    }
+                    else if(vel.y < 0){
+                        //pos.y = tile.y + tile.height;
+                        pos.y += overlapY;
+                        vel.y = 0;
+                        return;
+                    }
+                }
+            }
+        }
+    }
+}
+
+void Player::Attack(float deltatime){
     if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && !attacking) {
         attacking = true;
         attTimer = 0;
     }
 
     if (attacking) {
-        attTimer += deltaTime;
+        attTimer += deltatime;
 
         if (attTimer >= attMaxTimer) {
             attacking = false;
@@ -237,23 +245,43 @@ void Player::Attack(float deltaTime){
     }
 }
 
-
-void Player::UpdatePositions(){
+#pragma region HitBoxes
+Rectangle Player::getHitBox(){
     if(direction == 1){
-        HitBox = {pos.x + 5, pos.y + 3, width - 5, height - 10};
-        attackHitBox = {pos.x + width - 3, pos.y, 31, height};
-        FeetBox = {pos.x + 5, pos.y + height - 10, width - 10, 5};
-        interactBox = {pos.x, pos.y, width + 32, height};
-    } else{
-        HitBox = {pos.x, pos.y + 3, width - 5, height - 10};
-        attackHitBox = {pos.x - 30, pos.y, 31, height};
-        FeetBox = {pos.x + 5, pos.y + height - 10, width - 10, 5};
-        interactBox = {pos.x - 32, pos.y, width + 32, height};
-        if(walking){
-            HitBox.x -= 1;
-        }
+        return {pos.x + 5, pos.y + 3, width - 5, height - 10};
+    }
+    else{
+        return {pos.x, pos.y + 3, width - 5, height - 10};
     }
 }
+
+Rectangle Player::getAttackBox(){
+    if(direction == 1){
+        return {pos.x + width - 3, pos.y, 31, height};
+    }
+    else{
+        return {pos.x - 30, pos.y, 31, height};
+    }
+}
+
+Rectangle Player::getFeetBox(){
+    if(direction == 1){
+        return {pos.x + 5, pos.y + height - 10, width - 10, 5};
+    }
+    else{
+        return {pos.x + 5, pos.y + height - 10, width - 10, 5};
+    }
+}
+
+Rectangle Player::getInteractBox(){
+    if(direction == 1){
+        return {pos.x, pos.y, width + 32, height};
+    }
+    else{
+        return {pos.x - 32, pos.y, width + 32, height};
+    }
+}
+#pragma endregion
 
 void Player::Draw() {
 
@@ -269,12 +297,12 @@ void Player::Draw() {
     
     DrawTextureRec(currentAnimation->sheet, sourceRec, {pos.x - currentAnimation->paddingLeft, pos.y - currentAnimation->paddingTop}, WHITE);
 
-    //DrawRectangleRec(HitBox, {200, 0, 0, 100});
+    //DrawRectangleRec(getHitBox(), {200, 0, 0, 100});
     //DrawRectangleRec(attackHitBox, {200, 0, 0, 100});
     //DrawRectangleRec(FeetBox, RED);
 }
-void Player::HandleAnimation(float deltaTime){
-    animationTimer += deltaTime;
+void Player::HandleAnimation(float deltatime){
+    animationTimer += deltatime;
 
     //if we have finihed time of frame
     if(animationTimer >= currentAnimation->frameDuration){
@@ -296,16 +324,6 @@ void Player::ChangeAnim(Animation* anim){
     animationTimer = 0;
 }
 
-void Player::JumpAndGravity() {
-    pos.y += speed.y;
-    if (isGrounded) {
-        speed.y = 0;
-        jumping = false;
-    } else {
-        speed.y += gravity;
-    }
-}
-
 void Player::UpgradeLevel(){
     if(level == 1 && experience >= 40){
         level = 2;
@@ -325,12 +343,12 @@ void Player::UpgradeLevel(){
 bool Player::HandlePickingUp(Rectangle coll, bool pressing){
     if(sleeping || dead) return false;
     if(!pressing){
-        if(CheckCollisionRecs(interactBox, coll)) return true;
+        return CheckCollisionRecs(getHitBox(), coll);
     }
-    if (CheckCollisionRecs(interactBox, coll)){
+    if (CheckCollisionRecs(getInteractBox(), coll)){
         if(direction == 1){
-            DrawTexture(keyInteract, pos.x + 25, pos.y - 7, WHITE);
-        } else DrawTexture(keyInteract, pos.x - 8, pos.y - 7, WHITE);
+            DrawTexture(keyInteract, pos.x + 25, coll.y - 7, WHITE);
+        } else DrawTexture(keyInteract, pos.x - 8, coll.y - 7, WHITE);
         if(IsKeyPressed(KEY_E)){
             return true;
         }
@@ -380,4 +398,33 @@ void Player::DrawTop(){
     DrawText((coquitos.c_str()), counter, 25, 50, BLACK);
     counter += MeasureText(coquitos.c_str(), 50) + 10;
     DrawTexture(coquito, counter, 22, WHITE);
+}
+
+void Player::ChangeLevel(int level){
+    this->level = level;
+    if(level == 1){
+        colliders = LoadColliders("sprites/maps/Level1.csv");
+    }
+    else if(level == 2){
+        colliders = LoadColliders("sprites/maps/Level2.csv");
+    }
+}
+
+std::vector<std::vector<int>> Player::LoadColliders(const std::string& filename){
+    std::vector<std::vector<int>> colliders;
+    std:: ifstream file(filename);
+    std::string line;
+    while(std::getline(file, line)){
+        std::vector<int> row;
+        std::stringstream ss(line);
+        std::string num;
+        
+        while(std::getline(ss, num, ',')){
+            row.push_back(std::stoi(num));
+        }
+
+        colliders.push_back(row);
+    }
+
+    return colliders;
 }

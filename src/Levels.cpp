@@ -163,7 +163,7 @@ void Levels::DrawBackground(){
     else if(id == 1){
         DrawTexture(background, 0,0, WHITE);
         DrawTexture(background, background.width, 0, WHITE);
-        DrawRectangle(0, 0, 1500, 900, Fade(WHITE, 0.5f));
+        DrawRectangle(0, 0, 1500, 870, Fade(WHITE, 0.5f));
     }
     else if(id == 2){
         DrawTexture(background, 0,0, WHITE);
@@ -184,20 +184,6 @@ void Levels::Update(){
 
     ManageBadFloors();
     ControlFalling();
-}
-
-void Levels::ManageCollisions(){
-    for(int i = 0; i < (int)colliders.size(); i++){
-        for(int j = 0; j < (int)colliders[i].size(); j++){
-            if(colliders[i][j] == 1){
-                float posy = i*32;
-                float posx = j*32;
-                Rectangle plat = {posx, posy, 32, 32};
-                //DrawRectangleRec(plat, semi_transparent);
-                player->HandleCollisions(plat);
-            }
-        }
-    }
 }
 
 void Levels::ManageObjects(){
@@ -455,7 +441,7 @@ void Levels::ManageEnemies(float deltatime){
 
 void Levels::ManageBadFloors(){
     for(int i = 0; i<(int)badFloors.size(); i++){
-        if(CheckCollisionRecs(badFloors[i].area, player->FeetBox)){
+        if(CheckCollisionRecs(badFloors[i].area, player->getFeetBox())){
             player->lives--;
             if(player->lives <= 0){
                 player->HandleDead();
@@ -477,7 +463,7 @@ void Levels::ControlFalling(){
             return;
         }
         player->pos = player->lastCheckPoint;
-        player->speed.y = 0;
+        player->vel.y = 0;
         textBox->EnqueuDialogue({{"Upsi, me he tropezado"}, "teddy"});
     }    
 }
