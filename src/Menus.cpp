@@ -30,9 +30,11 @@ Menus::Menus(float id){
         calvi = LoadTexture("sprites/objects/calvoHead.png");
         siguiente = LoadTexture("sprites/menus/next.png");
         salir = LoadTexture("sprites/menus/salir.png");
+        background = LoadTexture("sprites/menus/bgNext.png");
     }
     else{
         interFont = LoadFontEx("fonts/04B_19.ttf", 96, 0, 250);;
+        background = LoadTexture("sprites/menus/folder.png");
     }
 }
 
@@ -45,10 +47,16 @@ void Menus::Draw(Player* player, float deltatime){
 
     else if(id > 1 && (int)(id*10) % 10 == 0){
 
-        std::string top = "¡Nivel " + std::to_string(id - 1) + " superado!";
+        DrawTexture(background, 0, 0, WHITE);
+        DrawRectangle(0, 0, 1500, 870, Fade(WHITE, 0.5f));
+
+        std::string top = "¡Nivel " + std::to_string((int)id - 1) + " superado!";
+
+        DrawRectangle(getMiddle(top, 60) - 10, 70, MeasureText(top.c_str(), 60) + 20, 310, WHITE);
         DrawText(top.c_str(), getMiddle(top, 60), 80, 60, BLACK);
 
         //TODO añadir mensaje como atributo e imprimirlo para cada nivel
+        //TODDo ponerlo todo dentro de un rectángulo blanco para que se vea bien
 
         std::string coins = std::to_string(player->money) + "x";
         std::string cocos = std::to_string(player->cocos) + "x";
@@ -65,14 +73,25 @@ void Menus::Draw(Player* player, float deltatime){
     }
 
     else if (id == 1.5){
+        DrawTexture(background, 0, 0, WHITE);
         std::string line1 = "Fase 1:";
         std::string line2 = "(del Plan Ultra Secreto para\nel Objetivo Ultra Secreto del Teddy)";
         std::string line3 = "LA RED DE INFORMACION";
 
-        DrawTextEx(interFont, line1.c_str(), (Vector2){(float)getMiddle(line1, 80, interFont), 100}, 80, 3, RED);
-        DrawTextEx(interFont, line2.c_str(), (Vector2){(float)getMiddle(line2, 60, interFont), 180}, 80, 2, BLACK);
-        DrawRectangleLines((float)getMiddle(line3, 100, interFont) - 15, 340, MeasureTextEx(interFont, line3.c_str(), 100, 3).x, MeasureTextEx(interFont, line3.c_str(), 100, 3).y, RED);
-        DrawTextEx(interFont, line3.c_str(), (Vector2){(float)getMiddle(line3, 100, interFont), 350}, 100, 3, BLACK);
+        DrawTextEx(interFont, line1.c_str(), (Vector2){(float)getMiddle(line1, 80, interFont), 350}, 80, 3, BLACK);
+        DrawTextEx(interFont, line2.c_str(), (Vector2){(float)getMiddle(line2, 50, interFont), 430}, 50, 2, BLACK);
+        DrawTextEx(interFont, line3.c_str(), (Vector2){(float)getMiddle(line3, 100, interFont), 550}, 100, 3, BLACK);
+    }
+
+    else if (id == 2.5){
+        DrawTexture(background, 0, 0, WHITE);
+        std::string line1 = "Fase 2:";
+        std::string line2 = "(del Plan Ultra Secreto para\nel Objetivo Ultra Secreto del Teddy)";
+        std::string line3 = "LOS SUMINISTROS";
+
+        DrawTextEx(interFont, line1.c_str(), (Vector2){(float)getMiddle(line1, 80, interFont), 350}, 80, 3, BLACK);
+        DrawTextEx(interFont, line2.c_str(), (Vector2){(float)getMiddle(line2, 50, interFont), 430}, 50, 2, BLACK);
+        DrawTextEx(interFont, line3.c_str(), (Vector2){(float)getMiddle(line3, 100, interFont), 550}, 100, 3, BLACK);
     }
 }
 
