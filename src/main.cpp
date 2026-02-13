@@ -148,8 +148,8 @@ int main() {
             }
         }
 
-        //specific to level 1
-        if(level == 1 && currentLevel->enemies[0]->initial && !currentLevel->enemies[0]->condition3){
+        //specific to level 2
+        if(level == 2 && currentLevel->enemies[0]->initial && !currentLevel->enemies[0]->condition3){
             currentLevel->DrawFoods();
         }
         #pragma endregion
@@ -158,14 +158,14 @@ int main() {
         if(level == 0 && currentLevel->finished){
             menuTimer = 0;
             menu = true;
-            ChangeLevel(1, &level1, player, 128, 947);
+            ChangeLevel(1, &level1, player, 96, 96);
             currentLevel = &level1;
             player.lastCheckPoint = player.pos;
         }
 
         else if(level == 1 && currentLevel->finished){
             menu = true;
-            ChangeLevel(2, &level2, player, 96, 96);
+            ChangeLevel(2, &level2, player, 128, 947);
             currentLevel = &level2;
             player.lastCheckPoint = player.pos;
         }

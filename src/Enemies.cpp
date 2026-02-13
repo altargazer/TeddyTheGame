@@ -249,7 +249,7 @@ void Paddy::Update(float deltatime){
         }
     }
 
-    else if(level == 1){
+    else if(level == 2){
         if(condition3 && !textBox->active){
             condition2 = true;
         }
@@ -320,8 +320,8 @@ Wall::Wall(float level, Vector2 pos, int height, int width, Player* player, Text
     remove = false;
 
     HitBox = {position.x, position.y, (float)width, (float)height};
-    if(level == 1){
-        sheet = LoadTexture("sprites/maps/Level1Wall.png");
+    if(level == 2){
+        sheet = LoadTexture("sprites/maps/Level2Wall.png");
     }
 
     normal = {0, 0, (float)width, (float)height};

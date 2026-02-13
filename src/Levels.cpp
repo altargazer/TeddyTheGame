@@ -77,10 +77,20 @@ Levels::Levels(int id, Player* player, TextBox* textBox, Camera2D* camera){
 
     //Level 1
     else if(id == 1){
-        //sprites specific to this level
+        //max to fall
+        maxDown = 1216;
+
         levelMap = LoadTexture("sprites/maps/Level1.png");
         background = LoadTexture("sprites/maps/Level1BG.png");
         colliders = LoadColliders("sprites/maps/Level1.csv");
+    }
+
+    //Level 2
+    else if(id == 2){
+        //sprites specific to this level
+        levelMap = LoadTexture("sprites/maps/Level2.png");
+        background = LoadTexture("sprites/maps/Level2BG.png");
+        colliders = LoadColliders("sprites/maps/Level2.csv");
 
         maxDown = 1216;
 
@@ -104,7 +114,7 @@ Levels::Levels(int id, Player* player, TextBox* textBox, Camera2D* camera){
         cake = LoadTexture("sprites/objects/tarta.png");
 
         //add enemies here (if any)
-        Paddy* paddy = new Paddy({1690, 838}, player, 1, textBox, 1, camera);
+        Paddy* paddy = new Paddy({1690, 838}, player, 1, textBox, 2, camera);
         enemies.push_back(paddy);
         MicroCalvi* calvi1 = new MicroCalvi({544, 910}, player, 416, 694);
         enemies.push_back(calvi1);
@@ -118,7 +128,7 @@ Levels::Levels(int id, Player* player, TextBox* textBox, Camera2D* camera){
         enemies.push_back(rat4);
         Rata* rat5 = new Rata({2848, 896+14}, player, 2560, 2976);
         enemies.push_back(rat5);
-        Wall* wall1 = new Wall(1, {1312, 992}, 64, 64, player, textBox);
+        Wall* wall1 = new Wall(2, {1312, 992}, 64, 64, player, textBox);
         enemies.push_back(wall1);
 
         //add bad floors here (if any)
@@ -140,16 +150,6 @@ Levels::Levels(int id, Player* player, TextBox* textBox, Camera2D* camera){
         badFloors.push_back(hot4);
     }
 
-    //Level 2
-    else if(id == 2){
-        //max to fall
-        maxDown = 1216;
-
-        levelMap = LoadTexture("sprites/maps/Level2.png");
-        background = LoadTexture("sprites/maps/Level2BG.png");
-        colliders = LoadColliders("sprites/maps/Level2.csv");
-    }
-
 }
 
 void Levels::Draw(){
@@ -163,11 +163,11 @@ void Levels::DrawBackground(){
     else if(id == 1){
         DrawTexture(background, 0,0, WHITE);
         DrawTexture(background, background.width, 0, WHITE);
-        DrawRectangle(0, 0, 1500, 870, Fade(WHITE, 0.5f));
     }
     else if(id == 2){
         DrawTexture(background, 0,0, WHITE);
         DrawTexture(background, background.width, 0, WHITE);
+        DrawRectangle(0, 0, 1500, 870, Fade(WHITE, 0.5f));
     }
 }
 
@@ -194,8 +194,8 @@ void Levels::ManageObjects(){
                 float posy = i*32;
                 float posx = j*32;
                 DrawObject(num, posx, posy);
-                //Food items and weapon are only on Level 1
-                if(id == 1){
+                //Food items and weapon are only on Level 2
+                if(id == 2){
                     //Weapon
                     if(num == 2){
                         Rectangle weaponColl = {posx+4, posy+4, 24, 28};
@@ -351,8 +351,8 @@ void Levels::ManageObjects(){
 }
 
 void Levels::DrawObject(int id,float posX,float posY){
-    //Level 1 since it has a lot of sprites
-    if(this->id == 1){
+    //Level 2 since it has a lot of sprites
+    if(this->id == 2){
         if(id == 2){
             DrawTexture(weapon, posX, posY+5, WHITE);
         }
