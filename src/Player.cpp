@@ -162,8 +162,6 @@ void Player::Update(float deltatime) {
     if(hasWeapon && !wallsliding) Attack(deltatime);
     if(attacking) ChangeAnim(&attackAnim);
 
-    if(wallsliding) ChangeAnim(&wallAnim);
-
     if(damaged){
         coolDown += deltatime;
         if(coolDown >= 1.0f){
@@ -220,6 +218,7 @@ void Player::ApplyMovement(float deltatime){
 
     if(touchingWall && !isGrounded && vel.y > 0){
         wallsliding = true;
+        ChangeAnim(&wallAnim);
         if(vel.y > 150) vel.y = 150;
     } else wallsliding = false;
 
