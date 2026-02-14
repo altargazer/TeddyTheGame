@@ -20,10 +20,14 @@ Player::Player(TextBox* textBox, float startX, float startY, int dir){
     gravity = 1000;
     jumpPower = 480;
     direction = dir;
+    wallDirection = 0;
     coolDown = 0;
     lastCheckPoint = {startX, startY};
     experience = 0;
     level = 0;
+
+    wallJumpDuration = 0.4f;
+    wallJumpTimer = 0;
 
     colliders = LoadColliders("sprites/maps/Level0.csv");
     
@@ -41,6 +45,8 @@ Player::Player(TextBox* textBox, float startX, float startY, int dir){
     damaged = false;
     dead = false;
     sleeping = false;
+    wallsliding = false;
+    touchingWall = false;
 
     attMaxTimer = 0.4f;
     deadTimer = 0;
@@ -53,6 +59,8 @@ Player::Player(TextBox* textBox, float startX, float startY, int dir){
     walkingSheet = LoadTexture("sprites/player/PlayerWalk.png");
     attackSheet = LoadTexture("sprites/player/PlayerAttack.png");
     deadSheet = LoadTexture("sprites/player/PlayerSleeping.png");
+    wallslidingSheet = LoadTexture("sprites/player/PlayerWallSlide.png");
+
     keyInteract = LoadTexture("sprites/objects/keyE.png");
     lifeFull = LoadTexture("sprites/objects/lifeFull.png");
     lifeEmpty = LoadTexture("sprites/objects/lifeEmpty.png");
@@ -95,6 +103,15 @@ Player::Player(TextBox* textBox, float startX, float startY, int dir){
     deadAnim.paddingRight = 1;
     deadAnim.paddingLeft = 0;
     deadAnim.paddingTop = 0;
+
+    wallAnim.sheet = wallslidingSheet;
+    wallAnim.frames = 1;
+    wallAnim.frameDuration = 10;
+    wallAnim.frameH = 40;
+    wallAnim.frameW = 21;
+    wallAnim.paddingRight = 0;
+    wallAnim.paddingLeft = 0;
+    wallAnim.paddingTop = 0;
     #pragma endregion
 }
 
@@ -134,15 +151,18 @@ void Player::Update(float deltatime) {
     //I only need padding when direction = -1
     attackAnim.paddingLeft = direction == 1 ? 0 : 25;
     deadAnim.paddingLeft = direction == 1 ? 0 : 4;
+    wallAnim.paddingLeft = direction == -1 ? 0 : -8;
 
-    if(walking || attacking) idle = false;
+    if(walking || attacking || wallsliding) idle = false;
     else idle = true;
 
-    if(walking && !attacking) ChangeAnim(&walkingAnim);
+    if(walking && !attacking && !wallsliding) ChangeAnim(&walkingAnim);
     if(idle) ChangeAnim(&idleAnim);
 
-    if(hasWeapon) Attack(deltatime);
+    if(hasWeapon && !wallsliding) Attack(deltatime);
     if(attacking) ChangeAnim(&attackAnim);
+
+    if(wallsliding) ChangeAnim(&wallAnim);
 
     if(damaged){
         coolDown += deltatime;
@@ -156,29 +176,52 @@ void Player::Update(float deltatime) {
 void Player::HandleInput(){
     vel.x = 0;
     walking = false;
+    int inputDir = 0;
     if(IsKeyDown(KEY_D)){
-        vel.x = speed;
-        direction = 1;
+        inputDir = 1;
     }
     if(IsKeyDown(KEY_A)){
-        vel.x = -speed;
-        direction = -1;
+        inputDir = -1;
     }
 
-    if(vel.x != 0) walking = true;
+    //si wallJumping (el timer no ha llegado a cero), y se mueve hacia el pared, hacer que no se pueda mover
+    if(wallJumpTimer > 0 && inputDir == wallDirection) inputDir = 0;
+
+    vel.x = speed * inputDir;
+
+    if(inputDir != 0){
+        direction = inputDir;
+        walking = true;
+    } 
 
     if(IsKeyPressed(KEY_SPACE) && isGrounded){
         vel.y = -jumpPower;
         isGrounded = false;
     }
+
+    if(IsKeyPressed(KEY_SPACE) && wallsliding){
+        wallsliding = false;
+        touchingWall = false;
+        vel.y = -500;
+        vel.x = 600 * -wallDirection;
+        direction *= -1;
+        wallJumpTimer = wallJumpDuration;
+    }
 }
 
 void Player::ApplyMovement(float deltatime){
+    if(wallJumpTimer > 0) wallJumpTimer -= deltatime;
+    touchingWall = false;
     pos.x += vel.x * deltatime;
     HandleCollisions(true);
 
     vel.y += gravity*deltatime;
-    if(vel.y >= 400) vel.y = 400;
+    if(vel.y >= 500) vel.y = 500;
+
+    if(touchingWall && !isGrounded && vel.y > 0){
+        wallsliding = true;
+        if(vel.y > 150) vel.y = 150;
+    } else wallsliding = false;
 
     pos.y += vel.y*deltatime;
     isGrounded = false;
@@ -196,15 +239,18 @@ void Player::HandleCollisions(bool horizontal){
                 if(!CheckCollisionRecs(getHitBox(), tile)) continue;
 
                 if(horizontal){
+                    touchingWall = true;
                     float overlapX = std::min(getHitBox().x + getHitBox().width, tile.x + tile.width) - std::max(getHitBox().x, tile.x);
                     if(vel.x > 0){
                         //pos.x = tile.x - getHitBox().width;
                         //para evitar tener que dibujar en otro sitio los sprites:
                         pos.x -= overlapX;
+                        if(wallJumpTimer <= 0) wallDirection = 1;
                     }
                     else if(vel.x < 0){
                         //pos.x = tile.x + tile.width;
                         pos.x += overlapX;
+                        if(wallJumpTimer <= 0) wallDirection = -1;
                     }
                     vel.x = 0;
                 }

@@ -19,8 +19,11 @@ public:
     float gravity;
     float speed;
     int direction;
+    int wallDirection;
     float height, width;
     int lives, money, cocos, calvis, experience, level;
+    float wallJumpTimer;
+    float wallJumpDuration;
 
     //attack
     float attTimer;
@@ -37,6 +40,8 @@ public:
     bool damaged;
     bool dead;
     bool sleeping;
+    bool wallsliding;
+    bool touchingWall;
 
     //objects
     TextBox* textBox;
@@ -62,6 +67,7 @@ public:
     Animation idleAnim;
     Animation attackAnim;
     Animation deadAnim;
+    Animation wallAnim;
     Animation* currentAnimation;
 
     int currentFrame;
@@ -73,6 +79,7 @@ public:
     Texture2D attackSheet;
     Texture2D keyInteract;
     Texture2D deadSheet;
+    Texture2D wallslidingSheet;
 
     //constructors
     Player(TextBox* textBox, float startX = 0, float startY = 0, int direction = 1);
