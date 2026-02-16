@@ -549,9 +549,11 @@ bool Levels::DrawEjecutar(){
 }
 
 bool Levels::Password(){
-    DrawRectangle(750 - 560/2, 150, 560, 250, BLACK);
-    DrawRectangle(750 - 560/2 + 5, 150 + 5, 560 - 10, 250 - 10, {139, 152, 184, 255});
-    DrawRectangle(750 - 560/2 + 15, 250 + 15, 560 - 25, 150 - 25, {233, 237, 244, 255});
+    DrawRectangle(750 - 570/2, 170, 570, 190, BLACK);
+    DrawRectangle(750 - 570/2 + 5, 170 + 5, 570 - 10, 190 - 10, {139, 152, 184, 255});
+    DrawRectangle(750 - 570/2 + 15, 230, 570 - 40, 130 - 25, {233, 237, 244, 255});
+
+    DrawText("Introduce el código de 4 cifras:", 750 - 570/2 + 15, 170 + 15, 30, BLACK);
 
     if(IsKeyPressed(KEY_BACKSPACE)){
         player->frozen = false;
