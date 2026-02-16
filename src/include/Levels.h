@@ -33,6 +33,10 @@ public:
     Texture2D ejecutarButton;
 
     //Level 1
+    Texture2D caja;
+    bool interactCaja;
+
+    //Level 2
     bool startedMission;
     int countFoods;
     std::vector<bool> foods;
@@ -71,6 +75,9 @@ public:
     bool DrawEjecutar();
     
     //Level 1
+    bool Password();
+
+    //Level 2
     void DrawFoods();
 };
 

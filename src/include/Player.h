@@ -42,6 +42,7 @@ public:
     bool sleeping;
     bool wallsliding;
     bool touchingWall;
+    bool frozen;
 
     //objects
     TextBox* textBox;

@@ -148,6 +148,11 @@ int main() {
             }
         }
 
+        //specific to level 1
+        if(level == 1 && currentLevel->interactCaja){
+            currentLevel->interactCaja = currentLevel->Password();
+        }
+
         //specific to level 2
         if(level == 2 && currentLevel->enemies[0]->initial && !currentLevel->enemies[0]->condition3){
             currentLevel->DrawFoods();

@@ -26,7 +26,7 @@ Player::Player(TextBox* textBox, float startX, float startY, int dir){
     experience = 0;
     level = 0;
 
-    wallJumpDuration = 0.4f;
+    wallJumpDuration = 0.3f;
     wallJumpTimer = 0;
 
     colliders = LoadColliders("sprites/maps/Level0.csv");
@@ -47,6 +47,7 @@ Player::Player(TextBox* textBox, float startX, float startY, int dir){
     sleeping = false;
     wallsliding = false;
     touchingWall = false;
+    frozen = false;
 
     attMaxTimer = 0.4f;
     deadTimer = 0;
@@ -145,6 +146,8 @@ void Player::Update(float deltatime) {
         return;
     }
 
+    if(frozen) return;
+
     HandleInput();
     ApplyMovement(deltatime);
 
@@ -219,7 +222,7 @@ void Player::ApplyMovement(float deltatime){
     if(touchingWall && !isGrounded && vel.y > 0){
         wallsliding = true;
         ChangeAnim(&wallAnim);
-        if(vel.y > 150) vel.y = 150;
+        if(vel.y > 140) vel.y = 140;
     } else wallsliding = false;
 
     pos.y += vel.y*deltatime;

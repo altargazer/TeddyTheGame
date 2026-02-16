@@ -21,6 +21,7 @@ OBJECTS:
 10:food5
 11: food6
 12: beds (one per level)
+13: safe (caja fuerte)
 20-29: reserved for pigeons
 */
 
@@ -83,6 +84,9 @@ Levels::Levels(int id, Player* player, TextBox* textBox, Camera2D* camera){
         levelMap = LoadTexture("sprites/maps/Level1.png");
         background = LoadTexture("sprites/maps/Level1BG.png");
         colliders = LoadColliders("sprites/maps/Level1.csv");
+
+        interactCaja = false;
+        caja = LoadTexture("sprites/objects/caja.png");
     }
 
     //Level 2
@@ -194,6 +198,17 @@ void Levels::ManageObjects(){
                 float posy = i*32;
                 float posx = j*32;
                 DrawObject(num, posx, posy);
+
+                if(id == 1){
+                    if(num == 13){
+                        Rectangle cajaColl = {posx, posy, 41, 34};
+                        if(player->HandlePickingUp(cajaColl, true)){
+                            player->frozen = true;
+                            interactCaja = true;
+                        }
+                    }
+                }
+
                 //Food items and weapon are only on Level 2
                 if(id == 2){
                     //Weapon
@@ -351,6 +366,11 @@ void Levels::ManageObjects(){
 }
 
 void Levels::DrawObject(int id,float posX,float posY){
+    if(this->id == 1){
+        if(id == 13){
+            DrawTexture(caja, posX, posY+5, WHITE);
+        }
+    }
     //Level 2 since it has a lot of sprites
     if(this->id == 2){
         if(id == 2){
@@ -526,4 +546,17 @@ bool Levels::DrawEjecutar(){
     DrawTextureRec(ejecutarButton, source, position, WHITE);
     
     return action;
+}
+
+bool Levels::Password(){
+    DrawRectangle(750 - 560/2, 150, 560, 250, BLACK);
+    DrawRectangle(750 - 560/2 + 5, 150 + 5, 560 - 10, 250 - 10, {139, 152, 184, 255});
+    DrawRectangle(750 - 560/2 + 15, 250 + 15, 560 - 25, 150 - 25, {233, 237, 244, 255});
+
+    if(IsKeyPressed(KEY_BACKSPACE)){
+        player->frozen = false;
+        return false;
+    }
+
+    return true;
 }
