@@ -3,6 +3,7 @@
 #include "include/TextBox.h"
 #include <raylib.h>
 #include <iostream>
+#include <cstring>
 #include <fstream>
 #include <sstream>
 
@@ -204,6 +205,9 @@ void Levels::ManageObjects(){
                         Rectangle cajaColl = {posx, posy, 41, 34};
                         if(player->HandlePickingUp(cajaColl, true)){
                             player->frozen = true;
+                            int n = sizeof(word) / sizeof(word[0]);
+                            std::fill (word, word+n, '\0');
+                            letterCount = 0;
                             interactCaja = true;
                         }
                     }
@@ -548,65 +552,51 @@ bool Levels::DrawEjecutar(){
     return action;
 }
 
-bool Levels::Password(){
-    bool done = false;
+void Levels::Password(float deltatime){
+    DrawRectangle(750 - 570/2, 170, 570, 190, BLACK);
+    DrawRectangle(750 - 570/2 + 5, 170 + 5, 570 - 10, 190 - 10, {139, 152, 184, 255});
+    DrawRectangle(750 - 570/2 + 15, 230, 570 - 40, 130 - 25, {233, 237, 244, 255});
 
-    while(!done){
-        DrawRectangle(750 - 570/2, 170, 570, 190, BLACK);
-        DrawRectangle(750 - 570/2 + 5, 170 + 5, 570 - 10, 190 - 10, {139, 152, 184, 255});
-        DrawRectangle(750 - 570/2 + 15, 230, 570 - 40, 130 - 25, {233, 237, 244, 255});
+    DrawText("Introduce el código de 4 cifras:", 750 - 570/2 + 15, 170 + 15, 30, BLACK);
 
-        DrawText("Introduce el código de 4 cifras:", 750 - 570/2 + 15, 170 + 15, 30, BLACK);
-        
+    int key = GetCharPressed();
 
-        char word[4 + 1] = "\0";
-        int letterCount = 0;
-        Rectangle textBox = {750 - 570/2 + 15, 230, 570 - 40, 130 - 25};
-        bool mouseOnText = false;
-        int framesCounter = 0;
+    Color green = {89, 196, 31, 255};
 
-        if (CheckCollisionPointRec(GetMousePosition(), textBox)) mouseOnText = true;
-        else mouseOnText = false;
-
-        if(mouseOnText){
-            SetMouseCursor(MOUSE_CURSOR_IBEAM);
-
-            int key = GetCharPressed();
-
-            while(key > 0){
-                if((key >= 32) && (key <= 41) && (letterCount < 4)){
-                    word[letterCount] = (char)key;
-                    word[letterCount+1] = '\0';
-                    letterCount++;
-                }
-
-                key = GetCharPressed();
-            }
-
-            if(IsKeyPressed(KEY_BACKSPACE)){
-                letterCount--;
-                if(letterCount < 0) letterCount = 0;
-                word[letterCount] = '\0';
-            }
-        }
-        else SetMouseCursor(MOUSE_CURSOR_DEFAULT);
-
-        if (mouseOnText) DrawRectangleLines((int)textBox.x, (int)textBox.y, (int)textBox.width, (int)textBox.height, RED);
-        else DrawRectangleLines((int)textBox.x, (int)textBox.y, (int)textBox.width, (int)textBox.height, DARKGRAY);
-
-        if (mouseOnText){
-            if (letterCount < 4){
-                // Draw blinking underscore char
-                if (((framesCounter/20)%2) == 0) DrawText("_", (int)textBox.x + 8 + MeasureText(word, 40), (int)textBox.y + 12, 40, MAROON);
-            }
+    while(key > 0){
+        if((key >= 48) && (key <= 57) && (letterCount < 4)){
+            word[letterCount] = (char)key;
+            word[letterCount+1] = '\0';
+            letterCount++;
         }
 
-        if(IsKeyPressed(KEY_ENTER)){
-            player->frozen = false;
-            done = true;
-        }
-
+        key = GetCharPressed();
     }
 
-    return true;
+    if(IsKeyPressed(KEY_BACKSPACE)){
+        letterCount--;
+        if(letterCount < 0) letterCount = 0;
+        word[letterCount] = '\0';
+    }
+
+    DrawText(word, (int)textBoxPW.x + 5, (int)textBoxPW.y + 8, 90, green);
+
+    int timer = deltatime;
+
+    if (timer % 20 == 0){
+        if (letterCount < 4){
+            // Draw blinking underscore char
+            DrawText("_", (int)textBoxPW.x + 8 + MeasureText(word, 90), (int)textBoxPW.y + 30, 90, green);
+        }
+    }
+
+    if(IsKeyPressed(KEY_ENTER)){
+        std::string sol = "1234";
+        bool equal = true;
+        for(int i = 0; i<4; i++) if(sol[i] != word[i]) equal = false;
+        if(equal) std::cout << "Bien" << std::endl;
+        else std::cout << "No" << std::endl;
+        player->frozen = false;
+        interactCaja = false;
+    }
 }

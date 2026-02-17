@@ -150,7 +150,7 @@ int main() {
 
         //specific to level 1
         if(level == 1 && currentLevel->interactCaja){
-            bool nothing = currentLevel->Password();
+            currentLevel->Password(deltatime);
         }
 
         //specific to level 2

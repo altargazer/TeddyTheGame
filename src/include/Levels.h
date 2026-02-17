@@ -35,6 +35,9 @@ public:
     //Level 1
     Texture2D caja;
     bool interactCaja;
+    char word[5];
+    int letterCount;
+    Rectangle textBoxPW = {750 - 570/2 + 15, 230, 570 - 40, 130 - 25};
 
     //Level 2
     bool startedMission;
@@ -75,7 +78,7 @@ public:
     bool DrawEjecutar();
     
     //Level 1
-    bool Password();
+    void Password(float deltatime);
 
     //Level 2
     void DrawFoods();
