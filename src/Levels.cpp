@@ -549,15 +549,63 @@ bool Levels::DrawEjecutar(){
 }
 
 bool Levels::Password(){
-    DrawRectangle(750 - 570/2, 170, 570, 190, BLACK);
-    DrawRectangle(750 - 570/2 + 5, 170 + 5, 570 - 10, 190 - 10, {139, 152, 184, 255});
-    DrawRectangle(750 - 570/2 + 15, 230, 570 - 40, 130 - 25, {233, 237, 244, 255});
+    bool done = false;
 
-    DrawText("Introduce el código de 4 cifras:", 750 - 570/2 + 15, 170 + 15, 30, BLACK);
+    while(!done){
+        DrawRectangle(750 - 570/2, 170, 570, 190, BLACK);
+        DrawRectangle(750 - 570/2 + 5, 170 + 5, 570 - 10, 190 - 10, {139, 152, 184, 255});
+        DrawRectangle(750 - 570/2 + 15, 230, 570 - 40, 130 - 25, {233, 237, 244, 255});
 
-    if(IsKeyPressed(KEY_BACKSPACE)){
-        player->frozen = false;
-        return false;
+        DrawText("Introduce el código de 4 cifras:", 750 - 570/2 + 15, 170 + 15, 30, BLACK);
+        
+
+        char word[4 + 1] = "\0";
+        int letterCount = 0;
+        Rectangle textBox = {750 - 570/2 + 15, 230, 570 - 40, 130 - 25};
+        bool mouseOnText = false;
+        int framesCounter = 0;
+
+        if (CheckCollisionPointRec(GetMousePosition(), textBox)) mouseOnText = true;
+        else mouseOnText = false;
+
+        if(mouseOnText){
+            SetMouseCursor(MOUSE_CURSOR_IBEAM);
+
+            int key = GetCharPressed();
+
+            while(key > 0){
+                if((key >= 32) && (key <= 41) && (letterCount < 4)){
+                    word[letterCount] = (char)key;
+                    word[letterCount+1] = '\0';
+                    letterCount++;
+                }
+
+                key = GetCharPressed();
+            }
+
+            if(IsKeyPressed(KEY_BACKSPACE)){
+                letterCount--;
+                if(letterCount < 0) letterCount = 0;
+                word[letterCount] = '\0';
+            }
+        }
+        else SetMouseCursor(MOUSE_CURSOR_DEFAULT);
+
+        if (mouseOnText) DrawRectangleLines((int)textBox.x, (int)textBox.y, (int)textBox.width, (int)textBox.height, RED);
+        else DrawRectangleLines((int)textBox.x, (int)textBox.y, (int)textBox.width, (int)textBox.height, DARKGRAY);
+
+        if (mouseOnText){
+            if (letterCount < 4){
+                // Draw blinking underscore char
+                if (((framesCounter/20)%2) == 0) DrawText("_", (int)textBox.x + 8 + MeasureText(word, 40), (int)textBox.y + 12, 40, MAROON);
+            }
+        }
+
+        if(IsKeyPressed(KEY_ENTER)){
+            player->frozen = false;
+            done = true;
+        }
+
     }
 
     return true;

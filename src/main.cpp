@@ -150,7 +150,7 @@ int main() {
 
         //specific to level 1
         if(level == 1 && currentLevel->interactCaja){
-            currentLevel->interactCaja = currentLevel->Password();
+            bool nothing = currentLevel->Password();
         }
 
         //specific to level 2
