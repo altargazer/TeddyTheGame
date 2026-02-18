@@ -561,8 +561,6 @@ void Levels::Password(float deltatime){
 
     int key = GetCharPressed();
 
-    Color green = {89, 196, 31, 255};
-
     while(key > 0){
         if((key >= 48) && (key <= 57) && (letterCount < 4)){
             word[letterCount] = (char)key;
@@ -579,14 +577,14 @@ void Levels::Password(float deltatime){
         word[letterCount] = '\0';
     }
 
-    DrawText(word, (int)textBoxPW.x + 5, (int)textBoxPW.y + 8, 90, green);
+    DrawText(word, (int)textBoxPW.x + 10, (int)textBoxPW.y + 8, 90, MAROON);
 
     int timer = deltatime;
 
     if (timer % 20 == 0){
         if (letterCount < 4){
             // Draw blinking underscore char
-            DrawText("_", (int)textBoxPW.x + 8 + MeasureText(word, 90), (int)textBoxPW.y + 30, 90, green);
+            DrawText("_", (int)textBoxPW.x + 13 + MeasureText(word, 90), (int)textBoxPW.y + 30, 90, MAROON);
         }
     }
 
