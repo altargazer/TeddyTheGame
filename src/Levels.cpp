@@ -72,6 +72,7 @@ Levels::Levels(int id, Player* player, TextBox* textBox, Camera2D* camera){
         colliders = LoadColliders("sprites/maps/Level0.csv");
 
         ejecutarButton = LoadTexture("sprites/objects/ejecutar.png");
+        open = false;
 
         Paddy* paddy = new Paddy({288, 230}, player, 1, textBox, 0, camera);
         enemies.push_back(paddy);
@@ -88,6 +89,7 @@ Levels::Levels(int id, Player* player, TextBox* textBox, Camera2D* camera){
 
         interactCaja = false;
         caja = LoadTexture("sprites/objects/caja.png");
+        llave = LoadTexture("sprites/objects/llave.png");
     }
 
     //Level 2
@@ -201,7 +203,11 @@ void Levels::ManageObjects(){
                 DrawObject(num, posx, posy);
 
                 if(id == 1){
-                    if(num == 13){
+                    if(num == 14){
+                        if(open){
+                            colliders[i][j] = 15;
+                            continue;
+                        }
                         Rectangle cajaColl = {posx, posy, 41, 34};
                         if(player->HandlePickingUp(cajaColl, true)){
                             player->frozen = true;
@@ -209,6 +215,12 @@ void Levels::ManageObjects(){
                             std::fill (word, word+n, '\0');
                             letterCount = 0;
                             interactCaja = true;
+                        }
+                    }
+                    else if(num == 15 && !textBox->active){
+                        Rectangle keyColl = {posx, posy, 19, 20};
+                        if(player->HandlePickingUp(keyColl, true)){
+                            finished = true;
                         }
                     }
                 }
@@ -371,8 +383,11 @@ void Levels::ManageObjects(){
 
 void Levels::DrawObject(int id,float posX,float posY){
     if(this->id == 1){
-        if(id == 13){
+        if(id == 14){
             DrawTexture(caja, posX, posY+5, WHITE);
+        }
+        else if(id == 15 && !textBox->active){
+            DrawTexture(llave, posX, posY+10, WHITE);
         }
     }
     //Level 2 since it has a lot of sprites
@@ -592,8 +607,13 @@ void Levels::Password(float deltatime){
         std::string sol = "1234";
         bool equal = true;
         for(int i = 0; i<4; i++) if(sol[i] != word[i]) equal = false;
-        if(equal) std::cout << "Bien" << std::endl;
-        else std::cout << "No" << std::endl;
+        if(equal){
+            open = true;
+            textBox->EnqueuDialogue({{"¡A la primera!", "Una llave. Espero parece un escape room."}, "teddy"});
+        }
+        else{
+            textBox->EnqueuDialogue({{"Esta caja está rota, no se abre >:("}, "teddy"});
+        }
         player->frozen = false;
         interactCaja = false;
     }

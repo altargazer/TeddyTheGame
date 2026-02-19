@@ -34,7 +34,9 @@ public:
 
     //Level 1
     Texture2D caja;
+    Texture2D llave;
     bool interactCaja;
+    bool open;
     char word[5];
     int letterCount;
     Rectangle textBoxPW = {750 - 570/2 + 15, 230, 570 - 40, 130 - 25};

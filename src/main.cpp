@@ -63,6 +63,7 @@ int main() {
     level = 0;
     menuNum = 1;
     menu = true;
+    int timerMenu = 5;
 
     SetTargetFPS(60);
 
@@ -86,7 +87,7 @@ int main() {
 
             else if(menuNum == 1.5){
                 menuTimer += deltatime;
-                if(menuTimer >= 8){
+                if(menuTimer >= timerMenu){
                     ChangeMenu(&menu2, false);
                 }
             }
@@ -97,7 +98,7 @@ int main() {
 
             else if(menuNum == 2.5){
                 menuTimer += deltatime;
-                if(menuTimer >= 8){
+                if(menuTimer >= timerMenu){
                     ChangeMenu(&menu3, false);
                 }
             }
