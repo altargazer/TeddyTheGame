@@ -9,6 +9,10 @@ TextBox::TextBox(){
 
     arrow = LoadTexture("sprites/objects/arrow.png");
     pigeon = LoadTexture("sprites/characters/retratoPigeon.png");
+    pigeonRed = LoadTexture("sprites/characters/retratoPigeonRed.png");
+    pigeonBlue = LoadTexture("sprites/characters/retratoPigeonBlue.png");
+    pigeonOrange = LoadTexture("sprites/characters/retratoPigeonOrange.png");
+    pigeonPink = LoadTexture("sprites/characters/retratoPigeonPink.png");
     calvo = LoadTexture("sprites/characters/retratoCalvo.png");
     teddy = LoadTexture("sprites/characters/retratoTeddy.png");
     paddy = LoadTexture("sprites/characters/retratoPaddy.png");
@@ -19,9 +23,13 @@ void TextBox::SetDialogue(const Dialogue& dialogue){
     index = 0;
 
     if(dialogue.character == "pigeon") retrato = pigeon;
-    if(dialogue.character == "teddy") retrato = teddy;
-    if(dialogue.character == "calvo") retrato = calvo;
-    if(dialogue.character == "paddy") retrato = paddy;
+    else if(dialogue.character == "pigeonRed") retrato = pigeonRed;
+    else if(dialogue.character == "pigeonBlue") retrato = pigeonBlue;
+    else if(dialogue.character == "pigeonOrange") retrato = pigeonOrange;
+    else if(dialogue.character == "pigeonPink") retrato = pigeonPink;
+    else if(dialogue.character == "teddy") retrato = teddy;
+    else if(dialogue.character == "calvo") retrato = calvo;
+    else if(dialogue.character == "paddy") retrato = paddy;
 
     this->text = multiple[index];
     active = true;

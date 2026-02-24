@@ -18,6 +18,10 @@ public:
     Texture2D arrow;
     Texture2D retrato;
     Texture2D pigeon;
+    Texture2D pigeonRed;
+    Texture2D pigeonBlue;
+    Texture2D pigeonOrange;
+    Texture2D pigeonPink;
     Texture2D calvo;
     Texture2D paddy;
     Texture2D teddy;
