@@ -40,6 +40,10 @@ public:
     char word[5];
     int letterCount;
     Rectangle textBoxPW = {750 - 570/2 + 15, 230, 570 - 40, 130 - 25};
+    Texture2D pigeonRed;
+    Texture2D pigeonBlue;
+    Texture2D pigeonPink;
+    Texture2D pigeonOrange;
 
     //Level 2
     bool startedMission;
