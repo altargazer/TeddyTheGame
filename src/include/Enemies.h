@@ -82,7 +82,7 @@ public:
     void Draw(float deltatime) override;
 };
 
-class Wall : public Enemies{
+class WallBreakable : public Enemies{
 public:
 
     TextBox* textBox;
@@ -92,7 +92,16 @@ public:
     Rectangle broken1;
     Rectangle broken2;
 
-    Wall(float level, Vector2 pos, int height, int width, Player* player, TextBox* textBox);
+    WallBreakable(Texture2D sprite, Vector2 pos, int height, int width, Player* player, TextBox* textBox);
+    void Draw(float deltatime) override;
+    void Update(float deltatime) override;
+};
+
+class WallDark : public Enemies{
+public:
+    Texture2D sprite;
+    unsigned char alpha;
+    WallDark(Texture2D sprite, Vector2 pos, Player* player);
     void Draw(float deltatime) override;
     void Update(float deltatime) override;
 };

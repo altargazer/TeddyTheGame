@@ -140,8 +140,11 @@ Levels::Levels(int id, Player* player, TextBox* textBox, Camera2D* camera){
         enemies.push_back(rat4);
         Rata* rat5 = new Rata({2848, 896+14}, player, 2560, 2976);
         enemies.push_back(rat5);
-        Wall* wall1 = new Wall(2, {1312, 992}, 64, 64, player, textBox);
+        WallBreakable* wall1 = new WallBreakable(LoadTexture("sprites/maps/Level2Wall.png"), {1312, 992}, 64, 64, player, textBox);
         enemies.push_back(wall1);
+
+        WallDark* wall2 = new WallDark(LoadTexture("sprites/maps/Level2DarkWall.png"), {1632, 960}, player);
+        enemies.push_back(wall2);
 
         //add bad floors here (if any)
         BadFloor clean1 = {{1696, 288, 96, 10}, {1568, 235}, "Uy, no debería pisar donde ha limpiado Paddy."};

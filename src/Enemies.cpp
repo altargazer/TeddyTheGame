@@ -301,10 +301,11 @@ void Paddy::Draw(float deltatime){
 
 //WALL
 
-Wall::Wall(float level, Vector2 pos, int height, int width, Player* player, TextBox* textBox){
+WallBreakable::WallBreakable(Texture2D sprite, Vector2 pos, int height, int width, Player* player, TextBox* textBox){
 
     this->player = player;
     this->textBox = textBox;
+    this->sheet = sprite;
 
     lives = 3;
     maxLives = 3;
@@ -320,16 +321,13 @@ Wall::Wall(float level, Vector2 pos, int height, int width, Player* player, Text
     remove = false;
 
     HitBox = {position.x, position.y, (float)width, (float)height};
-    if(level == 2){
-        sheet = LoadTexture("sprites/maps/Level2Wall.png");
-    }
 
     normal = {0, 0, (float)width, (float)height};
     broken1 = {(float)width+1, 0, (float)width, (float)height};
     broken2 = {(float)width*2+2, 0, (float)width, (float)height};
 }
 
-void Wall::Update(float deltatime){
+void WallBreakable::Update(float deltatime){
     if(!alive) return;
 
     if(CheckCollisionRecs(player->getHitBox(), HitBox)){
@@ -362,7 +360,7 @@ void Wall::Update(float deltatime){
     HitBox = {position.x, position.y, HitBox.width, HitBox.height};
 }
 
-void Wall::Draw(float deltatime){
+void WallBreakable::Draw(float deltatime){
     if(!alive){
         deadTimer += deltatime;
         if(deadTimer <= 2){
@@ -384,5 +382,43 @@ void Wall::Draw(float deltatime){
         case 1:
             DrawTextureRec(sheet, broken2, position, WHITE);
             break;
+    }
+}
+
+WallDark::WallDark(Texture2D sprite, Vector2 pos, Player* player){
+    this->player = player;
+    this->sprite = sprite;
+
+    position = pos;
+    experience = 5;
+    isAttacking = false;
+    alpha = 255;
+    deadTimer = 0;
+
+    damaged = false;
+
+    alive = true;
+    remove = false;
+
+    HitBox = {position.x, position.y, (float)sprite.width, (float)sprite.height};
+}
+
+void WallDark::Draw(float deltatime){
+    if(remove) return;
+    DrawTexture(sprite, position.x, position.y, (Color){ 255, 255, 255, alpha});
+}
+
+void WallDark::Update(float deltatime){
+    if(!alive){
+        deadTimer+=deltatime;
+        alpha-= deadTimer*10;
+        if(alpha <= 0){
+            alpha = 0;
+            remove = true;
+        }
+        return;
+    }
+    if(CheckCollisionRecs(HitBox, player->getAttackBox())){
+        alive = false;
     }
 }
