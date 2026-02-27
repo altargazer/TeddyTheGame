@@ -100,7 +100,7 @@ public:
 class WallDark : public Enemies{
 public:
     Texture2D sprite;
-    unsigned char alpha;
+    float alpha;
     WallDark(Texture2D sprite, Vector2 pos, Player* player);
     void Draw(float deltatime) override;
     void Update(float deltatime) override;

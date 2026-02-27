@@ -393,7 +393,6 @@ WallDark::WallDark(Texture2D sprite, Vector2 pos, Player* player){
     experience = 5;
     isAttacking = false;
     alpha = 255;
-    deadTimer = 0;
 
     damaged = false;
 
@@ -405,20 +404,19 @@ WallDark::WallDark(Texture2D sprite, Vector2 pos, Player* player){
 
 void WallDark::Draw(float deltatime){
     if(remove) return;
-    DrawTexture(sprite, position.x, position.y, (Color){ 255, 255, 255, alpha});
+    DrawTexture(sprite, position.x, position.y, (Color){ 255, 255, 255, (unsigned char)alpha});
 }
 
 void WallDark::Update(float deltatime){
     if(!alive){
-        deadTimer+=deltatime;
-        alpha-= deadTimer*10;
+        alpha-=230*deltatime;
         if(alpha <= 0){
             alpha = 0;
             remove = true;
         }
         return;
     }
-    if(CheckCollisionRecs(HitBox, player->getAttackBox())){
+    if(CheckCollisionRecs(HitBox, player->getHitBox())){
         alive = false;
     }
 }
