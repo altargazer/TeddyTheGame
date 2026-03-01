@@ -222,7 +222,7 @@ void Player::ApplyMovement(float deltatime){
     if(touchingWall && !isGrounded && vel.y > 0){
         wallsliding = true;
         ChangeAnim(&wallAnim);
-        if(vel.y > 140) vel.y = 140;
+        if(vel.y > 120) vel.y = 120;
     } else wallsliding = false;
 
     pos.y += vel.y*deltatime;

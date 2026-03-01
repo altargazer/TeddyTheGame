@@ -1,11 +1,36 @@
 #include <raylib.h>
 #include <iostream>
 #include <queue>
+#include <sstream>
 #include "include/TextBox.h"
+
+std::string TextBox::CorrectText(std::string text){
+    std::string result;
+    std::stringstream ss(text);
+    std::string word;
+    std::string line;
+
+    while(ss >> word){
+        if(line.empty()) line = word;
+
+        std::string newLine = line + " " + word;
+        if(MeasureText(newLine.c_str(), fontSize) > maxLength){
+            result += line + "\n";
+            line = word;
+        }
+        else line = newLine;
+    }
+
+    if(!line.empty()) result += line;
+
+    return result;
+}
 
 TextBox::TextBox(){
     active = false;
     index = -1;
+
+    maxLength = GetScreenWidth() - 20 - 250;
 
     arrow = LoadTexture("sprites/objects/arrow.png");
     pigeon = LoadTexture("sprites/characters/retratoPigeon.png");
@@ -32,6 +57,7 @@ void TextBox::SetDialogue(const Dialogue& dialogue){
     else if(dialogue.character == "paddy") retrato = paddy;
 
     this->text = multiple[index];
+
     active = true;
     size = (int) multiple.size();
 }
@@ -88,5 +114,9 @@ void TextBox::Draw(){
     
     DrawTexture(arrow, 1420, 230, WHITE);
 
-    DrawText(text.c_str(), 25 + 200, 115, 35, BLACK);
+    if(MeasureText(text.c_str(), fontSize) > maxLength){
+        text = CorrectText(text);
+    }
+
+    DrawText(text.c_str(), 25 + 200, 115, fontSize, BLACK);
 }

@@ -14,6 +14,8 @@ public:
     bool active;
     int index; //index for multiple messages
     int size;
+    int fontSize = 35;
+    int maxLength;
 
     Texture2D arrow;
     Texture2D retrato;
@@ -40,6 +42,7 @@ public:
     void FinishDialogue();
     void Update();
     void Draw();
+    std::string CorrectText(std::string text);
 
 };
 
