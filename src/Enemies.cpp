@@ -230,7 +230,7 @@ void Paddy::Update(float deltatime){
                 textBox->EnqueuDialogue({{"Lo sé, lo sé.", "Bueno, ahí va: ¡el Teddy tiene un plan maestro!"}, "teddy"});
                 textBox->EnqueuDialogue({{"Teddy, tú siempre tienes un \"plan maestro.\""}, "paddy"});
                 textBox->EnqueuDialogue({{"Paddy, no uses comillas, no tenemos dedos."}, "teddy"});
-                textBox->EnqueuDialogue({{"Ah, sí, perdona."}, "paddy"});
+                textBox->EnqueuDialogue({{"Ah, sí, perdona.", "Pero es verdad, siempre dices que tienes un plan secreto y luego te inventas cualquier cosa sobre la marcha y dices que lo tenías planeado desde el principio."}, "paddy"});
                 textBox->EnqueuDialogue({{"¡Pero este plan es especial! Es el Plan Ultra Secreto para el Objetivo Ultra Secreto del Teddy. También conocido como el PUSOUST."}, "teddy"});
                 textBox->EnqueuDialogue({{"¿Ese es el nombre oficial?"}, "paddy"});
                 textBox->EnqueuDialogue({{"Aún me lo estoy pensando."}, "teddy"});
@@ -260,12 +260,12 @@ void Paddy::Update(float deltatime){
             if(!initial){
                 textBox->EnqueuDialogue({{"Comida."}, "teddy"});
                 textBox->EnqueuDialogue({
-                    {"Hola, Teddy! Espero que te estés portando bien.", 
+                    {"Hola a ti también, Teddy.", 
                     "¿Tienes hambre? ¿Qué tal si te preparo una deliciosa tarta de queso?",
                     "Aunque... no tengo aquí los ingredientes, necesito que me los traigas."
                 }, "paddy"});
                 textBox->EnqueuDialogue({{"¿¿Por qué tengo que buscarlos yo??"}, "teddy"});
-                textBox->EnqueuDialogue({{"Porque los has dejado tú tirados por ahí."}, "paddy"});
+                textBox->EnqueuDialogue({{"Porque te has colado en la cocina, los has robado, y los has dejado tú tirados por ahí."}, "paddy"});
                 textBox->EnqueuDialogue({{"Ah.", "No sé de qué me hablas pero te traeré tus ingredientes."}, "teddy"});
                 textBox->EnqueuDialogue({{"¿Estás seguro que sabes qué ingredientes son los correctos?"}, "paddy"});
                 textBox->EnqueuDialogue({{"¡Claro que sí! Ahora mismo vuelvo"}, "teddy"});
@@ -280,7 +280,7 @@ void Paddy::Update(float deltatime){
                 textBox->EnqueuDialogue({{"He traído algo mejor: ¡Gasolina!"}, "teddy"});
                 textBox->EnqueuDialogue({{"No."}, "paddy"});
                 textBox->EnqueuDialogue({{"Vale :)"}, "teddy"});
-                textBox->EnqueuDialogue({{"En fin, ahora mismo te hago la tarta de queso.", "*Fiuuum*", "Ya está, Teddy."}, "paddy"});
+                textBox->EnqueuDialogue({{"En fin, ahora mismo te hago la tarta de queso.", "*Sonidos de repostería*", "Ya está, Teddy."}, "paddy"});
                 condition3 = true;
                 canTalk = false;
             }

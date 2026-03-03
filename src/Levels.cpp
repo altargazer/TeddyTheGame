@@ -464,75 +464,77 @@ void Levels::PigeonSytem(int id){
         textBox->EnqueuDialogue({{"Buenos días, Señor Teddy. Paloma #1434 a su servicio."}, "pigeon"});
         textBox->EnqueuDialogue({{"Infórmame."}, "teddy"});
         textBox->EnqueuDialogue({
-                {"Sí, señor, esta es la información que hemos recabado:", 
-                "Las paredes han sido revisadas y hemos encontrado que puede usted deslizarse por ellas.",
-                "Se han colocado diversas camas para que pueda descansar cuando lo vea necesario.Ese será el lugar en el que se encontrará en caso de... accidentes.",
-                "También se han repartido reservas de cocoa por si necesita recuperarse.", 
-                "El resto de mis compañeras están en sus posiciones, preparadas para observar cualquier cosa que pueda ser de interés para la operación.",
-                "Eso es todo. ¿Necesita algo de más de mí, señor?"
+                {"Paloma #1434: Sí, señor, esta es la información que hemos recabado:", 
+                "Paloma #1434: Las paredes han sido revisadas y hemos encontrado que puede usted deslizarse por ellas.",
+                "Paloma #1434: Algunas paredes parecen estar en malas condiciones, así que tal vez pueda encontrar atajos abriendo nuevos caminos.",
+                "Paloma #1434: Esté muy atento a cualquier pared o habitación con aspecto sospechoso, puede que haya algo más allá de lo que se ve a primera vista.",
+                "Paloma #1434: Se han colocado diversas camas para que pueda descansar cuando lo vea necesario.Ese será el lugar en el que se encontrará en caso de... accidentes.",
+                "Paloma #1434: También se han repartido reservas de cocoa por si necesita recuperarse.", 
+                "Paloma #1434: El resto de mis compañeras están en sus posiciones, preparadas para observar cualquier cosa que pueda ser de interés para la operación.",
+                "Paloma #1434: Eso es todo. ¿Necesita algo de más de mí, señor?"
             }, "pigeon"});
         textBox->EnqueuDialogue({{"Muchas gracias, soldado. Puedes descansar."}, "teddy"});
-        textBox->EnqueuDialogue({{"Señor, sí, señor."}, "pigeon"});
+        textBox->EnqueuDialogue({{"Paloma #1434: Señor, sí, señor."}, "pigeon"});
     }
     else if(id == 21){
-        textBox->EnqueuDialogue({{"Rruu #4727 Rruu"}, "pigeonRed"});
+        textBox->EnqueuDialogue({{"Paloma #4727: Rruu #4727 Rruu"}, "pigeonRed"});
         textBox->EnqueuDialogue({{"¿Rrruu rruu?"}, "teddy"});
-        textBox->EnqueuDialogue({{"Rruuuu"}, "pigeonRed"});
+        textBox->EnqueuDialogue({{"Paloma #4727: Rruuuu"}, "pigeonRed"});
         textBox->EnqueuDialogue({{"Rrruu"}, "teddy"});
     }
     else if(id == 22){
         textBox->EnqueuDialogue({{"Paloma #9344 reportando: se está \"cociendo\" una rebelión de las Ratas del Teddy en la cocina."}, "pigeon"});
         textBox->EnqueuDialogue({{"Como tu superior, te prohíbo hacer juegos de palabras que no tengan gracia."}, "teddy"});
-        textBox->EnqueuDialogue({{"Señor, sí, señor. Señor, lo siento, señor."}, "pigeon"});
+        textBox->EnqueuDialogue({{"Paloma #9344: Señor, sí, señor. Señor, lo siento, señor."}, "pigeon"});
         textBox->EnqueuDialogue({{"Me encargaré de esas ratas rebeldes, gracias por la información, soldado."}, "teddy"});
-        textBox->EnqueuDialogue({{"Deles su merecido, señor, la cosa está que arde."}, "pigeon"});
+        textBox->EnqueuDialogue({{"Paloma #9344: Deles su merecido, señor, la cosa está que arde."}, "pigeon"});
         textBox->EnqueuDialogue({{"Me voy a dar a la caza aviaria."}, "teddy"});
     }
     else if(id == 23){
         textBox->EnqueuDialogue({{"Señor, hola, señor. Soy Paloma #3228, encargada de RRPP (Recursos Palomos)."}, "pigeon"});
         textBox->EnqueuDialogue({{"¿Algún mensaje de parte del Grupo Palomar?", "Más os vale no montarme un motín."}, "teddy"});
-        textBox->EnqueuDialogue({{"Nada de eso, señor.", "Tenemos una sugerencia, señor, para nuestros números identificadores, señor.", "Creo, señor, que nuestros nombres son demasiado largos, señor.La primera cifra parece un poco innecesaria, señor."}, "pigeon"});
+        textBox->EnqueuDialogue({{"Paloma #3228: Nada de eso, señor.", "Paloma #3228 Tenemos una sugerencia, señor, para nuestros números identificadores, señor.", "Paloma #3228 Creo, señor, que nuestros nombres son demasiado largos, señor.La primera cifra parece un poco innecesaria, señor."}, "pigeon"});
         textBox->EnqueuDialogue({{"Pero así estáis todas ordenadas e identificadas."}, "teddy"});
-        textBox->EnqueuDialogue({{"Señor, nuestros nombres los ha elegido usted de forma totalmente aleatoria, señor."}, "pigeon"});
+        textBox->EnqueuDialogue({{"Paloma #3228: Señor, nuestros nombres los ha elegido usted de forma totalmente aleatoria, señor."}, "pigeon"});
         textBox->EnqueuDialogue({{"Ah.", "AH.", "Pequeña paloma inocente, no hables de aquellos que no conoces.", "El Teddy no hace nada de manera aleatoria, todo es parte de un plan más grande que tú que nunca podrías comprender.", "(Aunque ahora mismo no me acuerdo de qué era)."}, "teddy"});
-        textBox->EnqueuDialogue({{"Claro señor, siento haber subestimado el alcance de su genialidad, señor."}, "pigeon"});
+        textBox->EnqueuDialogue({{"Paloma #3228: Claro señor, siento haber subestimado el alcance de su genialidad, señor."}, "pigeon"});
         textBox->EnqueuDialogue({{"Te lo perdonaré solo por lo mucho que me haces la pelota."}, "teddy"});
     }
     else if(id == 24){
         textBox->EnqueuDialogue({{"¿Alguna cosa que reportar?"}, "teddy"});
         textBox->EnqueuDialogue({{"Paloma #5829, señor. Dato curioso: un experimento realizado en 1995 reveló que las palomas son capaces de distinguir entre las obras de Picasso y de Monet, diferenciando los estilos artísticos incluso en obras que no habían visto nunca"}, "pigeonBlue"});
-        textBox->EnqueuDialogue({{"¿Vale?"}, "teddy"});
+        textBox->EnqueuDialogue({{"¿Vale?", "(Tal vez podría usar a las palomas para robar cuadros y luego subastarlos...)"}, "teddy"});
     }
     else if(id == 25){
         textBox->EnqueuDialogue({{"Paloma #7932: El código es 9392."}, "pigeon"});
         textBox->EnqueuDialogue({{"Podría tener algún seis..."}, "teddy"});
     }
     else if(id == 26){
-        textBox->EnqueuDialogue({{"Señor, menos mal que ha llegado hasta aquí.", "Tengo una información importante: una de las palomas de esta zona es una mentirosa."}, "pigeon"});
+        textBox->EnqueuDialogue({{"Paloma #8294: Señor, menos mal que ha llegado hasta aquí.", "Paloma #8294: Tengo una información importante: una de las palomas de esta zona es una mentirosa."}, "pigeon"});
         textBox->EnqueuDialogue({{"¿Cómo sé que no eres tú la que miente?"}, "teddy"});
-        textBox->EnqueuDialogue({{"Es usted hermoso, señor."}, "pigeon"});
+        textBox->EnqueuDialogue({{"Paloma #8294: Es usted hermoso, señor."}, "pigeon"});
         textBox->EnqueuDialogue({{"Eso jamás podría ser una mentira. Buen argumento, soldado."}, "teddy"});
-        textBox->EnqueuDialogue({{"Gracias, señor."}, "pigeon"});
+        textBox->EnqueuDialogue({{"Paloma #8294: Gracias, señor."}, "pigeon"});
     }
     else if(id == 27){
         textBox->EnqueuDialogue({{"Por favor, dime que tienes algo de información interesante."}, "teddy"});
-        textBox->EnqueuDialogue({{"Claro que sí, señor, ese es mi trabajo como Paloma #4820.", "Me ha llegado la información de que el señor Paddy tiene pensado preparar una deliciosa tarta, señor."}, "pigeon"});
+        textBox->EnqueuDialogue({{"Paloma #4820: Claro que sí, señor, ese es mi trabajo.", "Paloma #4820: Me ha llegado la información de que el señor Paddy tiene pensado preparar una deliciosa tarta, señor."}, "pigeon"});
         textBox->EnqueuDialogue({{"Perfecto, eso es exactamente lo que el Teddy quería oír, todo va según mi plan maestro.", "Haré buen uso de esta información, gracias."}, "teddy"});
-        textBox->EnqueuDialogue({{"Es mi deber, señor."}, "pigeon"});
+        textBox->EnqueuDialogue({{"Paloma #4820: Es mi deber, señor."}, "pigeon"});
     }
     else if(id == 28){
         textBox->EnqueuDialogue({{"Paloma #1934 a su servicio, señor. Tengo un mensaje para usted."}, "pigeonPink"});
         textBox->EnqueuDialogue({{"Dímerlo ahora mismo. Ya."}, "teddy"});
-        textBox->EnqueuDialogue({{"El mensaje dice:\"Todo el mundo sabe que los colores del arcoíris son rosa, azul, rojo y naranja.Firmado, Teddy.\""}, "pigeonPink"});
+        textBox->EnqueuDialogue({{"Paloma #1934: El mensaje dice: \"Todo el mundo sabe que los colores del arcoíris son rosa, azul, rojo y naranja.Firmado, Teddy.\""}, "pigeonPink"});
         textBox->EnqueuDialogue({{"Entiendo.", "(No entiendo nada, qué cojones).", "Gracias por el mensaje, soldado."}, "teddy"});
-        textBox->EnqueuDialogue({{"No hay de qué, señor."}, "pigeonPink"});
+        textBox->EnqueuDialogue({{"Paloma #1934 : No hay de qué, señor."}, "pigeonPink"});
 
     }
     else if(id == 29){
         textBox->EnqueuDialogue({{"Soldado, hay una caja fuerte por ahí. ¿Tú no sabrás una combinación de cuatro dígitos?"}, "teddy"});
-        textBox->EnqueuDialogue({{"Paloma #4342, señor.", "Desgraciadamente no, pero tengo una combinación de 22 dígitos que coinciden con la cuenta bancaria del llamado Calvi, señor.", "¿Estaría interesado en esa información?"}, "pigeonOrange"});
+        textBox->EnqueuDialogue({{"Paloma #4342: Desgraciadamente no, señor, pero tengo una combinación de 22 dígitos que coinciden con la cuenta bancaria del llamado Calvi, señor.", "Paloma #4342: ¿Estaría interesado en esa información?"}, "pigeonOrange"});
         textBox->EnqueuDialogue({{"Ooh, al Teddy le interesa esa información.", "Ahora estoy ocupado con otra cosa, pero recuérdamelo más tarde."}, "teddy"});
-        textBox->EnqueuDialogue({{"Señor, sí, señor."}, "pigeonOrange"});
+        textBox->EnqueuDialogue({{"Paloma #4342: Señor, sí, señor."}, "pigeonOrange"});
     }
 }
 
@@ -692,7 +694,7 @@ void Levels::Password(float deltatime){
         for(int i = 0; i<4; i++) if(sol[i] != word[i]) equal = false;
         if(equal){
             open = true;
-            textBox->EnqueuDialogue({{"¡A la primera!", "Una llave. Espero parece un escape room."}, "teddy"});
+            textBox->EnqueuDialogue({{"¡A la primera!", "!", "Una llave, y sé exactamente qué puertecita abre. El plan del Teddy empieza a tomar forma... Pasemos a la siguiente fase."}, "teddy"});
         }
         else{
             textBox->EnqueuDialogue({{"Esta caja está rota, no se abre >:("}, "teddy"});
