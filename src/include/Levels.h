@@ -20,6 +20,7 @@ public:
     int maxDown; //límite hasta que se puede bajar hasta morir
     Camera2D* camera;
     bool finished;
+    bool initial;
 
     struct BadFloor{
         Rectangle area;

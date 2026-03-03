@@ -8,12 +8,12 @@ std::string TextBox::CorrectText(std::string text){
     std::string result;
     std::stringstream ss(text);
     std::string word;
-    std::string line;
+    std::string line = "";
 
     while(ss >> word){
-        if(line.empty()) line = word;
-
-        std::string newLine = line + " " + word;
+        std::string newLine;
+        if(line.empty()) newLine = word;
+        else newLine = line + " " + word;
         if(MeasureText(newLine.c_str(), fontSize) > maxLength){
             result += line + "\n";
             line = word;

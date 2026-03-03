@@ -58,6 +58,7 @@ Levels::Levels(int id, Player* player, TextBox* textBox, Camera2D* camera){
     this->camera = camera;
 
     finished = false;
+    initial = false;
 
     cocoa = LoadTexture("sprites/objects/cocoa.png");
     bed = LoadTexture("sprites/objects/bed.png");
@@ -199,6 +200,16 @@ void Levels::Update(){
 
     ManageBadFloors();
     ControlFalling();
+
+    if(!initial && player->isGrounded){
+        if(id == 0){
+            textBox->EnqueuDialogue({{"¡Paddy!"}, "teddy"});
+        }
+        else if(id == 1){
+            textBox->EnqueuDialogue({{"Primera fase: mi red de Información Palomar es la red de información mejor organizada y más distribuida del mundo.", "A ver que me tienen que decir."}, "teddy"});
+        }
+        initial = true;
+    }
 }
 
 void Levels::ManageObjects(){
@@ -242,6 +253,13 @@ void Levels::ManageObjects(){
                             player->hasWeapon = true;
                             colliders[i][j] = 0;
                             textBox->EnqueuDialogue({{"¡Has conseguido el Palo de la Tigrosura!", "Haz click izquierdo para atacar.", "No me mates, por favor."}, "calvo"});
+                            textBox->EnqueuDialogue({{"¿Qué haces aquí, Calvi? No quiero que hables en mi juego."}, "teddy"});
+                            textBox->EnqueuDialogue({{"Pero yo he programado el juego."}, "calvo"});
+                            textBox->EnqueuDialogue({{"Me da igual, cállate."}, "teddy"});
+                            textBox->EnqueuDialogue({{":("}, "calvo"});
+                            textBox->EnqueuDialogue({{"Emoticonos tampoco."}, "teddy"});
+                            textBox->EnqueuDialogue({{""}, "calvo"});
+                            textBox->EnqueuDialogue({{"Muy bien."}, "teddy"});
                         }
                     }
 
