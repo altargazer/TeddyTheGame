@@ -126,6 +126,8 @@ Levels::Levels(int id, Player* player, TextBox* textBox, Camera2D* camera){
         gas = LoadTexture("sprites/objects/gas.png");
         cake = LoadTexture("sprites/objects/tarta.png");
 
+        kingRat = LoadTexture("sprites/objects/ratKing.png");
+
         //add enemies here (if any)
         Paddy* paddy = new Paddy({1690, 838}, player, 1, textBox, 2, camera);
         enemies.push_back(paddy);
@@ -348,6 +350,12 @@ void Levels::ManageObjects(){
                             if(countFoods == 6) enemies[0]->condition = true;
                         }
                     }
+                    else if(num == 14){
+                        Rectangle rat = {posx, posy+40, 20, 20};
+                        if(player->HandlePickingUp(rat, true)){
+                            textBox->EnqueuDialogue({{"Hola."}, "teddy"});
+                        }
+                    }
                     else if(num == 13 && enemies[0]->condition2){
                         Rectangle cakeColl = {posx+4, posy+4, 20, 20};
                         if(player->HandlePickingUp(cakeColl, true)){
@@ -438,6 +446,9 @@ void Levels::DrawObject(int id,float posX,float posY){
         }
         else if(id == 11){
             DrawTexture(nata, posX, posY+20, WHITE);
+        }
+        else if(id == 14){
+            DrawTexture(kingRat, posX, posY, WHITE);
         }
         else if(id == 13 && enemies[0]->condition2){
             DrawTexture(cake, posX, posY+20, WHITE);

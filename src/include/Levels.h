@@ -52,6 +52,7 @@ public:
     std::vector<bool> foods;
     Texture2D egg, nata, flour, cheese, sugar, gas, cake;
     Texture2D eggBig, nataBig, flourBig, cheeseBig, sugarBig, gasBig;
+    Texture2D kingRat;
 
     //Mapa
     Texture2D levelMap;
