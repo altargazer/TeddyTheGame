@@ -27,6 +27,7 @@ public:
     Texture2D calvo;
     Texture2D paddy;
     Texture2D teddy;
+    Texture2D rat;
 
     struct Dialogue{
         std::vector<std::string> messages;

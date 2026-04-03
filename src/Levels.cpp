@@ -22,8 +22,11 @@ OBJECTS:
 10:food5
 11: food6
 12: beds (one per level)
-13: safe (caja fuerte)
-20-29: reserved for pigeons
+13: cake
+14: rat king
+15: key
+16: safe
+20-29: pigeons
 */
 
 template<typename Base, typename T>
@@ -208,7 +211,10 @@ void Levels::Update(){
             textBox->EnqueuDialogue({{"¡Paddy!"}, "teddy"});
         }
         else if(id == 1){
-            textBox->EnqueuDialogue({{"Primera fase: mi red de Información Palomar es la red de información mejor organizada y más distribuida del mundo.", "A ver que me tienen que decir."}, "teddy"});
+            textBox->EnqueuDialogue({{"Mi red de Información Palomar es la red de información mejor organizada y más distribuida del mundo.", "A ver si tienen algo importante que decirme."}, "teddy"});
+        }
+        else if(id == 2){
+            textBox->EnqueuDialogue({{"Bien, ahora necesito algo muy importante: comida.", "No se puede ejecutar el plan con el estómago vacío.", "Y Teddy siempre tiene el estómago vacío."}, "teddy"});
         }
         initial = true;
     }
@@ -223,8 +229,10 @@ void Levels::ManageObjects(){
                 float posx = j*32;
                 DrawObject(num, posx, posy);
 
+                //level 1
                 if(id == 1){
-                    if(num == 14){
+                    //caja fuerte
+                    if(num == 16){
                         if(open && !textBox->active){
                             colliders[i][j] = 15;
                             continue;
@@ -238,6 +246,7 @@ void Levels::ManageObjects(){
                             interactCaja = true;
                         }
                     }
+                    //llave
                     else if(num == 15){
                         Rectangle keyColl = {posx, posy, 19, 20};
                         if(player->HandlePickingUp(keyColl, true)){
@@ -246,7 +255,7 @@ void Levels::ManageObjects(){
                     }
                 }
 
-                //Food items and weapon are only on Level 2
+                //level 2
                 if(id == 2){
                     //Weapon
                     if(num == 2){
@@ -350,20 +359,34 @@ void Levels::ManageObjects(){
                             if(countFoods == 6) enemies[0]->condition = true;
                         }
                     }
+                    
+                    //king rat
                     else if(num == 14){
-                        Rectangle rat = {posx, posy+40, 20, 20};
+                        Rectangle rat = {posx, posy+10, 20, 20};
                         if(player->HandlePickingUp(rat, true)){
-                            textBox->EnqueuDialogue({{"Hola."}, "teddy"});
+                            textBox->EnqueuDialogue({{"¿Qué está pasando aquí, secuaz?"}, "teddy"});
+                            textBox->EnqueuDialogue({{"¡Ya no somos tus secuaces, hemos sido liberadas!"}, "rat"});
+                            textBox->EnqueuDialogue({{"Jaja, que monada.", "Pensar que podéis simplemente liberaros del Teddy.", "Iré a saludar a tus pequeñas amigas rebeldes."}, "teddy"});
+                            textBox->EnqueuDialogue({{"¡No podrás con la revolución!"}, "rat"});
+                            textBox->EnqueuDialogue({{"Eso ya lo veremos."}, "teddy"});
                         }
                     }
+
+                    //cake
                     else if(num == 13 && enemies[0]->condition2){
                         Rectangle cakeColl = {posx+4, posy+4, 20, 20};
                         if(player->HandlePickingUp(cakeColl, true)){
-                            colliders[i][j] = 0;
-                            finished = true;
+                            if(!player->hasWeapon){
+                                textBox->EnqueuDialogue({{"Debería conseguir un arma antes de comerme esta deliciosa tarta e irme."}, "teddy"});
+                            }
+                            else{
+                               colliders[i][j] = 0;
+                               finished = true; 
+                            }
                         }
                     }
                 }
+
                 //cocoa: increase 1 life
                 if(num == 3){
                     Rectangle cocoaColl = {posx+7, posy+14, 18, 21};
@@ -417,7 +440,7 @@ void Levels::ManageObjects(){
 
 void Levels::DrawObject(int id,float posX,float posY){
     if(this->id == 1){
-        if(id == 14){
+        if(id == 16){
             DrawTexture(caja, posX, posY+5, WHITE);
         }
         else if(id == 15 && !textBox->active){
@@ -448,7 +471,7 @@ void Levels::DrawObject(int id,float posX,float posY){
             DrawTexture(nata, posX, posY+20, WHITE);
         }
         else if(id == 14){
-            DrawTexture(kingRat, posX, posY, WHITE);
+            DrawTexture(kingRat, posX, posY+10, WHITE);
         }
         else if(id == 13 && enemies[0]->condition2){
             DrawTexture(cake, posX, posY+20, WHITE);

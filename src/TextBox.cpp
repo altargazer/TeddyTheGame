@@ -41,6 +41,7 @@ TextBox::TextBox(){
     calvo = LoadTexture("sprites/characters/retratoCalvo.png");
     teddy = LoadTexture("sprites/characters/retratoTeddy.png");
     paddy = LoadTexture("sprites/characters/retratoPaddy.png");
+    rat = LoadTexture("sprites/characters/retratoRatKing.png");
 }
 
 void TextBox::SetDialogue(const Dialogue& dialogue){
@@ -55,6 +56,7 @@ void TextBox::SetDialogue(const Dialogue& dialogue){
     else if(dialogue.character == "teddy") retrato = teddy;
     else if(dialogue.character == "calvo") retrato = calvo;
     else if(dialogue.character == "paddy") retrato = paddy;
+    else if(dialogue.character == "rat") retrato = rat;
 
     this->text = multiple[index];
 

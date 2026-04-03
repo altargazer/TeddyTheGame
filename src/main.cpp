@@ -21,15 +21,17 @@ void ChangeLevel(int next, Levels* nextLevel, Player& player, int x, int y){
     level = next;
     currentLevel = nextLevel;
     player.pos = {(float)x, (float)y};
+    player.lastCheckPoint = {(float)x, (float)y};
     player.direction = 1;
     player.ChangeLevel(next);
 }
 
-void ChangeMenu(Menus* next, bool continueMenu){
-    menuNum += 0.5;
-    menu = continueMenu;
+void ChangeMenu(float next, Menus* nextMenu, bool continueInMenu){
+    menuNum = next;
+    menu = continueInMenu;
     menuTimer = 0;
-    currentMenu = next;
+    currentMenu = nextMenu;
+    std::cout << "Next Menu: " << next << std::endl;
 }
 
 int main() {
@@ -51,19 +53,21 @@ int main() {
     Levels level0(0, &player, &textBox, &camera);
     Levels level1(1, &player, &textBox, &camera);
     Levels level2(2, &player, &textBox, &camera);
+    Levels level3(3, &player, &textBox, &camera);
 
     Menus menu1(1);
     Menus intermedio1(1.5);
     Menus menu2(2);
     Menus intermedio2(2.5);
     Menus menu3(3);
+    Menus intermedio3(3.5);
     
     currentLevel = &level0;
     currentMenu = &menu1;
     level = 0;
     menuNum = 1;
     menu = true;
-    int timerMenu = 5;
+    const int timerMenu = 5;
 
     SetTargetFPS(60);
 
@@ -80,27 +84,29 @@ int main() {
             currentMenu->Update();
 
             if(menuNum == 1 && currentMenu->jugarFlag){
-                menu = false;
-                menuNum += 0.5;
-                currentMenu = &intermedio1;
+                ChangeMenu(1.5, &intermedio1, false);
             }
 
             else if(menuNum == 1.5){
                 menuTimer += deltatime;
                 if(menuTimer >= timerMenu){
-                    ChangeMenu(&menu2, false);
+                    ChangeMenu(2, &menu2, false);
                 }
             }
 
             else if(menuNum == 2 && currentMenu->siguienteFlag){
-                ChangeMenu(&intermedio2, true);
+                ChangeMenu(2.5, &intermedio2, true);
             }
 
             else if(menuNum == 2.5){
                 menuTimer += deltatime;
                 if(menuTimer >= timerMenu){
-                    ChangeMenu(&menu3, false);
+                    ChangeMenu(3, &menu3, false);
                 }
+            }
+
+            else if(menuNum == 3 && currentMenu->siguienteFlag){
+                ChangeMenu(3.5, &intermedio3, true);
             }
 
             EndDrawing();
@@ -162,18 +168,19 @@ int main() {
 
         #pragma region Cambio de Nivel
         if(level == 0 && currentLevel->finished){
-            menuTimer = 0;
             menu = true;
+            currentLevel->finished = false;
             ChangeLevel(1, &level1, player, 96, 96);
-            currentLevel = &level1;
-            player.lastCheckPoint = player.pos;
         }
 
         else if(level == 1 && currentLevel->finished){
             menu = true;
             ChangeLevel(2, &level2, player, 128, 947);
-            currentLevel = &level2;
-            player.lastCheckPoint = player.pos;
+        }
+
+        else if(level == 2 && currentLevel->finished){
+            menu = true;
+            ChangeLevel(3, &level3, player, 96, 96);
         }
         #pragma endregion
 
