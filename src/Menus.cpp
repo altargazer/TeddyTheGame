@@ -93,6 +93,16 @@ void Menus::Draw(Player* player, float deltatime){
         DrawTextEx(interFont, line2.c_str(), (Vector2){(float)getMiddle(line2, 50, interFont), 430}, 50, 2, BLACK);
         DrawTextEx(interFont, line3.c_str(), (Vector2){(float)getMiddle(line3, 100, interFont), 550}, 100, 3, BLACK);
     }
+    else if (id == 3.5){
+        DrawTexture(background, 0, 0, WHITE);
+        std::string line1 = "Fase 3:";
+        std::string line2 = "(del Plan Ultra Secreto para\nel Objetivo Ultra Secreto del Teddy)";
+        std::string line3 = "EL ENEMIGO";
+
+        DrawTextEx(interFont, line1.c_str(), (Vector2){(float)getMiddle(line1, 80, interFont), 350}, 80, 3, BLACK);
+        DrawTextEx(interFont, line2.c_str(), (Vector2){(float)getMiddle(line2, 50, interFont), 430}, 50, 2, BLACK);
+        DrawTextEx(interFont, line3.c_str(), (Vector2){(float)getMiddle(line3, 100, interFont), 550}, 100, 3, BLACK);
+    }
 }
 
 void Menus::Update(){

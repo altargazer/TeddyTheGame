@@ -376,10 +376,10 @@ void Player::UpgradeLevel(){
     if(level == 1 && experience >= 40){
         level = 2;
         textBox->teddy = LoadTexture("sprites/characters/retratoTeddyGuay.png");
-        textBox->EnqueuDialogue({{"¡Felicidades! Has subido al nivel 2. La foto del Teddy ha sido actualizada como recompensa"}, "calvo"});
-        textBox->EnqueuDialogue({{"¿Qué narices signi-?"}, "teddy"});
-        textBox->EnqueuDialogue({{"!!!"}, "teddy"});
-        textBox->EnqueuDialogue({{"¡Toma ya, que guapo está el Teddy!"}, "teddy"});
+        textBox->EnqueuDialogue({"¡Felicidades! Has subido al nivel 2. La foto del Teddy ha sido actualizada como recompensa"}, "calvo");
+        textBox->EnqueuDialogue({"¿Qué narices signi-?"}, "teddy");
+        textBox->EnqueuDialogue({"!!!"}, "teddy");
+        textBox->EnqueuDialogue({"¡Toma ya, que guapo está el Teddy!"}, "teddy");
         return;
     }
 
@@ -422,7 +422,7 @@ void Player::HandleDead(){
     lives = 6;
     pos = lastCheckPoint;
     direction = 1;
-    textBox->SetDialogue({{"O-oh el Teddy ha tenido una pesadilla horrible."}, "teddy"});
+    textBox->SetDialogue({"O-oh el Teddy ha tenido una pesadilla horrible."}, "teddy");
 }
 
 void Player::DrawTop(){
@@ -455,6 +455,9 @@ void Player::ChangeLevel(int level){
     }
     else if(level == 2){
         colliders = LoadColliders("sprites/maps/Level2.csv");
+    }
+    else if(level == 3){
+        colliders = LoadColliders("sprites/maps/Level3.csv");
     }
 }
 

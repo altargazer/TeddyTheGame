@@ -34,12 +34,12 @@ public:
         std::string character;
     };
 
-    std::queue<Dialogue> dialogueQueue;
+    std::queue<Dialogue> messagesQueue;
 
     TextBox();
 
-    void SetDialogue(const Dialogue& dialogue);
-    void EnqueuDialogue(const Dialogue& dialogue);
+    void SetDialogue(std::vector<std::string> messages, std::string character);
+    void EnqueuDialogue(std::vector<std::string> messages, std::string character);
     void FinishDialogue();
     void Update();
     void Draw();

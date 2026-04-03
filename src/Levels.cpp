@@ -128,7 +128,6 @@ Levels::Levels(int id, Player* player, TextBox* textBox, Camera2D* camera){
         nata = LoadTexture("sprites/objects/nata.png");
         gas = LoadTexture("sprites/objects/gas.png");
         cake = LoadTexture("sprites/objects/tarta.png");
-
         kingRat = LoadTexture("sprites/objects/ratKing.png");
 
         //add enemies here (if any)
@@ -171,6 +170,13 @@ Levels::Levels(int id, Player* player, TextBox* textBox, Camera2D* camera){
         badFloors.push_back(hot4);
     }
 
+    else if(id == 3){
+        levelMap = LoadTexture("sprites/maps/Level3.png");
+        background = LoadTexture("sprites/maps/Level3BG.png");
+        colliders = LoadColliders("sprites/maps/Level3.csv");
+
+        maxDown = 1000;
+    }
 }
 
 void Levels::Draw(){
@@ -188,7 +194,12 @@ void Levels::DrawBackground(){
     else if(id == 2){
         DrawTexture(background, 0,0, WHITE);
         DrawTexture(background, background.width, 0, WHITE);
-        DrawRectangle(0, 0, 1500, 870, Fade(WHITE, 0.5f));
+        DrawRectangle(0, 0, 1500, 870, Fade(WHITE, 0.3f));
+    }
+    else if(id == 3){
+        DrawTexture(background, 0,0, WHITE);
+        DrawTexture(background, background.width, 0, WHITE);
+        DrawRectangle(0, 0, 1500, 870, Fade(WHITE, 0.3f));
     }
 }
 
@@ -208,13 +219,13 @@ void Levels::Update(){
 
     if(!initial && player->isGrounded){
         if(id == 0){
-            textBox->EnqueuDialogue({{"¡Paddy!"}, "teddy"});
+            textBox->EnqueuDialogue({"¡Paddy!"}, "teddy");
         }
         else if(id == 1){
-            textBox->EnqueuDialogue({{"Mi red de Información Palomar es la red de información mejor organizada y más distribuida del mundo.", "A ver si tienen algo importante que decirme."}, "teddy"});
+            textBox->EnqueuDialogue({"Mi red de Información Palomar es la red de información mejor organizada y más distribuida del mundo.", "A ver si tienen algo importante que decirme."}, "teddy");
         }
         else if(id == 2){
-            textBox->EnqueuDialogue({{"Bien, ahora necesito algo muy importante: comida.", "No se puede ejecutar el plan con el estómago vacío.", "Y Teddy siempre tiene el estómago vacío."}, "teddy"});
+            textBox->EnqueuDialogue({"Bien, ahora necesito algo muy importante: comida.", "No se puede ejecutar el plan con el estómago vacío.", "Y Teddy siempre tiene el estómago vacío."}, "teddy");
         }
         initial = true;
     }
@@ -263,14 +274,14 @@ void Levels::ManageObjects(){
                         if(player->HandlePickingUp(weaponColl, true)){
                             player->hasWeapon = true;
                             colliders[i][j] = 0;
-                            textBox->EnqueuDialogue({{"¡Has conseguido el Palo de la Tigrosura!", "Haz click izquierdo para atacar.", "No me mates, por favor."}, "calvo"});
-                            textBox->EnqueuDialogue({{"¿Qué haces aquí, Calvi? No quiero que hables en mi juego."}, "teddy"});
-                            textBox->EnqueuDialogue({{"Pero yo he programado el juego."}, "calvo"});
-                            textBox->EnqueuDialogue({{"Me da igual, cállate."}, "teddy"});
-                            textBox->EnqueuDialogue({{":("}, "calvo"});
-                            textBox->EnqueuDialogue({{"Emoticonos tampoco."}, "teddy"});
-                            textBox->EnqueuDialogue({{""}, "calvo"});
-                            textBox->EnqueuDialogue({{"Muy bien."}, "teddy"});
+                            textBox->EnqueuDialogue({"¡Has conseguido el Palo de la Tigrosura!", "Haz click izquierdo para atacar.", "No me mates, por favor."}, "calvo");
+                            textBox->EnqueuDialogue({"¿Qué haces aquí, Calvi? No quiero que hables en mi juego."}, "teddy");
+                            textBox->EnqueuDialogue({"Pero yo he programado el juego."}, "calvo");
+                            textBox->EnqueuDialogue({"Me da igual, cállate."}, "teddy");
+                            textBox->EnqueuDialogue({":("}, "calvo");
+                            textBox->EnqueuDialogue({"Emoticonos tampoco."}, "teddy");
+                            textBox->EnqueuDialogue({""}, "calvo");
+                            textBox->EnqueuDialogue({"Muy bien."}, "teddy");
                         }
                     }
 
@@ -279,13 +290,13 @@ void Levels::ManageObjects(){
                         Rectangle eggColl = {posx+4, posy+4, 20, 20};
                         if(player->HandlePickingUp(eggColl, true)){
                             if(!enemies[0]->initial){
-                                textBox->EnqueuDialogue({{"¿Debería comerme esto?Hm, seguramente Paddy se enfadaría. Mejor no."}, "teddy"});
+                                textBox->EnqueuDialogue({"¿Debería comerme esto?Hm, seguramente Paddy se enfadaría. Mejor no."}, "teddy");
                                 continue;
                             }
                             foods[0] = true;
                             countFoods++;
                             colliders[i][j] = 0;
-                            textBox->EnqueuDialogue({{"Huevos... Espero que no se me rompan por el camino."}, "teddy"});
+                            textBox->EnqueuDialogue({"Huevos... Espero que no se me rompan por el camino."}, "teddy");
                             if(countFoods == 6) enemies[0]->condition = true;
                         }
                     }
@@ -293,13 +304,13 @@ void Levels::ManageObjects(){
                         Rectangle sugarColl = {posx+4, posy+4, 20, 20};
                         if(player->HandlePickingUp(sugarColl, true)){
                             if(!enemies[0]->initial){
-                                textBox->EnqueuDialogue({{"¿Debería comerme esto?Hm, seguramente Paddy se enfadaría. Mejor no."}, "teddy"});
+                                textBox->EnqueuDialogue({"¿Debería comerme esto?Hm, seguramente Paddy se enfadaría. Mejor no."}, "teddy");
                                 continue;
                             }
                             foods[1] = true;
                             countFoods++;
                             colliders[i][j] = 0;
-                            textBox->EnqueuDialogue({{"El azúcar también tiene pinta de que es necesario para una rica tarta dulcecita."}, "teddy"});
+                            textBox->EnqueuDialogue({"El azúcar también tiene pinta de que es necesario para una rica tarta dulcecita."}, "teddy");
                             if(countFoods == 6) enemies[0]->condition = true;
                         }
                     }
@@ -307,13 +318,13 @@ void Levels::ManageObjects(){
                         Rectangle gasColl = {posx+4, posy+4, 20, 20};
                         if(player->HandlePickingUp(gasColl, true)){
                             if(!enemies[0]->initial){
-                                textBox->EnqueuDialogue({{"¿Debería comerme esto?Hm, seguramente Paddy se enfadaría. Mejor no."}, "teddy"});
+                                textBox->EnqueuDialogue({"¿Debería comerme esto?Hm, seguramente Paddy se enfadaría. Mejor no."}, "teddy");
                                 continue;
                             }
                             foods[2] = true;
                             countFoods++;
                             colliders[i][j] = 0;
-                            textBox->EnqueuDialogue({{"¡Ooh, rica gasolina para echarle por encima!Se me haría la boca agua si tuviera glándulas salivales."}, "teddy"});
+                            textBox->EnqueuDialogue({"¡Ooh, rica gasolina para echarle por encima!Se me haría la boca agua si tuviera glándulas salivales."}, "teddy");
                             if(countFoods == 6) enemies[0]->condition = true;
                         }
                     }
@@ -321,13 +332,13 @@ void Levels::ManageObjects(){
                         Rectangle flourColl = {posx+4, posy+4, 20, 20};
                         if(player->HandlePickingUp(flourColl, true)){
                             if(!enemies[0]->initial){
-                                textBox->EnqueuDialogue({{"¿Debería comerme esto?Hm, seguramente Paddy se enfadaría. Mejor no."}, "teddy"});
+                                textBox->EnqueuDialogue({"¿Debería comerme esto?Hm, seguramente Paddy se enfadaría. Mejor no."}, "teddy");
                                 continue;
                             }
                             foods[3] = true;
                             countFoods++;
                             colliders[i][j] = 0;
-                            textBox->EnqueuDialogue({{"COCAINA.", "Ah no, es harina.Pues supongo que le pondremos eso a la tarta :("}, "teddy"});
+                            textBox->EnqueuDialogue({"COCAINA.", "Ah no, es harina.Pues supongo que le pondremos eso a la tarta :("}, "teddy");
                             if(countFoods == 6) enemies[0]->condition = true;
                         }
                     }
@@ -335,13 +346,13 @@ void Levels::ManageObjects(){
                         Rectangle cheeseColl = {posx+4, posy+4, 20, 20};
                         if(player->HandlePickingUp(cheeseColl, true)){
                             if(!enemies[0]->initial){
-                                textBox->EnqueuDialogue({{"¿Debería comerme esto?Hm, seguramente Paddy se enfadaría. Mejor no."}, "teddy"});
+                                textBox->EnqueuDialogue({"¿Debería comerme esto?Hm, seguramente Paddy se enfadaría. Mejor no."}, "teddy");
                                 continue;
                             }
                             foods[4] = true;
                             countFoods++;
                             colliders[i][j] = 0;
-                            textBox->EnqueuDialogue({{"¡Queso! Igual debería darle esto a las ratas para que me dejen en paz...", "Ah claro, supongo que es más importante llevarla para hcer la tarta de queso.Tendré que matar a las ratas, entonces."}, "teddy"});
+                            textBox->EnqueuDialogue({"¡Queso! Igual debería darle esto a las ratas para que me dejen en paz...", "Ah claro, supongo que es más importante llevarla para hcer la tarta de queso.Tendré que matar a las ratas, entonces."}, "teddy");
                             if(countFoods == 6) enemies[0]->condition = true;
                         }
                     }
@@ -349,26 +360,26 @@ void Levels::ManageObjects(){
                         Rectangle nataColl = {posx+4, posy+4, 20, 20};
                         if(player->HandlePickingUp(nataColl, true)){
                             if(!enemies[0]->initial){
-                                textBox->EnqueuDialogue({{"¿Debería comerme esto?Hm, seguramente Paddy se enfadaría. Mejor no."}, "teddy"});
+                                textBox->EnqueuDialogue({"¿Debería comerme esto?Hm, seguramente Paddy se enfadaría. Mejor no."}, "teddy");
                                 continue;
                             }
                             foods[5] = true;
                             countFoods++;
                             colliders[i][j] = 0;
-                            textBox->EnqueuDialogue({{"Oh no."}, "teddy"});
+                            textBox->EnqueuDialogue({"Oh no."}, "teddy");
                             if(countFoods == 6) enemies[0]->condition = true;
                         }
                     }
                     
                     //king rat
                     else if(num == 14){
-                        Rectangle rat = {posx, posy+10, 20, 20};
+                        Rectangle rat = {posx, posy+30, 30, 30};
                         if(player->HandlePickingUp(rat, true)){
-                            textBox->EnqueuDialogue({{"¿Qué está pasando aquí, secuaz?"}, "teddy"});
-                            textBox->EnqueuDialogue({{"¡Ya no somos tus secuaces, hemos sido liberadas!"}, "rat"});
-                            textBox->EnqueuDialogue({{"Jaja, que monada.", "Pensar que podéis simplemente liberaros del Teddy.", "Iré a saludar a tus pequeñas amigas rebeldes."}, "teddy"});
-                            textBox->EnqueuDialogue({{"¡No podrás con la revolución!"}, "rat"});
-                            textBox->EnqueuDialogue({{"Eso ya lo veremos."}, "teddy"});
+                            textBox->EnqueuDialogue({"¿Qué está pasando aquí, secuaz?"}, "teddy");
+                            textBox->EnqueuDialogue({"¡Ya no somos tus secuaces, hemos sido liberadas!"}, "rat");
+                            textBox->EnqueuDialogue({"Jaja, que monada.", "Pensar que podéis simplemente liberaros del Teddy.", "Iré a saludar a tus pequeñas amigas rebeldes."}, "teddy");
+                            textBox->EnqueuDialogue({"¡No podrás con la revolución!"}, "rat");
+                            textBox->EnqueuDialogue({"Eso ya lo veremos."}, "teddy");
                         }
                     }
 
@@ -377,7 +388,7 @@ void Levels::ManageObjects(){
                         Rectangle cakeColl = {posx+4, posy+4, 20, 20};
                         if(player->HandlePickingUp(cakeColl, true)){
                             if(!player->hasWeapon){
-                                textBox->EnqueuDialogue({{"Debería conseguir un arma antes de comerme esta deliciosa tarta e irme."}, "teddy"});
+                                textBox->EnqueuDialogue({"Debería conseguir un arma antes de comerme esta deliciosa tarta e irme."}, "teddy");
                             }
                             else{
                                colliders[i][j] = 0;
@@ -421,7 +432,7 @@ void Levels::ManageObjects(){
                     Rectangle cocoColl = {posx, posy, 16, 15};
                     if(player->HandlePickingUp(cocoColl, true)){
                         player->cocos++;
-                        textBox->EnqueuDialogue({{"Otro rico coco para Paddy."}, "teddy"});
+                        textBox->EnqueuDialogue({"Otro rico coco para Paddy."}, "teddy");
                         colliders[i][j] = 0;
                     }
                 }
@@ -471,7 +482,7 @@ void Levels::DrawObject(int id,float posX,float posY){
             DrawTexture(nata, posX, posY+20, WHITE);
         }
         else if(id == 14){
-            DrawTexture(kingRat, posX, posY+10, WHITE);
+            DrawTexture(kingRat, posX, posY+14, WHITE);
         }
         else if(id == 13 && enemies[0]->condition2){
             DrawTexture(cake, posX, posY+20, WHITE);
@@ -512,10 +523,10 @@ void Levels::DrawObject(int id,float posX,float posY){
 
 void Levels::PigeonSytem(int id){
     if(id == 20){
-        textBox->EnqueuDialogue({{"Hola."}, "teddy"});
-        textBox->EnqueuDialogue({{"Buenos días, Señor Teddy. Paloma #1434 a su servicio."}, "pigeon"});
-        textBox->EnqueuDialogue({{"Infórmame."}, "teddy"});
-        textBox->EnqueuDialogue({
+        textBox->EnqueuDialogue({"Hola."}, "teddy");
+        textBox->EnqueuDialogue({"Buenos días, Señor Teddy. Paloma #1434 a su servicio."}, "pigeon");
+        textBox->EnqueuDialogue({"Infórmame."}, "teddy");
+        textBox->EnqueuDialogue(
                 {"Paloma #1434: Sí, señor, esta es la información que hemos recabado:", 
                 "Paloma #1434: Las paredes han sido revisadas y hemos encontrado que puede usted deslizarse por ellas.",
                 "Paloma #1434: Algunas paredes parecen estar en malas condiciones, así que tal vez pueda encontrar atajos abriendo nuevos caminos.",
@@ -524,69 +535,69 @@ void Levels::PigeonSytem(int id){
                 "Paloma #1434: También se han repartido reservas de cocoa por si necesita recuperarse.", 
                 "Paloma #1434: El resto de mis compañeras están en sus posiciones, preparadas para observar cualquier cosa que pueda ser de interés para la operación.",
                 "Paloma #1434: Eso es todo. ¿Necesita algo de más de mí, señor?"
-            }, "pigeon"});
-        textBox->EnqueuDialogue({{"Muchas gracias, soldado. Puedes descansar."}, "teddy"});
-        textBox->EnqueuDialogue({{"Paloma #1434: Señor, sí, señor."}, "pigeon"});
+            }, "pigeon");
+        textBox->EnqueuDialogue({"Muchas gracias, soldado. Puedes descansar."}, "teddy");
+        textBox->EnqueuDialogue({"Paloma #1434: Señor, sí, señor."}, "pigeon");
     }
     else if(id == 21){
-        textBox->EnqueuDialogue({{"Paloma #4727: Rruu #4727 Rruu"}, "pigeonRed"});
-        textBox->EnqueuDialogue({{"¿Rrruu rruu?"}, "teddy"});
-        textBox->EnqueuDialogue({{"Paloma #4727: Rruuuu"}, "pigeonRed"});
-        textBox->EnqueuDialogue({{"Rrruu"}, "teddy"});
+        textBox->EnqueuDialogue({"Paloma #4727: Rruu #4727 Rruu"}, "pigeonRed");
+        textBox->EnqueuDialogue({"¿Rrruu rruu?"}, "teddy");
+        textBox->EnqueuDialogue({"Paloma #4727: Rruuuu"}, "pigeonRed");
+        textBox->EnqueuDialogue({"Rrruu"}, "teddy");
     }
     else if(id == 22){
-        textBox->EnqueuDialogue({{"Paloma #9344 reportando: se está \"cociendo\" una rebelión de las Ratas del Teddy en la cocina."}, "pigeon"});
-        textBox->EnqueuDialogue({{"Como tu superior, te prohíbo hacer juegos de palabras que no tengan gracia."}, "teddy"});
-        textBox->EnqueuDialogue({{"Paloma #9344: Señor, sí, señor. Señor, lo siento, señor."}, "pigeon"});
-        textBox->EnqueuDialogue({{"Me encargaré de esas ratas rebeldes, gracias por la información, soldado."}, "teddy"});
-        textBox->EnqueuDialogue({{"Paloma #9344: Deles su merecido, señor, la cosa está que arde."}, "pigeon"});
-        textBox->EnqueuDialogue({{"Me voy a dar a la caza aviaria."}, "teddy"});
+        textBox->EnqueuDialogue({"Paloma #9344 reportando: se está \"cociendo\" una rebelión de las Ratas del Teddy en la cocina."}, "pigeon");
+        textBox->EnqueuDialogue({"Como tu superior, te prohíbo hacer juegos de palabras que no tengan gracia."}, "teddy");
+        textBox->EnqueuDialogue({"Paloma #9344: Señor, sí, señor. Señor, lo siento, señor."}, "pigeon");
+        textBox->EnqueuDialogue({"Me encargaré de esas ratas rebeldes, gracias por la información, soldado."}, "teddy");
+        textBox->EnqueuDialogue({"Paloma #9344: Deles su merecido, señor, la cosa está que arde."}, "pigeon");
+        textBox->EnqueuDialogue({"Me voy a dar a la caza aviaria."}, "teddy");
     }
     else if(id == 23){
-        textBox->EnqueuDialogue({{"Señor, hola, señor. Soy Paloma #3228, encargada de RRPP (Recursos Palomos)."}, "pigeon"});
-        textBox->EnqueuDialogue({{"¿Algún mensaje de parte del Grupo Palomar?", "Más os vale no montarme un motín."}, "teddy"});
-        textBox->EnqueuDialogue({{"Paloma #3228: Nada de eso, señor.", "Paloma #3228 Tenemos una sugerencia, señor, para nuestros números identificadores, señor.", "Paloma #3228 Creo, señor, que nuestros nombres son demasiado largos, señor.La primera cifra parece un poco innecesaria, señor."}, "pigeon"});
-        textBox->EnqueuDialogue({{"Pero así estáis todas ordenadas e identificadas."}, "teddy"});
-        textBox->EnqueuDialogue({{"Paloma #3228: Señor, nuestros nombres los ha elegido usted de forma totalmente aleatoria, señor."}, "pigeon"});
-        textBox->EnqueuDialogue({{"Ah.", "AH.", "Pequeña paloma inocente, no hables de aquellos que no conoces.", "El Teddy no hace nada de manera aleatoria, todo es parte de un plan más grande que tú que nunca podrías comprender.", "(Aunque ahora mismo no me acuerdo de qué era)."}, "teddy"});
-        textBox->EnqueuDialogue({{"Paloma #3228: Claro señor, siento haber subestimado el alcance de su genialidad, señor."}, "pigeon"});
-        textBox->EnqueuDialogue({{"Te lo perdonaré solo por lo mucho que me haces la pelota."}, "teddy"});
+        textBox->EnqueuDialogue({"Señor, hola, señor. Soy Paloma #3228, encargada de RRPP (Recursos Palomos)."}, "pigeon");
+        textBox->EnqueuDialogue({"¿Algún mensaje de parte del Grupo Palomar?", "Más os vale no montarme un motín."}, "teddy");
+        textBox->EnqueuDialogue({"Paloma #3228: Nada de eso, señor.", "Paloma #3228 Tenemos una sugerencia, señor, para nuestros números identificadores, señor.", "Paloma #3228 Creo, señor, que nuestros nombres son demasiado largos, señor.La primera cifra parece un poco innecesaria, señor."}, "pigeon");
+        textBox->EnqueuDialogue({"Pero así estáis todas ordenadas e identificadas."}, "teddy");
+        textBox->EnqueuDialogue({"Paloma #3228: Señor, nuestros nombres los ha elegido usted de forma totalmente aleatoria, señor."}, "pigeon");
+        textBox->EnqueuDialogue({"Ah.", "AH.", "Pequeña paloma inocente, no hables de aquellos que no conoces.", "El Teddy no hace nada de manera aleatoria, todo es parte de un plan más grande que tú que nunca podrías comprender.", "(Aunque ahora mismo no me acuerdo de qué era)."}, "teddy");
+        textBox->EnqueuDialogue({"Paloma #3228: Claro señor, siento haber subestimado el alcance de su genialidad, señor."}, "pigeon");
+        textBox->EnqueuDialogue({"Te lo perdonaré solo por lo mucho que me haces la pelota."}, "teddy");
     }
     else if(id == 24){
-        textBox->EnqueuDialogue({{"¿Alguna cosa que reportar?"}, "teddy"});
-        textBox->EnqueuDialogue({{"Paloma #5829, señor. Dato curioso: un experimento realizado en 1995 reveló que las palomas son capaces de distinguir entre las obras de Picasso y de Monet, diferenciando los estilos artísticos incluso en obras que no habían visto nunca"}, "pigeonBlue"});
-        textBox->EnqueuDialogue({{"¿Vale?", "(Tal vez podría usar a las palomas para robar cuadros y luego subastarlos...)"}, "teddy"});
+        textBox->EnqueuDialogue({"¿Alguna cosa que reportar?"}, "teddy");
+        textBox->EnqueuDialogue({"Paloma #5829, señor. Dato curioso: un experimento realizado en 1995 reveló que las palomas son capaces de distinguir entre las obras de Picasso y de Monet, diferenciando los estilos artísticos incluso en obras que no habían visto nunca"}, "pigeonBlue");
+        textBox->EnqueuDialogue({"¿Vale?", "(Tal vez podría usar a las palomas para robar cuadros y luego subastarlos...)"}, "teddy");
     }
     else if(id == 25){
-        textBox->EnqueuDialogue({{"Paloma #7932: El código es 9392."}, "pigeon"});
-        textBox->EnqueuDialogue({{"Podría tener algún seis..."}, "teddy"});
+        textBox->EnqueuDialogue({"Paloma #7932: El código es 9392."}, "pigeon");
+        textBox->EnqueuDialogue({"Podría tener algún seis..."}, "teddy");
     }
     else if(id == 26){
-        textBox->EnqueuDialogue({{"Paloma #8294: Señor, menos mal que ha llegado hasta aquí.", "Paloma #8294: Tengo una información importante: una de las palomas de esta zona es una mentirosa."}, "pigeon"});
-        textBox->EnqueuDialogue({{"¿Cómo sé que no eres tú la que miente?"}, "teddy"});
-        textBox->EnqueuDialogue({{"Paloma #8294: Es usted hermoso, señor."}, "pigeon"});
-        textBox->EnqueuDialogue({{"Eso jamás podría ser una mentira. Buen argumento, soldado."}, "teddy"});
-        textBox->EnqueuDialogue({{"Paloma #8294: Gracias, señor."}, "pigeon"});
+        textBox->EnqueuDialogue({"Paloma #8294: Señor, menos mal que ha llegado hasta aquí.", "Paloma #8294: Tengo una información importante: una de las palomas de esta zona es una mentirosa."}, "pigeon");
+        textBox->EnqueuDialogue({"¿Cómo sé que no eres tú la que miente?"}, "teddy");
+        textBox->EnqueuDialogue({"Paloma #8294: Es usted hermoso, señor."}, "pigeon");
+        textBox->EnqueuDialogue({"Eso jamás podría ser una mentira. Buen argumento, soldado."}, "teddy");
+        textBox->EnqueuDialogue({"Paloma #8294: Gracias, señor."}, "pigeon");
     }
     else if(id == 27){
-        textBox->EnqueuDialogue({{"Por favor, dime que tienes algo de información interesante."}, "teddy"});
-        textBox->EnqueuDialogue({{"Paloma #4820: Claro que sí, señor, ese es mi trabajo.", "Paloma #4820: Me ha llegado la información de que el señor Paddy tiene pensado preparar una deliciosa tarta, señor."}, "pigeon"});
-        textBox->EnqueuDialogue({{"Perfecto, eso es exactamente lo que el Teddy quería oír, todo va según mi plan maestro.", "Haré buen uso de esta información, gracias."}, "teddy"});
-        textBox->EnqueuDialogue({{"Paloma #4820: Es mi deber, señor."}, "pigeon"});
+        textBox->EnqueuDialogue({"Por favor, dime que tienes algo de información interesante."}, "teddy");
+        textBox->EnqueuDialogue({"Paloma #4820: Claro que sí, señor, ese es mi trabajo.", "Paloma #4820: Me ha llegado la información de que el señor Paddy tiene pensado preparar una deliciosa tarta, señor."}, "pigeon");
+        textBox->EnqueuDialogue({"Perfecto, eso es exactamente lo que el Teddy quería oír, todo va según mi plan maestro.", "Haré buen uso de esta información, gracias."}, "teddy");
+        textBox->EnqueuDialogue({"Paloma #4820: Es mi deber, señor."}, "pigeon");
     }
     else if(id == 28){
-        textBox->EnqueuDialogue({{"Paloma #1934 a su servicio, señor. Tengo un mensaje para usted."}, "pigeonPink"});
-        textBox->EnqueuDialogue({{"Dímerlo ahora mismo. Ya."}, "teddy"});
-        textBox->EnqueuDialogue({{"Paloma #1934: El mensaje dice: \"Todo el mundo sabe que los colores del arcoíris son rosa, azul, rojo y naranja.Firmado, Teddy.\""}, "pigeonPink"});
-        textBox->EnqueuDialogue({{"Entiendo.", "(No entiendo nada, qué cojones).", "Gracias por el mensaje, soldado."}, "teddy"});
-        textBox->EnqueuDialogue({{"Paloma #1934 : No hay de qué, señor."}, "pigeonPink"});
+        textBox->EnqueuDialogue({"Paloma #1934 a su servicio, señor. Tengo un mensaje para usted."}, "pigeonPink");
+        textBox->EnqueuDialogue({"Dímerlo ahora mismo. Ya."}, "teddy");
+        textBox->EnqueuDialogue({"Paloma #1934: El mensaje dice: \"Todo el mundo sabe que los colores del arcoíris son rosa, azul, rojo y naranja.Firmado, Teddy.\""}, "pigeonPink");
+        textBox->EnqueuDialogue({"Entiendo.", "(No entiendo nada, qué cojones).", "Gracias por el mensaje, soldado."}, "teddy");
+        textBox->EnqueuDialogue({"Paloma #1934 : No hay de qué, señor."}, "pigeonPink");
 
     }
     else if(id == 29){
-        textBox->EnqueuDialogue({{"Soldado, hay una caja fuerte por ahí. ¿Tú no sabrás una combinación de cuatro dígitos?"}, "teddy"});
-        textBox->EnqueuDialogue({{"Paloma #4342: Desgraciadamente no, señor, pero tengo una combinación de 22 dígitos que coinciden con la cuenta bancaria del llamado Calvi, señor.", "Paloma #4342: ¿Estaría interesado en esa información?"}, "pigeonOrange"});
-        textBox->EnqueuDialogue({{"Ooh, al Teddy le interesa esa información.", "Ahora estoy ocupado con otra cosa, pero recuérdamelo más tarde."}, "teddy"});
-        textBox->EnqueuDialogue({{"Paloma #4342: Señor, sí, señor."}, "pigeonOrange"});
+        textBox->EnqueuDialogue({"Soldado, hay una caja fuerte por ahí. ¿Tú no sabrás una combinación de cuatro dígitos?"}, "teddy");
+        textBox->EnqueuDialogue({"Paloma #4342: Desgraciadamente no, señor, pero tengo una combinación de 22 dígitos que coinciden con la cuenta bancaria del llamado Calvi, señor.", "Paloma #4342: ¿Estaría interesado en esa información?"}, "pigeonOrange");
+        textBox->EnqueuDialogue({"Ooh, al Teddy le interesa esa información.", "Ahora estoy ocupado con otra cosa, pero recuérdamelo más tarde."}, "teddy");
+        textBox->EnqueuDialogue({"Paloma #4342: Señor, sí, señor."}, "pigeonOrange");
     }
 }
 
@@ -625,7 +636,7 @@ void Levels::ManageBadFloors(){
                 return;
             }
             player->pos = badFloors[i].newPos;
-            textBox->EnqueuDialogue({{badFloors[i].message}, "teddy"});
+            textBox->EnqueuDialogue({badFloors[i].message}, "teddy");
         }
     }
 }
@@ -640,7 +651,7 @@ void Levels::ControlFalling(){
         }
         player->pos = player->lastCheckPoint;
         player->vel.y = 0;
-        textBox->EnqueuDialogue({{"Upsi, me he tropezado"}, "teddy"});
+        textBox->EnqueuDialogue({"Upsi, me he tropezado"}, "teddy");
     }    
 }
 
@@ -746,10 +757,10 @@ void Levels::Password(float deltatime){
         for(int i = 0; i<4; i++) if(sol[i] != word[i]) equal = false;
         if(equal){
             open = true;
-            textBox->EnqueuDialogue({{"¡A la primera!", "!", "Una llave, y sé exactamente qué puertecita abre. El plan del Teddy empieza a tomar forma... Pasemos a la siguiente fase."}, "teddy"});
+            textBox->EnqueuDialogue({"¡A la primera!", "!", "Una llave, y sé exactamente qué puertecita abre. El plan del Teddy empieza a tomar forma... Pasemos a la siguiente fase."}, "teddy");
         }
         else{
-            textBox->EnqueuDialogue({{"Esta caja está rota, no se abre >:("}, "teddy"});
+            textBox->EnqueuDialogue({"Esta caja está rota, no se abre >:("}, "teddy");
         }
         player->frozen = false;
         interactCaja = false;

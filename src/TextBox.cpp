@@ -44,19 +44,19 @@ TextBox::TextBox(){
     rat = LoadTexture("sprites/characters/retratoRatKing.png");
 }
 
-void TextBox::SetDialogue(const Dialogue& dialogue){
-    multiple = dialogue.messages;
+void TextBox::SetDialogue(std::vector<std::string> messages, std::string character){
+    multiple = messages;
     index = 0;
 
-    if(dialogue.character == "pigeon") retrato = pigeon;
-    else if(dialogue.character == "pigeonRed") retrato = pigeonRed;
-    else if(dialogue.character == "pigeonBlue") retrato = pigeonBlue;
-    else if(dialogue.character == "pigeonOrange") retrato = pigeonOrange;
-    else if(dialogue.character == "pigeonPink") retrato = pigeonPink;
-    else if(dialogue.character == "teddy") retrato = teddy;
-    else if(dialogue.character == "calvo") retrato = calvo;
-    else if(dialogue.character == "paddy") retrato = paddy;
-    else if(dialogue.character == "rat") retrato = rat;
+    if(character == "pigeon") retrato = pigeon;
+    else if(character == "pigeonRed") retrato = pigeonRed;
+    else if(character == "pigeonBlue") retrato = pigeonBlue;
+    else if(character == "pigeonOrange") retrato = pigeonOrange;
+    else if(character == "pigeonPink") retrato = pigeonPink;
+    else if(character == "teddy") retrato = teddy;
+    else if(character == "calvo") retrato = calvo;
+    else if(character == "paddy") retrato = paddy;
+    else if(character == "rat") retrato = rat;
 
     this->text = multiple[index];
 
@@ -64,19 +64,19 @@ void TextBox::SetDialogue(const Dialogue& dialogue){
     size = (int) multiple.size();
 }
 
-void TextBox::EnqueuDialogue(const Dialogue& dialogue){
-    dialogueQueue.push(dialogue);
+void TextBox::EnqueuDialogue(std::vector<std::string> messages, std::string character){
+    messagesQueue.push({messages, character});
 
     if(!active){
-        SetDialogue(dialogueQueue.front());
-        dialogueQueue.pop();
+        SetDialogue(messagesQueue.front().messages, messagesQueue.front().character);
+        messagesQueue.pop();
     }
 }
 
 void TextBox::FinishDialogue(){
-    if(!dialogueQueue.empty()){
-        SetDialogue(dialogueQueue.front());
-        dialogueQueue.pop();
+    if(!messagesQueue.empty()){
+        SetDialogue(messagesQueue.front().messages, messagesQueue.front().character);
+        messagesQueue.pop();
     } else{
         active = false;
     }

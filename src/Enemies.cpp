@@ -216,34 +216,34 @@ void Paddy::Update(float deltatime){
 
         if(player->HandlePickingUp(HitBox, true)){
             if(!initial){
-                textBox->EnqueuDialogue({{"Hola, Teddy."}, "paddy"});
-                textBox->EnqueuDialogue({{"..."}, "teddy"});
-                textBox->EnqueuDialogue({{"¿Hola?"}, "paddy"});
-                textBox->EnqueuDialogue({{"..."}, "teddy"});
-                textBox->EnqueuDialogue({{"¿Qué pasa, Teddy?"}, "paddy"});
-                textBox->EnqueuDialogue({{"...no te lo puedo decir, es alto secreto."}, "teddy"});
-                textBox->EnqueuDialogue({{"Pero parece que me lo quieres contar."}, "paddy"});
-                textBox->EnqueuDialogue({{"No, no. Es altísimo secreto."}, "teddy"});
-                textBox->EnqueuDialogue({{"Bueno vale, no pasa nada. Tampoco me interesa."}, "paddy"});
-                textBox->EnqueuDialogue({{". . .", ". . . . . .", ". . . . . . . . .", ". . . . . . . . . . . . . . .", "Ay, si insisted tanto, te lo contaré. Aunque no te puedo dar detalles."}, "teddy"});
-                textBox->EnqueuDialogue({{"...menos mal, no sé cómo iba a dormir esta noche sin saberlo."}, "paddy"});
-                textBox->EnqueuDialogue({{"Lo sé, lo sé.", "Bueno, ahí va: ¡el Teddy tiene un plan maestro!"}, "teddy"});
-                textBox->EnqueuDialogue({{"Teddy, tú siempre tienes un \"plan maestro.\""}, "paddy"});
-                textBox->EnqueuDialogue({{"Paddy, no uses comillas, no tenemos dedos."}, "teddy"});
-                textBox->EnqueuDialogue({{"Ah, sí, perdona.", "Pero es verdad, siempre dices que tienes un plan secreto y luego te inventas cualquier cosa sobre la marcha y dices que lo tenías planeado desde el principio."}, "paddy"});
-                textBox->EnqueuDialogue({{"¡Pero este plan es especial! Es el Plan Ultra Secreto para el Objetivo Ultra Secreto del Teddy. También conocido como el PUSOUST."}, "teddy"});
-                textBox->EnqueuDialogue({{"¿Ese es el nombre oficial?"}, "paddy"});
-                textBox->EnqueuDialogue({{"Aún me lo estoy pensando."}, "teddy"});
-                textBox->EnqueuDialogue({{"¿Y en qué consiste este plan, exactamente?"}, "paddy"});
-                textBox->EnqueuDialogue({{"Ay, ay, ay, pequeño Paddy.", "Como claramente indica su nombre provisional, el plan y sus objetivos son ultra secretos y no puedo compartirlos contigo.", "Si lo hiciera, tendría que matarte jiji."}, "teddy"});
-                textBox->EnqueuDialogue({{"Nada de jiji.", "Está bien, puedes quedarte con tus secretos, pero ya sabes que te estoy vigilando.", "Siempre."}, "paddy"});
-                textBox->EnqueuDialogue({{"¡No te preocupes! Solo la mayoría de las fases implican que haya víctimas mortales."}, "teddy"});
-                textBox->EnqueuDialogue({{"¿Qué?"}, "paddy"});
-                textBox->EnqueuDialogue({{"¿Qué?", "Bueno jaja, me tengo que ir. La Fase 1 está a punto de empezar."}, "teddy"});
-                textBox->EnqueuDialogue({{"No sé si me fío de este plan tuyo, Teddy."}, "paddy"});
-                textBox->EnqueuDialogue({{"Silencio, es la hora del botón."}, "teddy"});
-                textBox->EnqueuDialogue({{"¿Qué botón?"}, "paddy"});
-                textBox->EnqueuDialogue({{"Este botón."}, "teddy"});
+                textBox->EnqueuDialogue({"Hola, Teddy."}, "paddy");
+                textBox->EnqueuDialogue({"..."}, "teddy");
+                textBox->EnqueuDialogue({"¿Hola?"}, "paddy");
+                textBox->EnqueuDialogue({"..."}, "teddy");
+                textBox->EnqueuDialogue({"¿Qué pasa, Teddy?"}, "paddy");
+                textBox->EnqueuDialogue({"...no te lo puedo decir, es alto secreto."}, "teddy");
+                textBox->EnqueuDialogue({"Pero parece que me lo quieres contar."}, "paddy");
+                textBox->EnqueuDialogue({"No, no. Es altísimo secreto."}, "teddy");
+                textBox->EnqueuDialogue({"Bueno vale, no pasa nada. Tampoco me interesa."}, "paddy");
+                textBox->EnqueuDialogue({". . .", ". . . . . .", ". . . . . . . . .", ". . . . . . . . . . . . . . .", "Ay, si insisted tanto, te lo contaré. Aunque no te puedo dar detalles."}, "teddy");
+                textBox->EnqueuDialogue({"...menos mal, no sé cómo iba a dormir esta noche sin saberlo."}, "paddy");
+                textBox->EnqueuDialogue({"Lo sé, lo sé.", "Bueno, ahí va: ¡el Teddy tiene un plan maestro!"}, "teddy");
+                textBox->EnqueuDialogue({"Teddy, tú siempre tienes un \"plan maestro.\""}, "paddy");
+                textBox->EnqueuDialogue({"Paddy, no uses comillas, no tenemos dedos."}, "teddy");
+                textBox->EnqueuDialogue({"Ah, sí, perdona.", "Pero es verdad, siempre dices que tienes un plan secreto y luego te inventas cualquier cosa sobre la marcha y dices que lo tenías planeado desde el principio."}, "paddy");
+                textBox->EnqueuDialogue({"¡Pero este plan es especial! Es el Plan Ultra Secreto para el Objetivo Ultra Secreto del Teddy. También conocido como el PUSOUST."}, "teddy");
+                textBox->EnqueuDialogue({"¿Ese es el nombre oficial?"}, "paddy");
+                textBox->EnqueuDialogue({"Aún me lo estoy pensando."}, "teddy");
+                textBox->EnqueuDialogue({"¿Y en qué consiste este plan, exactamente?"}, "paddy");
+                textBox->EnqueuDialogue({"Ay, ay, ay, pequeño Paddy.", "Como claramente indica su nombre provisional, el plan y sus objetivos son ultra secretos y no puedo compartirlos contigo.", "Si lo hiciera, tendría que matarte jiji."}, "teddy");
+                textBox->EnqueuDialogue({"Nada de jiji.", "Está bien, puedes quedarte con tus secretos, pero ya sabes que te estoy vigilando.", "Siempre."}, "paddy");
+                textBox->EnqueuDialogue({"¡No te preocupes! Solo la mayoría de las fases implican que haya víctimas mortales."}, "teddy");
+                textBox->EnqueuDialogue({"¿Qué?"}, "paddy");
+                textBox->EnqueuDialogue({"¿Qué?", "Bueno jaja, me tengo que ir. La Fase 1 está a punto de empezar."}, "teddy");
+                textBox->EnqueuDialogue({"No sé si me fío de este plan tuyo, Teddy."}, "paddy");
+                textBox->EnqueuDialogue({"Silencio, es la hora del botón."}, "teddy");
+                textBox->EnqueuDialogue({"¿Qué botón?"}, "paddy");
+                textBox->EnqueuDialogue({"Este botón."}, "teddy");
                 initial = true;
             }
         }
@@ -258,29 +258,29 @@ void Paddy::Update(float deltatime){
         
         if(player->HandlePickingUp(HitBox, true)){
             if(!initial){
-                textBox->EnqueuDialogue({{"Comida."}, "teddy"});
-                textBox->EnqueuDialogue({
+                textBox->EnqueuDialogue({"Comida."}, "teddy");
+                textBox->EnqueuDialogue(
                     {"Hola a ti también, Teddy.", 
                     "¿Tienes hambre? ¿Qué tal si te preparo una deliciosa tarta de queso?",
                     "Aunque... no tengo aquí los ingredientes, necesito que me los traigas."
-                }, "paddy"});
-                textBox->EnqueuDialogue({{"¿¿Por qué tengo que buscarlos yo??"}, "teddy"});
-                textBox->EnqueuDialogue({{"Porque te has colado en la cocina, los has robado, y los has dejado tú tirados por ahí."}, "paddy"});
-                textBox->EnqueuDialogue({{"Ah.", "No sé de qué me hablas pero te traeré tus ingredientes."}, "teddy"});
-                textBox->EnqueuDialogue({{"¿Estás seguro que sabes qué ingredientes son los correctos?"}, "paddy"});
-                textBox->EnqueuDialogue({{"¡Claro que sí! Ahora mismo vuelvo"}, "teddy"});
+                }, "paddy");
+                textBox->EnqueuDialogue({"¿¿Por qué tengo que buscarlos yo??"}, "teddy");
+                textBox->EnqueuDialogue({"Porque te has colado en la cocina, los has robado, y los has dejado tú tirados por ahí."}, "paddy");
+                textBox->EnqueuDialogue({"Ah.", "No sé de qué me hablas pero te traeré tus ingredientes."}, "teddy");
+                textBox->EnqueuDialogue({"¿Estás seguro que sabes qué ingredientes son los correctos?"}, "paddy");
+                textBox->EnqueuDialogue({"¡Claro que sí! Ahora mismo vuelvo"}, "teddy");
                 initial = true;
             }
             else if(!condition){
-                textBox->EnqueuDialogue({{"¿Aún no me has traído los ingredientes?", "Si necesitas ayuda puedo ir contigo."}, "paddy"});
-                textBox->EnqueuDialogue({{"¡No, no! El Teddy puede solo."}, "teddy"});
+                textBox->EnqueuDialogue({"¿Aún no me has traído los ingredientes?", "Si necesitas ayuda puedo ir contigo."}, "paddy");
+                textBox->EnqueuDialogue({"¡No, no! El Teddy puede solo."}, "teddy");
             }
             else if(!condition2){
-                textBox->EnqueuDialogue({{"¡Muchas gracias, Teddy!", "Aunque... te ha faltado la mermelada."}, "paddy"});
-                textBox->EnqueuDialogue({{"He traído algo mejor: ¡Gasolina!"}, "teddy"});
-                textBox->EnqueuDialogue({{"No."}, "paddy"});
-                textBox->EnqueuDialogue({{"Vale :)"}, "teddy"});
-                textBox->EnqueuDialogue({{"En fin, ahora mismo te hago la tarta de queso.", "*Sonidos de repostería*", "Ya está, Teddy."}, "paddy"});
+                textBox->EnqueuDialogue({"¡Muchas gracias, Teddy!", "Aunque... te ha faltado la mermelada."}, "paddy");
+                textBox->EnqueuDialogue({"He traído algo mejor: ¡Gasolina!"}, "teddy");
+                textBox->EnqueuDialogue({"No."}, "paddy");
+                textBox->EnqueuDialogue({"Vale :)"}, "teddy");
+                textBox->EnqueuDialogue({"En fin, ahora mismo te hago la tarta de queso.", "*Sonidos de repostería*", "Ya está, Teddy."}, "paddy");
                 condition3 = true;
                 canTalk = false;
             }
@@ -351,7 +351,7 @@ void WallBreakable::Update(float deltatime){
             if(lives <= 0){
                 player->experience += experience;
                 alive = false;
-                textBox->EnqueuDialogue({{"... Espero que a nadie le importe que haya roto eso jiji"}, "teddy"});
+                textBox->EnqueuDialogue({"... Espero que a nadie le importe que haya roto eso jiji"}, "teddy");
                 return;
             } 
         }

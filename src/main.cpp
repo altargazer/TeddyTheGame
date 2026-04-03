@@ -31,7 +31,6 @@ void ChangeMenu(float next, Menus* nextMenu, bool continueInMenu){
     menu = continueInMenu;
     menuTimer = 0;
     currentMenu = nextMenu;
-    std::cout << "Next Menu: " << next << std::endl;
 }
 
 int main() {
@@ -61,6 +60,7 @@ int main() {
     Menus intermedio2(2.5);
     Menus menu3(3);
     Menus intermedio3(3.5);
+    Menus menu4(3);
     
     currentLevel = &level0;
     currentMenu = &menu1;
@@ -107,6 +107,13 @@ int main() {
 
             else if(menuNum == 3 && currentMenu->siguienteFlag){
                 ChangeMenu(3.5, &intermedio3, true);
+            }
+
+            else if(menuNum == 3.5){
+                menuTimer += deltatime;
+                if(menuTimer >= timerMenu){
+                    ChangeMenu(4, &menu4, false);
+                }
             }
 
             EndDrawing();
@@ -180,7 +187,7 @@ int main() {
 
         else if(level == 2 && currentLevel->finished){
             menu = true;
-            ChangeLevel(3, &level3, player, 96, 96);
+            ChangeLevel(3, &level3, player, 5*32, 12*32);
         }
         #pragma endregion
 
