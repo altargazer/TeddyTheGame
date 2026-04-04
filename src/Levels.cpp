@@ -176,10 +176,17 @@ Levels::Levels(int id, Player* player, TextBox* textBox, Camera2D* camera){
         colliders = LoadColliders("sprites/maps/Level3.csv");
 
         maxDown = 1000;
+
+        waterSpot water1 = {{352, 608, 96, 5}, {320, 480}, {448, 480}};
+        waterSpots.push_back(water1);
     }
 }
 
 void Levels::Draw(){
+    if(id == 3){
+        DrawRectangle(11*32, 18*32, 18*32, 7*32, Fade(Color({143, 205, 227, 255}), 0.5f));
+    }
+
     DrawTexture(levelMap, 0, 0, WHITE);
 }
 
@@ -227,7 +234,14 @@ void Levels::Update(){
         else if(id == 2){
             textBox->EnqueuDialogue({"Bien, ahora necesito algo muy importante: comida.", "No se puede ejecutar el plan con el estómago vacío.", "Y Teddy siempre tiene el estómago vacío."}, "teddy");
         }
+        else if(id == 3){
+            textBox->EnqueuDialogue({"Aquí estoy.", "El peor lugar que haya existido nunca.", "Pero el Teddy no le tiene miedo a nada, para demostrar que este el mejor plan jamás llevado a cabo, derrotará a todos sus enemigos."}, "teddy");
+        }
         initial = true;
+    }
+
+    if(id == 3){
+        HandleWater();
     }
 }
 
@@ -764,5 +778,24 @@ void Levels::Password(float deltatime){
         }
         player->frozen = false;
         interactCaja = false;
+    }
+}
+
+void Levels::HandleWater(){
+    for(int i = 0; i<(int)waterSpots.size(); i++){
+        if(CheckCollisionRecs(waterSpots[i].area, player->getHitBox())){
+            if(!player->swimming){
+                player->pos.y = waterSpots[i].area.y + waterSpots[i].area.height;
+                player->swimming = true;
+            }
+            else{
+                player->pos.y = waterSpots[i].area.y;
+                if(player->HandlePickingUp(waterSpots[i].area, true)){
+                    player->pos = (player->direction == 1) ? waterSpots[i].newPosR : waterSpots[i].newPosL;
+                    textBox->EnqueuDialogue({"Necesito una toalla y una motosierra para matar al Calvi por sus pecados."}, "teddy");
+                    player->swimming = false;
+                }
+            }
+        }
     }
 }

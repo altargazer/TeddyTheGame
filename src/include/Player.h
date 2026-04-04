@@ -42,7 +42,8 @@ public:
     bool sleeping;
     bool wallsliding;
     bool touchingWall;
-    bool frozen;
+    bool frozen; //ahora mismo esto solo se usa al poner la contraseña de la caja fuerte
+    bool swimming;
 
     //objects
     TextBox* textBox;
@@ -74,6 +75,8 @@ public:
     int currentFrame;
     float animationTimer;
 
+    Color tint;
+
     //sprites
     Texture2D idleSheet;
     Texture2D walkingSheet;
@@ -90,6 +93,8 @@ public:
     void HandleInput();
     void ApplyMovement(float deltatime);
     void HandleCollisions(bool horizontal);
+    void HandleInputSwimming();
+    void ApplyMovementSwimming(float deltatime);
     void Draw();
     void ChangeAnim(Animation* anim);
     void HandleAnimation(float deltatime);

@@ -76,6 +76,7 @@ int main() {
     SetTargetFPS(60);
 
     ChangeLevel(3, &level3, player, l3);
+    player.hasWeapon = true;
 
     while (!WindowShouldClose()){
         
@@ -160,7 +161,7 @@ int main() {
         textBox.Draw();
         player.DrawTop();
 
-        #pragma region Código de cada Nivel
+        #pragma region Código de cada Nivel (fuera de cámara)
         //specific to level 0
         if(level == 0 && currentLevel->enemies[0]->condition){
             if(currentLevel->DrawEjecutar()){

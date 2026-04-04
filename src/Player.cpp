@@ -48,6 +48,7 @@ Player::Player(TextBox* textBox, float startX, float startY, int dir){
     wallsliding = false;
     touchingWall = false;
     frozen = false;
+    swimming = false;
 
     attMaxTimer = 0.4f;
     deadTimer = 0;
@@ -69,6 +70,8 @@ Player::Player(TextBox* textBox, float startX, float startY, int dir){
     coquito = LoadTexture("sprites/objects/coco.png");
 
     #pragma region Animaciones
+    tint = WHITE;
+
     idleAnim.sheet = idleSheet;
     idleAnim.frames = 4;
     idleAnim.frameDuration = 0.3f;
@@ -143,13 +146,22 @@ void Player::Update(float deltatime) {
 
     if(textBox->active){
         ChangeAnim(&idleAnim);
+        if(!swimming) tint = WHITE;
         return;
     }
 
     if(frozen) return;
 
-    HandleInput();
-    ApplyMovement(deltatime);
+    if(!swimming){
+        HandleInput();
+        ApplyMovement(deltatime);
+        tint = WHITE;
+    }
+    else{
+        tint = Color({143, 205, 227, 255});
+        HandleInputSwimming();
+        ApplyMovementSwimming(deltatime);
+    }
 
     //I only need padding when direction = -1
     attackAnim.paddingLeft = direction == 1 ? 0 : 25;
@@ -227,6 +239,43 @@ void Player::ApplyMovement(float deltatime){
 
     pos.y += vel.y*deltatime;
     isGrounded = false;
+    HandleCollisions(false);
+}
+
+void Player::HandleInputSwimming(){
+    walking = true;
+    int inputDirX = 0;
+    int inputDirY = 0;
+    if(IsKeyDown(KEY_D)){
+        inputDirX = 1;
+    }
+    if(IsKeyDown(KEY_A)){
+        inputDirX = -1;
+    }
+    if(IsKeyDown(KEY_W)){
+        inputDirY = -1;
+    }
+    if(IsKeyDown(KEY_S)){
+        inputDirY = 1;
+    }
+
+    vel.x = (speed - 50) * inputDirX;
+    vel.y = (speed - 50) * inputDirY;
+
+    if(inputDirX != 0){
+        direction = inputDirX;
+    }
+}
+
+void Player::ApplyMovementSwimming(float deltatime){
+    if(wallJumpTimer > 0) wallJumpTimer = 0;
+    
+    pos.x += vel.x * deltatime;
+    HandleCollisions(true);
+
+    wallsliding = false;
+
+    pos.y += vel.y*deltatime;
     HandleCollisions(false);
 }
 
@@ -343,7 +392,7 @@ void Player::Draw() {
             (float)currentAnimation->frameH
         };
     
-    DrawTextureRec(currentAnimation->sheet, sourceRec, {pos.x - currentAnimation->paddingLeft, pos.y - currentAnimation->paddingTop}, WHITE);
+    DrawTextureRec(currentAnimation->sheet, sourceRec, {pos.x - currentAnimation->paddingLeft, pos.y - currentAnimation->paddingTop}, tint);
 
     //DrawRectangleRec(getHitBox(), {200, 0, 0, 100});
     //DrawRectangleRec(attackHitBox, {200, 0, 0, 100});

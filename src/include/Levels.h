@@ -54,6 +54,14 @@ public:
     Texture2D eggBig, nataBig, flourBig, cheeseBig, sugarBig, gasBig;
     Texture2D kingRat;
 
+    //Level 3
+    struct waterSpot{
+        Rectangle area;
+        Vector2 newPosL;
+        Vector2 newPosR;
+    };
+    std::vector<waterSpot> waterSpots;
+
     //Mapa
     Texture2D levelMap;
     Texture2D background;
@@ -74,7 +82,6 @@ public:
     void Draw();
     void DrawBackground();
     void Update();
-    void ManageCollisions();
     void ManageObjects();
     void DrawObject(int id,float posX,float posY);
     void PigeonSytem(int id);
@@ -90,6 +97,9 @@ public:
 
     //Level 2
     void DrawFoods();
+
+    //Level 3
+    void HandleWater();
 };
 
 
