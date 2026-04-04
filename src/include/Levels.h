@@ -61,6 +61,7 @@ public:
         Vector2 newPosR;
     };
     std::vector<waterSpot> waterSpots;
+    Texture2D underWater;
 
     //Mapa
     Texture2D levelMap;

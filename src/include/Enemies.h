@@ -106,4 +106,12 @@ public:
     void Update(float deltatime) override;
 };
 
+class Fish : public Enemies{
+public:
+    std::string id;
+    Fish(Vector2 pos, Player* player, int maxR, int maxL, std::string id);
+    void Update(float deltatime) override;
+    void Draw(float deltatime) override;
+};
+
 #endif 

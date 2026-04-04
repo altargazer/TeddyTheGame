@@ -179,12 +179,15 @@ Levels::Levels(int id, Player* player, TextBox* textBox, Camera2D* camera){
 
         waterSpot water1 = {{352, 608, 96, 5}, {320, 480}, {448, 480}};
         waterSpots.push_back(water1);
+
+        underWater = LoadTexture("sprites/maps/UnderWater.png");
     }
 }
 
 void Levels::Draw(){
     if(id == 3){
-        DrawRectangle(11*32, 18*32, 18*32, 7*32, Fade(Color({143, 205, 227, 255}), 0.5f));
+        //DrawRectangle(11*32, 18*32, 18*32, 7*32, Fade(Color({143, 205, 227, 255}), 0.5f));
+        DrawTexture(underWater, 0, 0, Color{143, 205, 227, 255});
     }
 
     DrawTexture(levelMap, 0, 0, WHITE);
