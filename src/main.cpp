@@ -17,11 +17,11 @@ float alpha;
 bool menu;
 float menuTimer;
 
-void ChangeLevel(int next, Levels* nextLevel, Player& player, int x, int y){
+void ChangeLevel(int next, Levels* nextLevel, Player& player, Vector2 newPos){
     level = next;
     currentLevel = nextLevel;
-    player.pos = {(float)x, (float)y};
-    player.lastCheckPoint = {(float)x, (float)y};
+    player.pos = newPos;
+    player.lastCheckPoint = newPos;
     player.direction = 1;
     player.ChangeLevel(next);
 }
@@ -69,7 +69,13 @@ int main() {
     menu = true;
     const int timerMenu = 5;
 
+    const Vector2 l1 = {96, 96};
+    const Vector2 l2 = {128, 947};
+    const Vector2 l3 = {5*32, 12*32};
+
     SetTargetFPS(60);
+
+    ChangeLevel(3, &level3, player, l3);
 
     while (!WindowShouldClose()){
         
@@ -177,17 +183,17 @@ int main() {
         if(level == 0 && currentLevel->finished){
             menu = true;
             currentLevel->finished = false;
-            ChangeLevel(1, &level1, player, 96, 96);
+            ChangeLevel(1, &level1, player, l1);
         }
 
         else if(level == 1 && currentLevel->finished){
             menu = true;
-            ChangeLevel(2, &level2, player, 128, 947);
+            ChangeLevel(2, &level2, player, l2);
         }
 
         else if(level == 2 && currentLevel->finished){
             menu = true;
-            ChangeLevel(3, &level3, player, 5*32, 12*32);
+            ChangeLevel(3, &level3, player, l3);
         }
         #pragma endregion
 
