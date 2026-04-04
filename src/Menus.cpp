@@ -18,7 +18,7 @@ Menus::Menus(float id){
     resumirFlag = false;
 
     if(id == 0){
-
+        //TODO botón de pausa y menú de pausa
     }
     else if(id == 1){
         jugar = LoadTexture("sprites/menus/start.png");
@@ -45,6 +45,7 @@ void Menus::Draw(Player* player, float deltatime){
         DrawText("Teddy: The Game", middle, 100, 100, BLACK);
     }
 
+    //menús entre-niveles
     else if(id > 1 && (int)(id*10) % 10 == 0){
 
         DrawTexture(background, 0, 0, WHITE);
@@ -72,32 +73,25 @@ void Menus::Draw(Player* player, float deltatime){
         DrawTexture(calvi, middle + MeasureText(calvis.c_str(), 50) + 10, 315, WHITE);
     }
 
-    else if (id == 1.5){
+    //menús de las fases
+    else{
         DrawTexture(background, 0, 0, WHITE);
-        std::string line1 = "Fase 1:";
+        std::string line1 = "Fase X:";
         std::string line2 = "(del Plan Ultra Secreto para\nel Objetivo Ultra Secreto del Teddy)";
-        std::string line3 = "LA RED DE INFORMACION";
+        std::string line3 = "X";
 
-        DrawTextEx(interFont, line1.c_str(), (Vector2){(float)getMiddle(line1, 80, interFont), 350}, 80, 3, BLACK);
-        DrawTextEx(interFont, line2.c_str(), (Vector2){(float)getMiddle(line2, 50, interFont), 430}, 50, 2, BLACK);
-        DrawTextEx(interFont, line3.c_str(), (Vector2){(float)getMiddle(line3, 100, interFont), 550}, 100, 3, BLACK);
-    }
-
-    else if (id == 2.5){
-        DrawTexture(background, 0, 0, WHITE);
-        std::string line1 = "Fase 2:";
-        std::string line2 = "(del Plan Ultra Secreto para\nel Objetivo Ultra Secreto del Teddy)";
-        std::string line3 = "LOS SUMINISTROS";
-
-        DrawTextEx(interFont, line1.c_str(), (Vector2){(float)getMiddle(line1, 80, interFont), 350}, 80, 3, BLACK);
-        DrawTextEx(interFont, line2.c_str(), (Vector2){(float)getMiddle(line2, 50, interFont), 430}, 50, 2, BLACK);
-        DrawTextEx(interFont, line3.c_str(), (Vector2){(float)getMiddle(line3, 100, interFont), 550}, 100, 3, BLACK);
-    }
-    else if (id == 3.5){
-        DrawTexture(background, 0, 0, WHITE);
-        std::string line1 = "Fase 3:";
-        std::string line2 = "(del Plan Ultra Secreto para\nel Objetivo Ultra Secreto del Teddy)";
-        std::string line3 = "EL ENEMIGO";
+        if (id == 1.5){
+            line1 = "Fase 1:";
+            line3 = "LA RED DE INFORMACION";
+        }
+        else if (id == 2.5){
+            line1 = "Fase 2:";
+            line3 = "LOS SUMINISTROS";
+        }
+        else if (id == 3.5){
+            line1 = "Fase 2:";
+            line3 = "EL ENEMIGO";
+        }
 
         DrawTextEx(interFont, line1.c_str(), (Vector2){(float)getMiddle(line1, 80, interFont), 350}, 80, 3, BLACK);
         DrawTextEx(interFont, line2.c_str(), (Vector2){(float)getMiddle(line2, 50, interFont), 430}, 50, 2, BLACK);
@@ -115,7 +109,7 @@ void Menus::Update(){
     else if(id > 1 && (int)(id*10) % 10 == 0){
         Vector2 pos = {GetScreenWidth()/2 - (float)salir.width/3/2 - (float)siguiente.width/3/2 - 20, 400};
         if(DrawAndHandleBtn(salir, pos)){
-
+            //TODO botón de salir
         }
         pos = {pos.x + (float)salir.width/3 + 20, pos.y};
         if(DrawAndHandleBtn (siguiente, pos)){
