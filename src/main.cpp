@@ -71,11 +71,11 @@ int main() {
 
     const Vector2 l1 = {96, 96};
     const Vector2 l2 = {128, 947};
-    const Vector2 l3 = {32, 160};
+    const Vector2 l3 = {64, 160};
 
     SetTargetFPS(60);
 
-    ChangeLevel(3, &level3, player, l3);
+    ChangeLevel(3, &level3, player, l2);
     player.hasWeapon = true;
 
     while (!WindowShouldClose()){
