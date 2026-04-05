@@ -177,17 +177,29 @@ Levels::Levels(int id, Player* player, TextBox* textBox, Camera2D* camera){
 
         maxDown = 1000;
 
-        waterSpot water1 = {{352, 608, 96, 5}, {320, 480}, {448, 480}};
+        waterSpot water1 = {{288, 256, 128, 5}, {224, 160}, {448, 160}};
         waterSpots.push_back(water1);
+        waterSpot water2 = {{896, 256, 288, 5}, {864, 160}, {1184, 160}};
+        waterSpots.push_back(water2);
+        waterSpot water3 = {{1312, 512, 224, 5}, {1536, 416}, {1536, 416}};
+        waterSpots.push_back(water3);
+        waterSpot water4 = {{2016, 320, 256, 5}, {1984, 224}, {1984, 224}};
+        waterSpots.push_back(water4);
 
-        underWater = LoadTexture("sprites/maps/UnderWater.png");
+        underWater = LoadTexture("sprites/maps/Level3UnderWater.png");
+        currentFrameWater = 0;
+        numFramesWater = 2;
+        frameTimerWater = 0;
+        frameDurationWater = 0.6f;
+        wave = LoadTexture("sprites/bgElements/wave.png");
     }
 }
 
-void Levels::Draw(){
+void Levels::Draw(float deltatime){
     if(id == 3){
         //DrawRectangle(11*32, 18*32, 18*32, 7*32, Fade(Color({143, 205, 227, 255}), 0.5f));
         DrawTexture(underWater, 0, 0, Color{143, 205, 227, 255});
+        AnimateWater(deltatime);
     }
 
     DrawTexture(levelMap, 0, 0, WHITE);
@@ -244,7 +256,7 @@ void Levels::Update(){
     }
 
     if(id == 3){
-        HandleWater();
+        EnterExitWater();
     }
 }
 
@@ -784,7 +796,7 @@ void Levels::Password(float deltatime){
     }
 }
 
-void Levels::HandleWater(){
+void Levels::EnterExitWater(){
     for(int i = 0; i<(int)waterSpots.size(); i++){
         if(CheckCollisionRecs(waterSpots[i].area, player->getHitBox())){
             if(!player->swimming){
@@ -800,5 +812,19 @@ void Levels::HandleWater(){
                 }
             }
         }
+    }
+}
+
+void Levels::AnimateWater(float deltatime){
+    Rectangle source = {(float)currentFrameWater*288, 0, 288, 4};
+    DrawTextureRec(wave, source, {288, 256-4}, Color{143, 205, 227, 255});
+    DrawTextureRec(wave, source, {896, 256-4}, Color{143, 205, 227, 255});
+    DrawTextureRec(wave, source, {1312, 512-4}, Color{143, 205, 227, 255});
+    DrawTextureRec(wave, source, {2016, 320-4}, Color{143, 205, 227, 255});
+    frameTimerWater += deltatime;
+    if(frameTimerWater >= frameDurationWater){
+        frameTimerWater = 0;
+        currentFrameWater++;
+        if(currentFrameWater >= 2) currentFrameWater = 0;
     }
 }

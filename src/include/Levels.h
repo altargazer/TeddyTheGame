@@ -62,6 +62,9 @@ public:
     };
     std::vector<waterSpot> waterSpots;
     Texture2D underWater;
+    Texture2D wave;
+    int currentFrameWater, numFramesWater;
+    float frameTimerWater, frameDurationWater;
 
     //Mapa
     Texture2D levelMap;
@@ -80,7 +83,7 @@ public:
 
     //methods general
     Levels(int id, Player* player, TextBox* textBox, Camera2D* camera);
-    void Draw();
+    void Draw(float deltatime);
     void DrawBackground();
     void Update();
     void ManageObjects();
@@ -100,7 +103,8 @@ public:
     void DrawFoods();
 
     //Level 3
-    void HandleWater();
+    void EnterExitWater();
+    void AnimateWater(float deltatime);
 };
 
 

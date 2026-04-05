@@ -71,7 +71,7 @@ int main() {
 
     const Vector2 l1 = {96, 96};
     const Vector2 l2 = {128, 947};
-    const Vector2 l3 = {5*32, 12*32};
+    const Vector2 l3 = {32, 160};
 
     SetTargetFPS(60);
 
@@ -149,7 +149,7 @@ int main() {
         camera.target.y = floorf(camera.target.y);
         #pragma endregion
         
-        currentLevel->Draw();
+        currentLevel->Draw(deltatime);
         currentLevel->Update();
 
         currentLevel->ManageObjects();
