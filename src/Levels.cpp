@@ -26,6 +26,9 @@ OBJECTS:
 14: rat king
 15: key
 16: safe
+17: flags
+18: closed chest
+19: open chest
 20-29: pigeons
 */
 
@@ -170,6 +173,7 @@ Levels::Levels(int id, Player* player, TextBox* textBox, Camera2D* camera){
         badFloors.push_back(hot4);
     }
 
+    //Level 3
     else if(id == 3){
         levelMap = LoadTexture("sprites/maps/Level3.png");
         background = LoadTexture("sprites/maps/Level3BG.png");
@@ -185,6 +189,10 @@ Levels::Levels(int id, Player* player, TextBox* textBox, Camera2D* camera){
         waterSpots.push_back(water3);
         waterSpot water4 = {{2016, 320, 256, 5}, {1984, 224}, {1984, 224}};
         waterSpots.push_back(water4);
+        flags = LoadTexture("sprites/objects/flag.png");
+        flags2 = LoadTexture("sprites/objects/flag2.png");
+        chestOpen = LoadTexture("sprites/objects/chestOpen.png");
+        chestClosed = LoadTexture("sprites/objects/chestClosed.png");
 
         underWater = LoadTexture("sprites/maps/Level3UnderWater.png");
         currentFrameWater = 0;
@@ -192,6 +200,8 @@ Levels::Levels(int id, Player* player, TextBox* textBox, Camera2D* camera){
         frameTimerWater = 0;
         frameDurationWater = 0.6f;
         wave = LoadTexture("sprites/bgElements/wave.png");
+
+        counterFishes = 0;
     }
 }
 
@@ -296,7 +306,7 @@ void Levels::ManageObjects(){
                 }
 
                 //level 2
-                if(id == 2){
+                else if(id == 2){
                     //Weapon
                     if(num == 2){
                         Rectangle weaponColl = {posx+4, posy+4, 24, 28};
@@ -427,8 +437,37 @@ void Levels::ManageObjects(){
                     }
                 }
 
+                //level 3
+                else if(id == 3){
+                    if(num == 17){
+                        Rectangle flagColl = {posx, posy+10, 28, 83};
+                        if(player->HandlePickingUp(flagColl, true)){
+                            if(counterFishes == 10){
+                                textBox->EnqueuDialogue({"Otra victoria perfecta para el Teddy..."}, "teddy"); 
+                                continue;
+                            }
+                            textBox->EnqueuDialogue({
+                                "Verde y rojo... eso me temía.", 
+                                "Algún ignorante podría pensar que estas dos banderas juntas es contradictorio, pero tiene mucho sentido.", 
+                                "La bandera verde significa que el oleaje está tranquilo. Eso se debe a que el Calvi tiene unas capacidades demasiado limitadas para hacer que el agua tenga ningún tipo de movimiento.", 
+                                "Y la bandera roja significa peligro. Peligro por los horribles, malolientes, viscosos, repugnantes y malvados peces que hay en el agua.", 
+                                "Cuando el Teddy haya acabado su tarea, podremos quitar esta bandera roja. El reinado de los peces  acaba hoy."
+                            }, "teddy");
+                        }
+                    }
+                    
+                    if(num == 18){
+                        Rectangle chestColl = {posx, posy+4, 29, 28};
+                        if(player->HandlePickingUp(chestColl, true)){
+                            textBox->EnqueuDialogue({"Moneditas, joyas... Jiji dinerito para el Teddy."}, "teddy");
+                            colliders[i][j] = 19;
+                            player->money += 20;
+                        }
+                    }
+                }
+                
                 //cocoa: increase 1 life
-                if(num == 3){
+                else if(num == 3){
                     Rectangle cocoaColl = {posx+7, posy+14, 18, 21};
                     if(player->HandlePickingUp(cocoaColl, true)){
                         if(player->lives < 6){
@@ -478,57 +517,47 @@ void Levels::ManageObjects(){
     }
 }
 
-void Levels::DrawObject(int id,float posX,float posY){
-    if(this->id == 1){
-        if(id == 16){
-            DrawTexture(caja, posX, posY+5, WHITE);
-        }
-        else if(id == 15 && !textBox->active){
-            DrawTexture(llave, posX, posY+10, WHITE);
-        }
+void Levels::DrawObject(int id, float posX, float posY){
+
+    if(id == 16) DrawTexture(caja, posX, posY+5, WHITE);
+   
+    else if(id == 15 && !textBox->active) DrawTexture(llave, posX, posY+10, WHITE);
+
+    else if(id == 2) DrawTexture(weapon, posX, posY+5, WHITE);
+    
+    else if(id == 6) DrawTexture(egg, posX, posY+20, WHITE);
+    
+    else if(id == 7) DrawTexture(sugar, posX, posY+20, WHITE);
+    
+    else if(id == 8) DrawTexture(gas, posX, posY+20, WHITE);
+    
+    else if(id == 9) DrawTexture(flour, posX, posY+20, WHITE);
+    
+    else if(id == 10) DrawTexture(cheese, posX, posY+20, WHITE);
+    
+    else if(id == 11) DrawTexture(nata, posX, posY+20, WHITE);
+    
+    else if(id == 14) DrawTexture(kingRat, posX, posY+14, WHITE);
+    
+    else if(id == 13 && enemies[0]->condition2) DrawTexture(cake, posX, posY+20, WHITE);
+    
+    else if(id == 3) DrawTexture(cocoa, posX, posY + 5, WHITE);
+    
+    else if(id == 4) DrawTexture(coco, posX, posY+17, WHITE);
+    
+    else if(id == 12) DrawTexture(bed, posX, posY, WHITE);
+    
+    else if(id == 5) DrawTexture(coin, posX, posY+5, WHITE);
+
+    else if(id == 17){
+        if(counterFishes == 10) DrawTexture(flags2, posX, posY+3, WHITE);
+        else DrawTexture(flags, posX, posY+3, WHITE);
     }
-    //Level 2 since it has a lot of sprites
-    if(this->id == 2){
-        if(id == 2){
-            DrawTexture(weapon, posX, posY+5, WHITE);
-        }
-        else if(id == 6){
-            DrawTexture(egg, posX, posY+20, WHITE);
-        }
-        else if(id == 7){
-            DrawTexture(sugar, posX, posY+20, WHITE);
-        }
-        else if(id == 8){
-            DrawTexture(gas, posX, posY+20, WHITE);
-        }
-        else if(id == 9){
-            DrawTexture(flour, posX, posY+20, WHITE);
-        }
-        else if(id == 10){
-            DrawTexture(cheese, posX, posY+20, WHITE);
-        }
-        else if(id == 11){
-            DrawTexture(nata, posX, posY+20, WHITE);
-        }
-        else if(id == 14){
-            DrawTexture(kingRat, posX, posY+14, WHITE);
-        }
-        else if(id == 13 && enemies[0]->condition2){
-            DrawTexture(cake, posX, posY+20, WHITE);
-        }
-    }
-    if(id == 3){
-        DrawTexture(cocoa, posX, posY + 5, WHITE);
-    }
-    else if(id == 4){
-        DrawTexture(coco, posX, posY+17, WHITE);
-    }
-    else if(id == 12){
-        DrawTexture(bed, posX, posY, WHITE);
-    }
-    else if(id == 5){
-        DrawTexture(coin, posX, posY+5, WHITE);
-    }
+    
+    else if(id == 18) DrawTexture(chestClosed, posX, posY+5, Color{143, 205, 227, 255});
+
+    else if(id == 19) DrawTexture(chestOpen, posX, posY+5, Color{143, 205, 227, 255});
+    
     else if(id >= 20 && id <= 29){
         if(id == 24){
            DrawTexture(pigeonBlue, posX, posY + 5, WHITE); 
@@ -807,7 +836,6 @@ void Levels::EnterExitWater(){
                 player->pos.y = waterSpots[i].area.y;
                 if(player->HandlePickingUp(waterSpots[i].area, true)){
                     player->pos = (player->direction == 1) ? waterSpots[i].newPosR : waterSpots[i].newPosL;
-                    textBox->EnqueuDialogue({"Necesito una toalla y una motosierra para matar al Calvi por sus pecados."}, "teddy");
                     player->swimming = false;
                 }
             }

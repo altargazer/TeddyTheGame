@@ -75,7 +75,7 @@ int main() {
 
     SetTargetFPS(60);
 
-    ChangeLevel(3, &level3, player, l2);
+    ChangeLevel(3, &level3, player, l3);
     player.hasWeapon = true;
 
     while (!WindowShouldClose()){
