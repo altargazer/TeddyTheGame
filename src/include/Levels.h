@@ -67,6 +67,9 @@ public:
     int currentFrameWater, numFramesWater;
     float frameTimerWater, frameDurationWater;
     int counterFishes;
+    bool flag;
+    bool flagAndActive;
+    Texture2D deadFish;
 
     //Mapa
     Texture2D levelMap;
@@ -107,6 +110,7 @@ public:
     //Level 3
     void EnterExitWater();
     void AnimateWater(float deltatime);
+    void DrawDeadFish();
 };
 
 

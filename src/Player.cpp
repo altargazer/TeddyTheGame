@@ -398,6 +398,7 @@ void Player::Draw() {
     //DrawRectangleRec(attackHitBox, {200, 0, 0, 100});
     //DrawRectangleRec(FeetBox, RED);
 }
+
 void Player::HandleAnimation(float deltatime){
     animationTimer += deltatime;
 

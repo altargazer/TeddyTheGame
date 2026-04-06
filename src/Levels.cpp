@@ -202,6 +202,12 @@ Levels::Levels(int id, Player* player, TextBox* textBox, Camera2D* camera){
         wave = LoadTexture("sprites/bgElements/wave.png");
 
         counterFishes = 0;
+        flag = false;
+        flagAndActive = false;
+        deadFish = LoadTexture("sprites/objects/deadFish.png");
+
+        Fish* fish2 = new Fish({250, 200}, player, 100, 400, "fish2");
+        enemies.push_back(fish2);
     }
 }
 
@@ -441,7 +447,9 @@ void Levels::ManageObjects(){
                 else if(id == 3){
                     if(num == 17){
                         Rectangle flagColl = {posx, posy+10, 28, 83};
+                        if(flag && !textBox->active && !flagAndActive) flagAndActive = true;
                         if(player->HandlePickingUp(flagColl, true)){
+                            flag = true;
                             if(counterFishes == 10){
                                 textBox->EnqueuDialogue({"Otra victoria perfecta para el Teddy..."}, "teddy"); 
                                 continue;
@@ -668,6 +676,12 @@ void Levels::ManageEnemies(float deltatime){
                 player->calvis++;
             }
 
+            if(id == 3){
+                if(instanceof<Fish>(enemies[i]) || instanceof<Crab>(enemies[i]) || instanceof<MicroCalviWater>(enemies[i])){
+                    counterFishes++;
+                }
+            }
+
             //to free the memory space:
             delete enemies[i];
             //to remove the element from the vector:
@@ -855,4 +869,12 @@ void Levels::AnimateWater(float deltatime){
         currentFrameWater++;
         if(currentFrameWater >= 2) currentFrameWater = 0;
     }
+}
+
+void Levels::DrawDeadFish(){
+    std::string counter = std::to_string(counterFishes) + "/10";
+    float position = GetScreenWidth()/2 - 10;
+    DrawText((counter.c_str()), position, 25, 50, BLACK);
+    position += MeasureText(counter.c_str(), 50) + 10;
+    DrawTexture(deadFish, position, 20, WHITE);
 }

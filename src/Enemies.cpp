@@ -299,7 +299,7 @@ void Paddy::Draw(float deltatime){
     }
 }
 
-//WALL
+//WALLS
 
 WallBreakable::WallBreakable(Texture2D sprite, Vector2 pos, int height, int width, Player* player, TextBox* textBox){
 
@@ -419,4 +419,246 @@ void WallDark::Update(float deltatime){
     if(CheckCollisionRecs(HitBox, player->getHitBox())){
         alive = false;
     }
+}
+
+//FISHES
+
+Fish::Fish(Vector2 pos, Player* player, int maxL, int maxR, std::string id){
+    position = pos;
+    this->player = player;
+    maxRight = maxR;
+    maxLeft = maxL;
+    direction = 1;
+
+    alive = true;
+    remove = false;
+    damaged = false;
+
+    frameTimer = 0;
+    deadTimer = 0;
+    padding = 1;
+    currentFrame = 0;
+
+    //Fish 1: pequeño azul
+    if(id == "fish1"){
+        lives = 2;
+        maxLives = 2;
+        damage = 1;
+        velocity = 1.8f;
+        position = pos;
+        experience = 10;
+
+        frameDuration = 0.3f;
+        frames = 4;
+        frameH = 10;
+        frameW = 17;
+        HitBox = {position.x, position.y, 17, 10};
+
+        idleSprite = LoadTexture("sprites/characters/fish1.png");
+        deadSprite = LoadTexture("sprites/characters/fish1Dead.png");
+    }
+
+    //Fish 2: grande verde
+    if(id == "fish2"){
+        lives = 4;
+        maxLives = 4;
+        damage = 2;
+        velocity = 1.5f;
+        position = pos;
+        experience = 20;
+
+        frameDuration = 0.3f;
+        frames = 4;
+        frameH = 15;
+        frameW = 31;
+        HitBox = {position.x, position.y, 31, 15};
+
+        idleSprite = LoadTexture("sprites/characters/fish2.png");
+        deadSprite = LoadTexture("sprites/characters/fish2Dead.png");
+    }
+
+    //Fish 3: mediano amarillo
+    if(id == "fish3"){
+        lives = 3;
+        maxLives = 3;
+        damage = 2;
+        velocity = 1.5f;
+        position = pos;
+        experience = 15;
+
+        frameDuration = 0.3f;
+        frames = 4;
+        frameH = 15;
+        frameW = 17;
+        HitBox = {position.x, position.y, 17, 15};
+
+        idleSprite = LoadTexture("sprites/characters/fish3.png");
+        deadSprite = LoadTexture("sprites/characters/fish3Dead.png");
+    }    
+
+    //Jellyfish
+    if(id == "medusa"){
+        lives = 3;
+        maxLives = 3;
+        damage = 2;
+        velocity = 1.8f;
+        position = pos;
+        experience = 20;
+
+        frameDuration = 0.5f;
+        frames = 2;
+        frameH = 16;
+        frameW = 28;
+        HitBox = {position.x, position.y, 28, 16};
+
+        idleSprite = LoadTexture("sprites/characters/medusa.png");
+        deadSprite = LoadTexture("sprites/characters/medusaDead.png");
+    }
+}
+
+void Fish::Draw(float deltatime){
+    //DrawRectangleRec(HitBox, Fade(RED, 0.5));
+    if(!alive){
+        deadTimer += deltatime;
+        if(deadTimer <= 2){
+            std::string exp = "+" + std::to_string(experience) + " exp.";
+            DrawText(exp.c_str(), player->pos.x, player->pos.y -15, 10, GREEN);
+        }
+        if(deadTimer <= 5){
+            DrawTexture(deadSprite, position.x, position.y + HitBox.height - deadSprite.height, WHITE);
+        } else{
+            remove = true;
+        }
+        return;
+    }
+
+    else{
+        Rectangle source = {(float)currentFrame*(frameW + padding), 0, (float)frameW*-direction, (float)frameH};
+        // if (direction == -1) position.x += frameW;
+        DrawTextureRec(idleSprite, source, position, WHITE);
+        frameTimer += deltatime;
+        if(frameTimer >= frameDuration){
+            frameTimer = 0;
+            currentFrame++;
+            if(currentFrame >= frames) currentFrame = 0;
+        }
+        return;
+    }
+}
+
+void Fish::Update(float deltatime){
+    if(!alive) return;
+
+    if(player->dead) return;
+
+    if(damaged){
+        cooldown += deltatime;
+        if(cooldown >= player->attMaxTimer){
+            cooldown = 0;
+            damaged = false;
+        }
+    }
+
+    if(player->attacking && !damaged){
+        if(CheckCollisionRecs(HitBox, player->getAttackBox())){
+            damaged = true;
+            lives--;
+            //TODO calcular en que direction tiene que empujar al personaje
+            position.x += 30*player->direction;
+            if(lives <= 0){
+                player->experience += experience;
+                alive = false;
+                return;
+            } 
+        }
+    }
+
+    position.x += direction*velocity;
+
+    if(position.x > maxRight){
+        direction = -1;
+    }
+    else if(position.x < maxLeft){
+        direction = 1;
+    }
+
+    if(CheckCollisionRecs(player->getHitBox(), HitBox)){
+        player->TakeDamage(damage);
+    }
+
+    HitBox = {position.x, position.y, HitBox.width, HitBox.height};
+}
+
+MicroCalviWater::MicroCalviWater(Vector2 pos, Player* player, int maxL, int maxR){
+    //standing: 13 x 23
+    //walking: 13 + 1 padding x 24
+    //dead: 23 x 8
+
+    this->player = player;
+
+    lives = 5;
+    maxLives = 5;
+    damage = 1;
+    velocity = 1.5f;
+    position = pos;
+    direction = 1;
+    maxRight = maxR;
+    maxLeft = maxL;
+    experience = 30;
+
+    frameTimer = 0;
+    frameDuration = 0.3f;
+    deadTimer = 0;
+    padding = 1;
+    frames = 4;
+    frameH = 24;
+    frameW = 13;
+    currentFrame = 0;
+
+    alive = true;
+    isAttacking = false;
+    remove = false;
+    damaged = false;
+
+    HitBox = {position.x, position.y, 13, 23};
+    idleSprite = LoadTexture("sprites/characters/microCalviWaterIdle.png");
+    attackingSprite = LoadTexture("sprites/characters/microCalviWaterAttack.png");
+    deadSprite = LoadTexture("sprites/characters/microCalviWaterDead.png");
+}
+
+Crab::Crab(Vector2 pos, Player* player, int maxL, int maxR){
+    //standing: 20 x 15
+    //walking: 20 + 1 padding x 15
+    //dead: 20 x 15
+
+    this->player = player;
+
+    lives = 3;
+    maxLives = 3;
+    damage = 2;
+    velocity = 2.3f;
+    position = pos;
+    direction = 1;
+    maxRight = maxR;
+    maxLeft = maxL;
+    experience = 20;
+
+    frameTimer = 0;
+    frameDuration = 0.3f;
+    deadTimer = 0;
+    padding = 1;
+    frames = 4;
+    frameH = 15;
+    frameW = 20;
+    currentFrame = 0;
+
+    alive = true;
+    isAttacking = false;
+    remove = false;
+    damaged = false;
+
+    HitBox = {position.x, position.y, 20, 15};
+    idleSprite = LoadTexture("sprites/characters/crabIdle.png");
+    attackingSprite = LoadTexture("sprites/characters/crabAttack.png");
+    deadSprite = LoadTexture("sprites/characters/crabDead.png");
 }

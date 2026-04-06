@@ -114,4 +114,15 @@ public:
     void Draw(float deltatime) override;
 };
 
+class MicroCalviWater : public Enemies{
+public:
+    MicroCalviWater(Vector2 pos, Player* player, int maxR, int maxL);
+};
+
+class Crab : public Enemies{
+public:
+    Crab(Vector2 pos, Player* player, int maxL, int maxR);
+};
+
+
 #endif 

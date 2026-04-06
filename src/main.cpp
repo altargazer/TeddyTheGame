@@ -178,6 +178,10 @@ int main() {
         if(level == 2 && currentLevel->enemies[0]->initial && !currentLevel->enemies[0]->condition3){
             currentLevel->DrawFoods();
         }
+
+        if(level == 3 && currentLevel->flagAndActive){
+            currentLevel->DrawDeadFish();
+        }
         #pragma endregion
 
         #pragma region Cambio de Nivel
