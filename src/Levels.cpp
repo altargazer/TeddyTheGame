@@ -30,6 +30,9 @@ OBJECTS:
 18: closed chest
 19: open chest
 20-29: pigeons
+30: palmera con coco
+31: palmera sin coco
+32: underwater coin
 */
 
 template<typename Base, typename T>
@@ -193,6 +196,8 @@ Levels::Levels(int id, Player* player, TextBox* textBox, Camera2D* camera){
         flags2 = LoadTexture("sprites/objects/flag2.png");
         chestOpen = LoadTexture("sprites/objects/chestOpen.png");
         chestClosed = LoadTexture("sprites/objects/chestClosed.png");
+        palmera = LoadTexture("sprites/objects/palmera.png");
+        palmeraCocos = LoadTexture("sprites/objects/palmeraCocos.png");
 
         underWater = LoadTexture("sprites/maps/Level3UnderWater.png");
         currentFrameWater = 0;
@@ -472,10 +477,19 @@ void Levels::ManageObjects(){
                             player->money += 20;
                         }
                     }
+
+                    if(num == 30){
+                        Rectangle palmeraColl = {posx+15, posy+20, 27, 15};
+                        if(player->HandlePickingUp(palmeraColl, true)){
+                            player->cocos+=2;
+                            textBox->EnqueuDialogue({"Dos coquitos para Paddy."}, "teddy");
+                            colliders[i][j] = 31;
+                        }
+                    }
                 }
                 
                 //cocoa: increase 1 life
-                else if(num == 3){
+                if(num == 3){
                     Rectangle cocoaColl = {posx+7, posy+14, 18, 21};
                     if(player->HandlePickingUp(cocoaColl, true)){
                         if(player->lives < 6){
@@ -495,7 +509,7 @@ void Levels::ManageObjects(){
                 }
 
                 //coin: increase player.coins
-                else if(num == 5){
+                else if(num == 5 || num == 32){
                     Rectangle coinColl = {posx, posy, 17, 16};
                     if(player->HandlePickingUp(coinColl, false)){
                         player->money++;
@@ -527,11 +541,13 @@ void Levels::ManageObjects(){
 
 void Levels::DrawObject(int id, float posX, float posY){
 
-    if(id == 16) DrawTexture(caja, posX, posY+5, WHITE);
-   
-    else if(id == 15 && !textBox->active) DrawTexture(llave, posX, posY+10, WHITE);
+    if(id == 2) DrawTexture(weapon, posX, posY+5, WHITE);
 
-    else if(id == 2) DrawTexture(weapon, posX, posY+5, WHITE);
+    else if(id == 3) DrawTexture(cocoa, posX, posY + 5, WHITE);
+    
+    else if(id == 4) DrawTexture(coco, posX, posY+17, WHITE);
+
+    else if(id == 5) DrawTexture(coin, posX, posY+5, WHITE);
     
     else if(id == 6) DrawTexture(egg, posX, posY+20, WHITE);
     
@@ -544,18 +560,16 @@ void Levels::DrawObject(int id, float posX, float posY){
     else if(id == 10) DrawTexture(cheese, posX, posY+20, WHITE);
     
     else if(id == 11) DrawTexture(nata, posX, posY+20, WHITE);
-    
-    else if(id == 14) DrawTexture(kingRat, posX, posY+14, WHITE);
-    
+
+    else if(id == 12) DrawTexture(bed, posX, posY, WHITE);
+
     else if(id == 13 && enemies[0]->condition2) DrawTexture(cake, posX, posY+20, WHITE);
     
-    else if(id == 3) DrawTexture(cocoa, posX, posY + 5, WHITE);
-    
-    else if(id == 4) DrawTexture(coco, posX, posY+17, WHITE);
-    
-    else if(id == 12) DrawTexture(bed, posX, posY, WHITE);
-    
-    else if(id == 5) DrawTexture(coin, posX, posY+5, WHITE);
+    else if(id == 14) DrawTexture(kingRat, posX, posY+14, WHITE);
+
+    else if(id == 15 && !textBox->active) DrawTexture(llave, posX, posY+10, WHITE);
+
+    else if(id == 16) DrawTexture(caja, posX, posY+5, WHITE);
 
     else if(id == 17){
         if(counterFishes == 10) DrawTexture(flags2, posX, posY+3, WHITE);
@@ -585,6 +599,12 @@ void Levels::DrawObject(int id, float posX, float posY){
         }
         DrawTexture(pigeon, posX, posY + 5, WHITE);
     }
+
+    else if(id == 30) DrawTexture(palmeraCocos, posX, posY+5, WHITE);
+
+    else if(id == 31) DrawTexture(palmera, posX, posY+5, WHITE);
+
+    else if(id == 32) DrawTexture(coin, posX, posY+5, Color{143, 205, 227, 255});
 }
 
 void Levels::PigeonSytem(int id){
@@ -670,16 +690,16 @@ void Levels::PigeonSytem(int id){
 void Levels::ManageEnemies(float deltatime){
     int i = 0;
     while(i < (int)enemies.size()){
-        if(enemies[i]->remove){
+        if(id == 3 && !enemies[i]->alive && !enemies[i]->counted){
+            if(instanceof<Fish>(enemies[i]) || instanceof<Crab>(enemies[i]) || instanceof<MicroCalviWater>(enemies[i])){
+                counterFishes++;
+                enemies[i]->counted = true; //esto no cambia el funcionamiento pero así solo lo cuento una vez
+            }
+        }
 
+        if(enemies[i]->remove){
             if(instanceof<MicroCalvi>(enemies[i])){
                 player->calvis++;
-            }
-
-            if(id == 3){
-                if(instanceof<Fish>(enemies[i]) || instanceof<Crab>(enemies[i]) || instanceof<MicroCalviWater>(enemies[i])){
-                    counterFishes++;
-                }
             }
 
             //to free the memory space:
@@ -843,6 +863,11 @@ void Levels::EnterExitWater(){
     for(int i = 0; i<(int)waterSpots.size(); i++){
         if(CheckCollisionRecs(waterSpots[i].area, player->getHitBox())){
             if(!player->swimming){
+                if(!flagAndActive){
+                    textBox->EnqueuDialogue({"Debería mirar las banderas antes de meterme en el agua."}, "teddy");
+                    player->pos = (player->direction == 1) ? waterSpots[i].newPosL : waterSpots[i].newPosR;
+                    continue;
+                }
                 player->pos.y = waterSpots[i].area.y + waterSpots[i].area.height;
                 player->swimming = true;
             }

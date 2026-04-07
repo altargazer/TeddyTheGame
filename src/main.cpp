@@ -38,6 +38,7 @@ int main() {
     const int screenHeight = 870;
 
     InitWindow(screenWidth, screenHeight, "Teddy: The Game");
+    SetWindowState(FLAG_WINDOW_UNDECORATED);
 
     TextBox textBox;
     Player player(&textBox, 64, 160, 1);

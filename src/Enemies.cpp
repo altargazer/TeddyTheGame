@@ -6,7 +6,7 @@
 //GENERAL ENEMIES
 
 void Enemies::Update(float deltatime){
-    if(!alive) return;
+    if(!alive || remove) return;
     
     isAttacking = false;
 
@@ -439,6 +439,8 @@ Fish::Fish(Vector2 pos, Player* player, int maxL, int maxR, std::string id){
     padding = 1;
     currentFrame = 0;
 
+    counted = false;
+
     //Fish 1: pequeño azul
     if(id == "fish1"){
         lives = 2;
@@ -525,7 +527,7 @@ void Fish::Draw(float deltatime){
             DrawText(exp.c_str(), player->pos.x, player->pos.y -15, 10, GREEN);
         }
         if(deadTimer <= 5){
-            DrawTexture(deadSprite, position.x, position.y + HitBox.height - deadSprite.height, WHITE);
+            DrawTexture(deadSprite, position.x, position.y + HitBox.height - deadSprite.height, Color{143, 205, 227, 255});
         } else{
             remove = true;
         }
@@ -535,7 +537,7 @@ void Fish::Draw(float deltatime){
     else{
         Rectangle source = {(float)currentFrame*(frameW + padding), 0, (float)frameW*-direction, (float)frameH};
         // if (direction == -1) position.x += frameW;
-        DrawTextureRec(idleSprite, source, position, WHITE);
+        DrawTextureRec(idleSprite, source, position, Color{143, 205, 227, 255});
         frameTimer += deltatime;
         if(frameTimer >= frameDuration){
             frameTimer = 0;
@@ -547,7 +549,7 @@ void Fish::Draw(float deltatime){
 }
 
 void Fish::Update(float deltatime){
-    if(!alive) return;
+    if(!alive || remove) return;
 
     if(player->dead) return;
 
@@ -619,6 +621,7 @@ MicroCalviWater::MicroCalviWater(Vector2 pos, Player* player, int maxL, int maxR
     isAttacking = false;
     remove = false;
     damaged = false;
+    counted = false;
 
     HitBox = {position.x, position.y, 13, 23};
     idleSprite = LoadTexture("sprites/characters/microCalviWaterIdle.png");
@@ -656,6 +659,7 @@ Crab::Crab(Vector2 pos, Player* player, int maxL, int maxR){
     isAttacking = false;
     remove = false;
     damaged = false;
+    counted = false;
 
     HitBox = {position.x, position.y, 20, 15};
     idleSprite = LoadTexture("sprites/characters/crabIdle.png");

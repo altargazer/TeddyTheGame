@@ -63,7 +63,7 @@ public:
     std::vector<waterSpot> waterSpots;
     Texture2D underWater;
     Texture2D wave;
-    Texture2D flags, flags2, chestOpen, chestClosed;
+    Texture2D flags, flags2, chestOpen, chestClosed, palmera, palmeraCocos;
     int currentFrameWater, numFramesWater;
     float frameTimerWater, frameDurationWater;
     int counterFishes;

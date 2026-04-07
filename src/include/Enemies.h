@@ -54,6 +54,9 @@ public:
     bool condition3;
     bool canTalk;
 
+    //fishes
+    bool counted;
+
     virtual void Update(float deltatime);
     virtual void Draw(float deltatime);
     bool CheckCollision();
