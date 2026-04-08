@@ -70,6 +70,7 @@ public:
     bool flag;
     bool flagAndActive;
     Texture2D deadFish;
+    Texture2D teddyco;
 
     //Mapa
     Texture2D levelMap;

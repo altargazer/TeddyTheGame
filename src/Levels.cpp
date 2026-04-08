@@ -184,13 +184,13 @@ Levels::Levels(int id, Player* player, TextBox* textBox, Camera2D* camera){
 
         maxDown = 1000;
 
-        waterSpot water1 = {{288, 256, 128, 5}, {224, 160}, {448, 160}};
+        waterSpot water1 = {{288, 320, 128, 5}, {224, 224}, {448, 224}};
         waterSpots.push_back(water1);
-        waterSpot water2 = {{896, 256, 288, 5}, {864, 160}, {1184, 160}};
+        waterSpot water2 = {{896, 320, 288, 5}, {864, 224}, {1184, 224}};
         waterSpots.push_back(water2);
-        waterSpot water3 = {{1312, 512, 224, 5}, {1536, 416}, {1536, 416}};
+        waterSpot water3 = {{1312, 576, 224, 5}, {1536, 480}, {1536, 480}};
         waterSpots.push_back(water3);
-        waterSpot water4 = {{2016, 320, 256, 5}, {1984, 224}, {1984, 224}};
+        waterSpot water4 = {{2016, 384, 256, 5}, {1984, 288}, {1984, 288}};
         waterSpots.push_back(water4);
         flags = LoadTexture("sprites/objects/flag.png");
         flags2 = LoadTexture("sprites/objects/flag2.png");
@@ -198,6 +198,7 @@ Levels::Levels(int id, Player* player, TextBox* textBox, Camera2D* camera){
         chestClosed = LoadTexture("sprites/objects/chestClosed.png");
         palmera = LoadTexture("sprites/objects/palmera.png");
         palmeraCocos = LoadTexture("sprites/objects/palmeraCocos.png");
+        teddyco = LoadTexture("sprites/objects/teddyco.png");
 
         underWater = LoadTexture("sprites/maps/Level3UnderWater.png");
         currentFrameWater = 0;
@@ -211,7 +212,7 @@ Levels::Levels(int id, Player* player, TextBox* textBox, Camera2D* camera){
         flagAndActive = false;
         deadFish = LoadTexture("sprites/objects/deadFish.png");
 
-        Fish* fish2 = new Fish({250, 200}, player, 100, 400, "fish2");
+        Fish* fish2 = new Fish({250, 264}, player, 100, 400, "fish2");
         enemies.push_back(fish2);
     }
 }
@@ -605,6 +606,8 @@ void Levels::DrawObject(int id, float posX, float posY){
     else if(id == 31) DrawTexture(palmera, posX, posY+5, WHITE);
 
     else if(id == 32) DrawTexture(coin, posX, posY+5, Color{143, 205, 227, 255});
+
+    else if(id == 33) DrawTexture(teddyco, posX, posY, WHITE);
 }
 
 void Levels::PigeonSytem(int id){
@@ -884,10 +887,10 @@ void Levels::EnterExitWater(){
 
 void Levels::AnimateWater(float deltatime){
     Rectangle source = {(float)currentFrameWater*288, 0, 288, 4};
-    DrawTextureRec(wave, source, {288, 256-4}, Color{143, 205, 227, 255});
-    DrawTextureRec(wave, source, {896, 256-4}, Color{143, 205, 227, 255});
-    DrawTextureRec(wave, source, {1312, 512-4}, Color{143, 205, 227, 255});
-    DrawTextureRec(wave, source, {2016, 320-4}, Color{143, 205, 227, 255});
+    DrawTextureRec(wave, source, {288, 320-4}, Color{143, 205, 227, 255});
+    DrawTextureRec(wave, source, {896, 320-4}, Color{143, 205, 227, 255});
+    DrawTextureRec(wave, source, {1312, 576-4}, Color{143, 205, 227, 255});
+    DrawTextureRec(wave, source, {2016, 384-4}, Color{143, 205, 227, 255});
     frameTimerWater += deltatime;
     if(frameTimerWater >= frameDurationWater){
         frameTimerWater = 0;

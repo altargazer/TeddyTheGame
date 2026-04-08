@@ -565,7 +565,6 @@ void Fish::Update(float deltatime){
         if(CheckCollisionRecs(HitBox, player->getAttackBox())){
             damaged = true;
             lives--;
-            //TODO calcular en que direction tiene que empujar al personaje
             position.x += 30*player->direction;
             if(lives <= 0){
                 player->experience += experience;
@@ -585,6 +584,18 @@ void Fish::Update(float deltatime){
     }
 
     if(CheckCollisionRecs(player->getHitBox(), HitBox)){
+        //para saber por qué lado está en colisión: calcular el overlapping de cada lado y encontrar el valor mínimo
+        float overlapRight = abs(player->getHitBox().x + player->getHitBox().width - HitBox.x);
+        float overlapLeft = abs(HitBox.x + HitBox.width - player->getHitBox().x);
+        float overlapUp = abs(player->getHitBox().y + player->getHitBox().height - HitBox.y);
+        float overlapDown = abs(HitBox.y + HitBox.height - player->getHitBox().y);
+        float min = std::min(overlapRight, std::min(overlapLeft, std::min(overlapDown, overlapUp)));
+
+        if(min == overlapRight) player->pos.x -= min;
+        else if(min == overlapLeft) player->pos.x += min;
+        else if(min == overlapUp) player->pos.y -= min;
+        else if(min == overlapDown) player->pos.y += min;
+
         player->TakeDamage(damage);
     }
 

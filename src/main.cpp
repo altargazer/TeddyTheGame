@@ -72,7 +72,7 @@ int main() {
 
     const Vector2 l1 = {96, 96};
     const Vector2 l2 = {128, 947};
-    const Vector2 l3 = {64, 160};
+    const Vector2 l3 = {64, 224};
 
     SetTargetFPS(60);
 
