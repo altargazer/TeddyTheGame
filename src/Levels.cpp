@@ -33,6 +33,7 @@ OBJECTS:
 30: palmera con coco
 31: palmera sin coco
 32: underwater coin
+33: teddy Co.
 */
 
 template<typename Base, typename T>
@@ -151,9 +152,9 @@ Levels::Levels(int id, Player* player, TextBox* textBox, Camera2D* camera){
         enemies.push_back(rat4);
         Rata* rat5 = new Rata({2848, 896+14}, player, 2560, 2976);
         enemies.push_back(rat5);
+        
         WallBreakable* wall1 = new WallBreakable(LoadTexture("sprites/maps/Level2Wall.png"), {1312, 992}, 64, 64, player, textBox);
         enemies.push_back(wall1);
-
         WallDark* wall2 = new WallDark(LoadTexture("sprites/maps/Level2DarkWall.png"), {1632, 960}, player);
         enemies.push_back(wall2);
 
@@ -212,8 +213,23 @@ Levels::Levels(int id, Player* player, TextBox* textBox, Camera2D* camera){
         flagAndActive = false;
         deadFish = LoadTexture("sprites/objects/deadFish.png");
 
-        Fish* fish2 = new Fish({250, 264}, player, 100, 400, "fish2");
+        Fish* fish1 = new Fish({300, 480}, player, 224, 544, "fish1");
+        enemies.push_back(fish1);
+        Fish* fish3 = new Fish({900, 384}, player, 864, 1152, "fish3");
+        enemies.push_back(fish3);
+        Fish* fish2 = new Fish({200, 768}, player, 96, 448, "fish2");
         enemies.push_back(fish2);
+        Fish* medusa = new Fish({800, 640}, player, 576, 1088, "medusa");
+        enemies.push_back(medusa);
+        Crab* crab = new Crab({600, 832+17}, player, 512, 736-20);
+        enemies.push_back(crab);
+        MicroCalviWater* calvi = new MicroCalviWater({1700, 992+9}, player, 1632, 1856-13);
+        enemies.push_back(calvi);
+        Shark* shark = new Shark({1762, 672}, player, 1280, 1792);
+        enemies.push_back(shark);
+
+        WallBreakable* wall1 = new WallBreakable(LoadTexture("sprites/maps/Level3Wall.png"), {1536, 672}, 64, 64, player, textBox);
+        enemies.push_back(wall1);
     }
 }
 
@@ -451,6 +467,7 @@ void Levels::ManageObjects(){
 
                 //level 3
                 else if(id == 3){
+                    //flags
                     if(num == 17){
                         Rectangle flagColl = {posx, posy+10, 28, 83};
                         if(flag && !textBox->active && !flagAndActive) flagAndActive = true;
@@ -470,6 +487,7 @@ void Levels::ManageObjects(){
                         }
                     }
                     
+                    //chest
                     if(num == 18){
                         Rectangle chestColl = {posx, posy+4, 29, 28};
                         if(player->HandlePickingUp(chestColl, true)){
@@ -479,12 +497,27 @@ void Levels::ManageObjects(){
                         }
                     }
 
+                    //palmera
                     if(num == 30){
                         Rectangle palmeraColl = {posx+15, posy+20, 27, 15};
                         if(player->HandlePickingUp(palmeraColl, true)){
                             player->cocos+=2;
                             textBox->EnqueuDialogue({"Dos coquitos para Paddy."}, "teddy");
                             colliders[i][j] = 31;
+                        }
+                    }
+                    
+                    //Teddy Co.
+                    if(num == 33){
+                        Rectangle teddycoColl = {posx + 38, posy + 226, 48, 60};
+                        if(player->HandlePickingUp(teddycoColl, true)){
+                            if(counterFishes == 10){
+                                textBox->EnqueuDialogue({"Uff, por fin puedo salir de este lugar horrible.", "No sé quien habrá decidido esta localización para esta sede pero debería despedirlo."}, "teddy");
+                                finished = true;
+                            }
+                            else{
+                                textBox->EnqueuDialogue({"Podría irme de aquí...", "¡No! El Teddy no será derrotado."}, "teddy");
+                            }
                         }
                     }
                 }

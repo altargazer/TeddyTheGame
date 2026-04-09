@@ -127,5 +127,9 @@ public:
     Crab(Vector2 pos, Player* player, int maxL, int maxR);
 };
 
+class Shark : public Enemies{
+public:
+    Shark(Vector2 pos, Player* player, int maxL, int maxR);
+};
 
 #endif 

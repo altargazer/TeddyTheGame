@@ -201,6 +201,11 @@ int main() {
             menu = true;
             ChangeLevel(3, &level3, player, l3);
         }
+
+        else if(level == 3 && currentLevel->finished && !textBox.active){
+            menu = true;
+            //ChangeLevel(4, &level4, player, l4);
+        }
         #pragma endregion
 
         //Position of player for development

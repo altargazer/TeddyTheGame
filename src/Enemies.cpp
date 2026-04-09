@@ -3,6 +3,11 @@
 #include <cmath>
 #include "include/Enemies.h"
 
+template<typename Base, typename T>
+inline bool instanceof(const T *ptr) {
+   return dynamic_cast<const Base*>(ptr) != nullptr;
+}
+
 //GENERAL ENEMIES
 
 void Enemies::Update(float deltatime){
@@ -52,6 +57,10 @@ void Enemies::Update(float deltatime){
 }
 
 void Enemies::Draw(float deltatime){
+
+    Color tint = WHITE;
+    if(instanceof<Crab>(this) || instanceof<MicroCalviWater>(this)) tint = Color({230, 223, 213, 255});
+
     //DrawRectangleRec(HitBox, Fade(RED, 0.5));
     if(!alive){
         deadTimer += deltatime;
@@ -60,7 +69,7 @@ void Enemies::Draw(float deltatime){
             DrawText(exp.c_str(), player->pos.x, player->pos.y -15, 10, GREEN);
         }
         if(deadTimer <= 5){
-            DrawTexture(deadSprite, position.x, position.y + HitBox.height - deadSprite.height, WHITE);
+            DrawTexture(deadSprite, position.x, position.y + HitBox.height - deadSprite.height, tint);
         } else{
             remove = true;
         }
@@ -69,7 +78,7 @@ void Enemies::Draw(float deltatime){
 
     if(isAttacking){
         Rectangle source = {(float)currentFrame*(frameW + padding), 0, (float)frameW*direction, (float)frameH};
-        DrawTextureRec(attackingSprite, source, position, WHITE);
+        DrawTextureRec(attackingSprite, source, position, tint);
         frameTimer += deltatime;
         if(frameTimer >= frameDuration){
             frameTimer = 0;
@@ -79,7 +88,7 @@ void Enemies::Draw(float deltatime){
         return;
     }
     else{
-        DrawTexture(idleSprite, position.x, position.y, WHITE);
+        DrawTexture(idleSprite, position.x, position.y, tint);
     }
 }
 
@@ -374,13 +383,13 @@ void WallBreakable::Draw(float deltatime){
     
     switch (lives){
         case 3:
-            DrawTextureRec(sheet, normal, position, WHITE);
+            DrawTextureRec(sheet, normal, position, Color({230, 223, 213, 255}));
             break;
         case 2: 
-            DrawTextureRec(sheet, broken1, position, WHITE);
+            DrawTextureRec(sheet, broken1, position, Color({230, 223, 213, 255}));
             break;
         case 1:
-            DrawTextureRec(sheet, broken2, position, WHITE);
+            DrawTextureRec(sheet, broken2, position, Color({230, 223, 213, 255}));
             break;
     }
 }
@@ -676,4 +685,42 @@ Crab::Crab(Vector2 pos, Player* player, int maxL, int maxR){
     idleSprite = LoadTexture("sprites/characters/crabIdle.png");
     attackingSprite = LoadTexture("sprites/characters/crabAttack.png");
     deadSprite = LoadTexture("sprites/characters/crabDead.png");
+}
+
+Shark::Shark(Vector2 pos, Player* player, int maxL, int maxR){
+    //standing: 52 x 31
+    //walking: 51 + 1 padding x 31
+    //dead: 52 x 31
+
+    this->player = player;
+
+    lives = 4;
+    maxLives = 4;
+    damage = 3;
+    velocity = 2.0f;
+    position = pos;
+    direction = 1;
+    maxRight = maxR;
+    maxLeft = maxL;
+    experience = 50;
+
+    frameTimer = 0;
+    frameDuration = 0.3f;
+    deadTimer = 0;
+    padding = 1;
+    frames = 4;
+    frameH = 31;
+    frameW = 51;
+    currentFrame = 0;
+
+    alive = true;
+    isAttacking = false;
+    remove = false;
+    damaged = false;
+    counted = false;
+
+    HitBox = {position.x, position.y, 51, 31};
+    idleSprite = LoadTexture("sprites/characters/sharkIdle.png");
+    attackingSprite = LoadTexture("sprites/characters/sharkAttack.png");
+    deadSprite = LoadTexture("sprites/characters/sharkDead.png");
 }
