@@ -60,6 +60,9 @@ public:
     virtual void Update(float deltatime);
     virtual void Draw(float deltatime);
     bool CheckCollision();
+    virtual Color getTint(){
+        return WHITE;
+    };
 };
 
 class MicroCalvi : public Enemies{
@@ -120,16 +123,25 @@ public:
 class MicroCalviWater : public Enemies{
 public:
     MicroCalviWater(Vector2 pos, Player* player, int maxR, int maxL);
+    Color getTint() override{
+        return Color{143, 205, 227, 255};
+    };
 };
 
 class Crab : public Enemies{
 public:
     Crab(Vector2 pos, Player* player, int maxL, int maxR);
+    Color getTint() override{
+        return Color{143, 205, 227, 255};
+    };
 };
 
 class Shark : public Enemies{
 public:
     Shark(Vector2 pos, Player* player, int maxL, int maxR);
+    Color getTint() override{
+        return Color{143, 205, 227, 255};
+    };
 };
 
 #endif 

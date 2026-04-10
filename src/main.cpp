@@ -152,10 +152,9 @@ int main() {
         
         currentLevel->Draw(deltatime);
         currentLevel->Update();
-
         currentLevel->ManageObjects();
-        player.Draw();
         currentLevel->ManageEnemies(deltatime);
+        player.Draw();
 
         EndMode2D();
         

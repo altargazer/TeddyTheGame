@@ -217,12 +217,18 @@ Levels::Levels(int id, Player* player, TextBox* textBox, Camera2D* camera){
         enemies.push_back(fish1);
         Fish* fish3 = new Fish({900, 384}, player, 864, 1152, "fish3");
         enemies.push_back(fish3);
+        Fish* fish3_2 = new Fish({2000, 640}, player, 1984, 2208, "fish3");
+        enemies.push_back(fish3_2);
         Fish* fish2 = new Fish({200, 768}, player, 96, 448, "fish2");
         enemies.push_back(fish2);
         Fish* medusa = new Fish({800, 640}, player, 576, 1088, "medusa");
         enemies.push_back(medusa);
+        Fish* medusa2 = new Fish({600, 672}, player, 576, 1088, "medusa");
+        enemies.push_back(medusa2);
         Crab* crab = new Crab({600, 832+17}, player, 512, 736-20);
         enemies.push_back(crab);
+        Crab* crab2 = new Crab({2050, 992+17}, player, 1984, 2112-20);
+        enemies.push_back(crab2);
         MicroCalviWater* calvi = new MicroCalviWater({1700, 992+9}, player, 1632, 1856-13);
         enemies.push_back(calvi);
         Shark* shark = new Shark({1762, 672}, player, 1280, 1792);
@@ -727,7 +733,7 @@ void Levels::ManageEnemies(float deltatime){
     int i = 0;
     while(i < (int)enemies.size()){
         if(id == 3 && !enemies[i]->alive && !enemies[i]->counted){
-            if(instanceof<Fish>(enemies[i]) || instanceof<Crab>(enemies[i]) || instanceof<MicroCalviWater>(enemies[i])){
+            if(instanceof<Fish>(enemies[i]) || instanceof<Crab>(enemies[i]) || instanceof<MicroCalviWater>(enemies[i]) || instanceof<Shark>(enemies[i])){
                 counterFishes++;
                 enemies[i]->counted = true; //esto no cambia el funcionamiento pero así solo lo cuento una vez
             }

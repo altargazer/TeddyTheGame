@@ -58,9 +58,6 @@ void Enemies::Update(float deltatime){
 
 void Enemies::Draw(float deltatime){
 
-    Color tint = WHITE;
-    if(instanceof<Crab>(this) || instanceof<MicroCalviWater>(this)) tint = Color({230, 223, 213, 255});
-
     //DrawRectangleRec(HitBox, Fade(RED, 0.5));
     if(!alive){
         deadTimer += deltatime;
@@ -69,7 +66,7 @@ void Enemies::Draw(float deltatime){
             DrawText(exp.c_str(), player->pos.x, player->pos.y -15, 10, GREEN);
         }
         if(deadTimer <= 5){
-            DrawTexture(deadSprite, position.x, position.y + HitBox.height - deadSprite.height, tint);
+            DrawTexture(deadSprite, position.x, position.y + HitBox.height - deadSprite.height, getTint());
         } else{
             remove = true;
         }
@@ -78,7 +75,7 @@ void Enemies::Draw(float deltatime){
 
     if(isAttacking){
         Rectangle source = {(float)currentFrame*(frameW + padding), 0, (float)frameW*direction, (float)frameH};
-        DrawTextureRec(attackingSprite, source, position, tint);
+        DrawTextureRec(attackingSprite, source, position, getTint());
         frameTimer += deltatime;
         if(frameTimer >= frameDuration){
             frameTimer = 0;
@@ -88,7 +85,7 @@ void Enemies::Draw(float deltatime){
         return;
     }
     else{
-        DrawTexture(idleSprite, position.x, position.y, tint);
+        DrawTexture(idleSprite, position.x, position.y, getTint());
     }
 }
 
@@ -512,7 +509,7 @@ Fish::Fish(Vector2 pos, Player* player, int maxL, int maxR, std::string id){
         lives = 3;
         maxLives = 3;
         damage = 2;
-        velocity = 1.8f;
+        velocity = 2.0f;
         position = pos;
         experience = 20;
 
@@ -697,7 +694,7 @@ Shark::Shark(Vector2 pos, Player* player, int maxL, int maxR){
     lives = 4;
     maxLives = 4;
     damage = 3;
-    velocity = 2.0f;
+    velocity = 2.2f;
     position = pos;
     direction = 1;
     maxRight = maxR;
