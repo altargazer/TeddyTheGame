@@ -469,6 +469,7 @@ void Player::TakeDamage(int damage){
 
 void Player::HandleDead(){
     //set dying state and change animation to sleeping, wait some seconds, then die
+    if(swimming) swimming = false;
     lives = 6;
     pos = lastCheckPoint;
     direction = 1;
