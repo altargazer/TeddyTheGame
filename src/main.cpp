@@ -61,7 +61,7 @@ int main() {
     Menus intermedio2(2.5);
     Menus menu3(3);
     Menus intermedio3(3.5);
-    Menus menu4(3);
+    Menus menu4(4);
     
     currentLevel = &level0;
     currentMenu = &menu1;
@@ -76,8 +76,8 @@ int main() {
 
     SetTargetFPS(60);
 
-    ChangeLevel(3, &level3, player, l3);
-    player.hasWeapon = true;
+    //ChangeLevel(3, &level3, player, l3);
+    //player.hasWeapon = true;
 
     while (!WindowShouldClose()){
         

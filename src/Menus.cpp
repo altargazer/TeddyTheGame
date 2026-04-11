@@ -31,6 +31,20 @@ Menus::Menus(float id){
         siguiente = LoadTexture("sprites/menus/next.png");
         salir = LoadTexture("sprites/menus/salir.png");
         background = LoadTexture("sprites/menus/bgNext.png");
+        square = LoadTexture("sprites/menus/menuSquare.png");
+
+        if(id == 2){
+            message1 = "¡Qué listo es Teddy!";
+            message2 = "¿Qué puerta abrirá la llave\n  que acaba de encontrar?";
+        }
+        else if(id == 3){
+            message1 = "¡Qué tarta más rica!";
+            message2 = "Aunque el Teddy todavía\n  tiene un poco de hambre...";
+        }
+        else if(id == 4){
+            message1 = "Wow, Teddy, que valiente.";
+            message2 = "¡Solo ha estado a punto\n  de llorar 293742 veces!";
+        }
     }
     else{
         interFont = LoadFontEx("fonts/04B_19.ttf", 96, 0, 250);;
@@ -53,7 +67,9 @@ void Menus::Draw(Player* player, float deltatime){
 
         std::string top = "¡Nivel " + std::to_string((int)id - 1) + " superado!";
 
-        DrawRectangle(getMiddle(top, 60) - 10, 70, MeasureText(top.c_str(), 60) + 20, 310, WHITE);
+        DrawTexture(square, 462, 60, WHITE);
+        //DrawRectangle(getMiddle(top, 60) - 30, 60, MeasureText(top.c_str(), 60) + 60, 580, WHITE);
+        //std::cout << "X: " << getMiddle(top, 60) - 30 << ", Y: 60, Width: " << MeasureText(top.c_str(), 60) + 60 << ", Height: 580" << std::endl;
         DrawText(top.c_str(), getMiddle(top, 60), 80, 60, BLACK);
 
         //TODO añadir mensaje como atributo e imprimirlo para cada nivel
@@ -71,13 +87,16 @@ void Menus::Draw(Player* player, float deltatime){
         middle = GetScreenWidth()/2 - (MeasureText(calvis.c_str(), 50) + calvi.width + 10)/2;
         DrawText(calvis.c_str(), middle, 320, 50, BLACK);
         DrawTexture(calvi, middle + MeasureText(calvis.c_str(), 50) + 10, 315, WHITE);
+
+        DrawText(message1.c_str(), getMiddle(message1, 30), 390, 30, BLACK);
+        DrawText(message2.c_str(), getMiddle(message2, 30), 430, 30, BLACK);
     }
 
     //menús de las fases
     else{
         DrawTexture(background, 0, 0, WHITE);
         std::string line1 = "Fase X:";
-        std::string line2 = "(del Plan Ultra Secreto para\nel Objetivo Ultra Secreto del Teddy)";
+        std::string line2 = "(del Plan Ultra Secreto para el Objetivo\n         Ultra Secreto del Teddy)";
         std::string line3 = "X";
 
         if (id == 1.5){
@@ -89,7 +108,7 @@ void Menus::Draw(Player* player, float deltatime){
             line3 = "LOS SUMINISTROS";
         }
         else if (id == 3.5){
-            line1 = "Fase 2:";
+            line1 = "Fase 3:";
             line3 = "EL ENEMIGO";
         }
 
@@ -107,7 +126,7 @@ void Menus::Update(){
         }
     }
     else if(id > 1 && (int)(id*10) % 10 == 0){
-        Vector2 pos = {GetScreenWidth()/2 - (float)salir.width/3/2 - (float)siguiente.width/3/2 - 20, 400};
+        Vector2 pos = {GetScreenWidth()/2 - (float)(salir.width/3)/2 - (float)(siguiente.width/3)/2 - 10, 500};
         if(DrawAndHandleBtn(salir, pos)){
             //TODO botón de salir
         }

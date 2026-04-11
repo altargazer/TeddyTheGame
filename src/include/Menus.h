@@ -20,9 +20,12 @@ public:
         6: To level 6
     */
     Texture2D background;
+    Texture2D square;
     Texture2D coin;
     Texture2D coconut;
     Texture2D calvi; // for calvis killed counter
+    std::string message1;
+    std::string message2;
 
     Texture2D jugar;
     Texture2D siguiente;
