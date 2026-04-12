@@ -89,7 +89,7 @@ void Menus::Draw(Player* player, float deltatime){
         DrawTexture(calvi, middle + MeasureText(calvis.c_str(), 50) + 10, 315, WHITE);
 
         DrawText(message1.c_str(), getMiddle(message1, 30), 390, 30, BLACK);
-        DrawText(message2.c_str(), getMiddle(message2, 30), 430, 30, BLACK);
+        DrawText(message2.c_str(), getMiddle(message2, 30), 425, 30, BLACK);
     }
 
     //menús de las fases
