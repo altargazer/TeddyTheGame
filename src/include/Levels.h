@@ -49,6 +49,7 @@ public:
     //Level 2
     bool startedMission;
     int countFoods;
+    int countRats;
     std::vector<bool> foods;
     Texture2D egg, nata, flour, cheese, sugar, gas, cake;
     Texture2D eggBig, nataBig, flourBig, cheeseBig, sugarBig, gasBig;

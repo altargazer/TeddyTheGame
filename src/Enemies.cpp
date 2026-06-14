@@ -231,7 +231,7 @@ void Paddy::Update(float deltatime){
                 textBox->EnqueuDialogue({"Pero parece que me lo quieres contar."}, "paddy");
                 textBox->EnqueuDialogue({"No, no. Es altísimo secreto."}, "teddy");
                 textBox->EnqueuDialogue({"Bueno vale, no pasa nada. Tampoco me interesa."}, "paddy");
-                textBox->EnqueuDialogue({". . .", ". . . . . .", ". . . . . . . . .", ". . . . . . . . . . . . . . .", "Ay, si insisted tanto, te lo contaré. Aunque no te puedo dar detalles."}, "teddy");
+                textBox->EnqueuDialogue({". . .", ". . . . . .", ". . . . . . . . .", ". . . . . . . . . . . . . . .", "Ay, si insistes tanto, te lo contaré. Aunque no te puedo dar detalles."}, "teddy");
                 textBox->EnqueuDialogue({"...menos mal, no sé cómo iba a dormir esta noche sin saberlo."}, "paddy");
                 textBox->EnqueuDialogue({"Lo sé, lo sé.", "Bueno, ahí va: ¡el Teddy tiene un plan maestro!"}, "teddy");
                 textBox->EnqueuDialogue({"Teddy, tú siempre tienes un \"plan maestro.\""}, "paddy");
