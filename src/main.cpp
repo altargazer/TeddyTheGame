@@ -37,7 +37,7 @@ int main() {
     const int screenWidth = 1500;
     const int screenHeight = 870;
 
-    InitWindow(screenWidth, screenHeight, "Teddy: The Game");
+    InitWindow(screenWidth, screenHeight, "Teddy: El Juego");
     SetWindowState(FLAG_WINDOW_UNDECORATED);
 
     TextBox textBox;
@@ -76,8 +76,8 @@ int main() {
 
     SetTargetFPS(60);
 
-    //ChangeLevel(3, &level3, player, l3);
-    //player.hasWeapon = true;
+    ChangeLevel(3, &level3, player, l3);
+    player.hasWeapon = true;
 
     while (!WindowShouldClose()){
         
