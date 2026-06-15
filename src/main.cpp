@@ -12,8 +12,6 @@ Levels* currentLevel;
 Menus* currentMenu;
 float menuNum;
 int level;
-int fadeTimer;
-float alpha;
 bool menu;
 float menuTimer;
 

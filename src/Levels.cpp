@@ -36,6 +36,50 @@ OBJECTS:
 33: teddy Co.
 */
 
+float fadeTimer = 0.0f;
+float fadeAlpha = 0.0f;
+float fadeDuration = 1.0f;
+bool fading = false;
+bool unfading = false;
+
+void StartFade(){
+    if(fading) return;
+    fadeTimer = 0.0f;
+    fading = true;
+    unfading = false;
+}
+
+void StartUnfade(){
+    if(unfading) return;
+    fadeTimer = 0.0f;
+    fading = false;
+    unfading = true;
+}
+
+void UpdateFade(float deltatime){
+    if(!fading) return;
+    fadeTimer += deltatime;
+    fadeAlpha = fadeTimer / fadeDuration;
+    if(fadeAlpha >= 1.0f){
+        fadeAlpha = 1.0f;
+        fading = false;
+    }
+}
+
+void UpdateUnfade(float deltatime){
+    if(!unfading) return;
+    fadeTimer += deltatime;
+    fadeAlpha = 1.0f - (fadeTimer / fadeDuration);
+    if(fadeAlpha <= 0.0f){
+        fadeAlpha = 0.0f;
+        unfading = false;
+    }
+}
+
+void DrawFade(){
+    DrawRectangle(0, 0, 1500, 870, Fade(BLACK, fadeAlpha));
+}
+
 template<typename Base, typename T>
 inline bool instanceof(const T *ptr) {
    return dynamic_cast<const Base*>(ptr) != nullptr;
@@ -249,6 +293,11 @@ void Levels::Draw(float deltatime){
     }
 
     DrawTexture(levelMap, 0, 0, WHITE);
+
+    UpdateFade(deltatime);
+    UpdateUnfade(deltatime);
+
+    DrawFade();
 }
 
 void Levels::DrawBackground(){
