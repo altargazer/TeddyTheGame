@@ -52,6 +52,7 @@ int main() {
     Levels level1(1, &player, &textBox, &camera);
     Levels level2(2, &player, &textBox, &camera);
     Levels level3(3, &player, &textBox, &camera);
+    Levels level4(4, &player, &textBox, &camera);
 
     Menus menu1(1);
     Menus intermedio1(1.5);
@@ -71,11 +72,12 @@ int main() {
     const Vector2 l1 = {96, 96};
     const Vector2 l2 = {128, 947};
     const Vector2 l3 = {64, 224};
+    const Vector2 l4 = {128, 256};
 
     SetTargetFPS(60);
 
-    //ChangeLevel(3, &level3, player, l3);
-    //player.hasWeapon = true;
+    ChangeLevel(4, &level4, player, l4);
+    player.hasWeapon = true;
 
     while (!WindowShouldClose()){
         

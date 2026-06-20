@@ -283,6 +283,15 @@ Levels::Levels(int id, Player* player, TextBox* textBox, Camera2D* camera){
         WallBreakable* wall1 = new WallBreakable(LoadTexture("sprites/maps/Level3Wall.png"), {1536, 672}, 64, 64, player, textBox);
         enemies.push_back(wall1);
     }
+
+    //Level 4
+    else if(id == 4){
+        levelMap = LoadTexture("sprites/maps/Level4.png");
+        background = LoadTexture("sprites/maps/Level3BG.png");
+        colliders = LoadColliders("sprites/maps/Level4.csv");
+
+        maxDown = 63*32;
+    }
 }
 
 void Levels::Draw(float deltatime){

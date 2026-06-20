@@ -510,6 +510,9 @@ void Player::ChangeLevel(int level){
     else if(level == 3){
         colliders = LoadColliders("sprites/maps/Level3.csv");
     }
+    else if(level == 4){
+        colliders = LoadColliders("sprites/maps/Level4.csv");
+    }
 }
 
 std::vector<std::vector<int>> Player::LoadColliders(const std::string& filename){
